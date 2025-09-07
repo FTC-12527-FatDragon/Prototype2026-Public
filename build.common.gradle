@@ -81,6 +81,8 @@ android {
         //
         versionCode vCode
         versionName vName
+
+        multiDexEnabled true
     }
 
     // http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.BuildType.html
@@ -113,5 +115,6 @@ android {
 }
 
 repositories {
+    mavenCentral()
 }
 
