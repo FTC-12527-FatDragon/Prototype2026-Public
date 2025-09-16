@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
 
 public class TeleopDriveCommand extends CommandBase {
     private final Drive drive;
-    private GamepadEx gamepadEx;
+    private final GamepadEx gamepadEx;
 
     public TeleopDriveCommand(Drive drive, GamepadEx gamepadEx) {
         this.drive = drive;
@@ -17,6 +17,6 @@ public class TeleopDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.setTeleOpDrive(-gamepadEx.getLeftX(), gamepadEx.getLeftY(), gamepadEx.getRightX());
+        drive.setTeleOpDrive(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
     }
 }

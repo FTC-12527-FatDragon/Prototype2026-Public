@@ -6,12 +6,12 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Drive extends SubsystemBase {
-    private static Follower follower;
+    private final Follower follower;
 
     public Drive(HardwareMap hardwareMap) {
         follower = Constants.createFollower(hardwareMap);
+        follower.setStartingPose(new Pose(0, 0, 0));
         follower.startTeleopDrive();
-        follower.setPose(new Pose(0, 0, 0));
     }
 
     public void setTeleOpDrive(double x, double y, double heading) {
@@ -20,5 +20,16 @@ public class Drive extends SubsystemBase {
 
     public Pose getPose() {
         return follower.getPose();
+    }
+
+    public void resetHead() {
+        Pose pose = follower.getPose();
+        pose.setHeading(0);
+        follower.setPose(pose);
+    }
+
+    @Override
+    public void periodic() {
+        follower.update();
     }
 }
