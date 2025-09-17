@@ -15,5 +15,4 @@ public class HeadResetCommand extends CommandBase {
     public void execute() {
         drive.resetHead();
     }
-
 }
