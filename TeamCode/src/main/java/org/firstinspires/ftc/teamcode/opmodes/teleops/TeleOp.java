@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.HeadResetCommand;
 import org.firstinspires.ftc.teamcode.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleopDriveCommand;
@@ -23,11 +27,13 @@ public class TeleOp extends CommandOpMode {
 
     private Shooter shooter;
 
+    private Telemetry telemetryM;
+
     @Override
     public void initialize() {
         drive = new Drive(hardwareMap);
         gamepadEx1 = new GamepadEx(gamepad1);
-        shooter = new Shooter(hardwareMap);
+//        shooter = new Shooter(hardwareMap);
 
         drive.setDefaultCommand(new TeleopDriveCommand(drive, gamepadEx1));
 
@@ -46,6 +52,11 @@ public class TeleOp extends CommandOpMode {
 
     @Override
     public void run() {
+        telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
+        telemetry.addData("X", drive.getPose().getX());
+        telemetry.addData("Y",  drive.getPose().getY());
+        telemetry.addData("Heading", drive.getPose().getHeading());
+        telemetry.update();
     }
 }

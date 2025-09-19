@@ -23,9 +23,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void resetHead() {
-        Pose pose = follower.getPose();
-        pose.setHeading(0);
-        follower.setPose(pose);
+        follower.setPose(follower.getPose().setHeading(0));
     }
 
     @Override
