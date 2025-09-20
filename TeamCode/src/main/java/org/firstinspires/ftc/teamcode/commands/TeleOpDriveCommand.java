@@ -5,18 +5,22 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 
-public class TeleopDriveCommand extends CommandBase {
+public class TeleOpDriveCommand extends CommandBase {
     private final MecanumDrive drive;
     private final GamepadEx gamepadEx;
+    private final boolean isAuto;
 
-    public TeleopDriveCommand(MecanumDrive drive, GamepadEx gamepadEx) {
+    public TeleOpDriveCommand(MecanumDrive drive, GamepadEx gamepadEx, boolean isAuto) {
         this.drive = drive;
         this.gamepadEx = gamepadEx;
+        this.isAuto = isAuto;
         addRequirements(drive);
     }
 
     @Override
     public void execute() {
-        drive.moveRobotFieldRelative(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
+        if (!isAuto) {
+            drive.moveRobotFieldRelative(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
+        }
     }
 }
