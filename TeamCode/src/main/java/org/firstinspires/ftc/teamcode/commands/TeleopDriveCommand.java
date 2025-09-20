@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 
 public class TeleopDriveCommand extends CommandBase {
-    private final Drive drive;
+    private final MecanumDrive drive;
     private final GamepadEx gamepadEx;
 
-    public TeleopDriveCommand(Drive drive, GamepadEx gamepadEx) {
+    public TeleopDriveCommand(MecanumDrive drive, GamepadEx gamepadEx) {
         this.drive = drive;
         this.gamepadEx = gamepadEx;
         addRequirements(drive);
@@ -17,6 +17,6 @@ public class TeleopDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.setTeleOpDrive(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
+        drive.moveRobotFieldRelative(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
     }
 }
