@@ -77,6 +77,7 @@ public class TeleOp extends CommandOpMode {
         telemetry.addData("X", drive.getPose().getX(DistanceUnit.MM));
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
+        telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.update();
     }
 }

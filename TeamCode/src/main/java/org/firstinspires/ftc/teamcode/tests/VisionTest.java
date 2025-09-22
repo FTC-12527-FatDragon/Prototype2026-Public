@@ -20,8 +20,6 @@ public class VisionTest extends CommandOpMode {
     @Override
     public void initialize() {
         autoApriltag = new AutoApriltag(hardwareMap);
-
-
     }
 
     @Override

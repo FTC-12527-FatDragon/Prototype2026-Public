@@ -115,6 +115,8 @@ public class MecanumDrive extends SubsystemBase {
         return od.getPosition();
     }
 
+    public double getYawOffset() {return yawOffset;}
+
     public void stop() {
         moveRobot(0, 0, 0);
     }
