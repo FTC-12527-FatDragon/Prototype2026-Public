@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
-import static org.firstinspires.ftc.teamcode.tests.Tuning.follower;
-
-import android.graphics.Point;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.Pose;
