@@ -14,15 +14,13 @@ import com.pedropathing.geometry.Pose;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.commands.HeadResetCommand;
-import org.firstinspires.ftc.teamcode.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterSpeedCalc;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
+import org.firstinspires.ftc.teamcode.utils.Pose2dToPose;
 
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
@@ -64,8 +62,9 @@ public class TeleOp extends CommandOpMode {
         ).whenPressed(
                 new InstantCommand(() -> isAuto[0] = true)
                         .andThen(new TeleOpPathCommand(follower,
-                                TeleOpPaths.buildPath(follower, new Pose(0, 0, 0),
-                                        new Pose(10, 10, 10))))
+                                TeleOpPaths.buildPath(follower,
+                                        Pose2dToPose.convert(drive.getPose()),
+                                        new Pose(2, 2, 1))))
                         .andThen(new InstantCommand(() -> isAuto[0] = false))
         );
     }

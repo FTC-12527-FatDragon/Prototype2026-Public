@@ -20,7 +20,7 @@ public class TeleOpDriveCommand extends CommandBase {
     @Override
     public void execute() {
         if (!isAuto[0]) {
-            drive.moveRobotFieldRelative(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
+            drive.moveRobotFieldRelative(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), gamepadEx.getRightX());
         }
     }
 }
