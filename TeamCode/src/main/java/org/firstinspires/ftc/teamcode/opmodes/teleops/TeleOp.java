@@ -53,18 +53,18 @@ public class TeleOp extends CommandOpMode {
                 new HeadResetCommand(drive)
         );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.A)
-        ).whenHeld(
-                new ShootCommand(shooter, ShooterSpeedCalc.calcSpeed(drive.getPose()))
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.A)
+//        ).whenHeld(
+//                new ShootCommand(shooter, ShooterSpeedCalc.calcSpeed(drive.getPose()))
+//        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.B)
         ).whenPressed(
                 new InstantCommand(() -> isAuto[0] = true)
                         .andThen(new TeleOpPathCommand(follower,
-                                TeleOpPaths.buildPath(new Pose(0, 0, 0),
+                                TeleOpPaths.buildPath(follower, new Pose(0, 0, 0),
                                         new Pose(10, 10, 10))))
                         .andThen(new InstantCommand(() -> isAuto[0] = false))
         );
