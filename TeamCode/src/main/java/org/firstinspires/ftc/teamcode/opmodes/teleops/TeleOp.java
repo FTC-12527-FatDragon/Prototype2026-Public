@@ -36,7 +36,7 @@ public class TeleOp extends CommandOpMode {
 
     private Telemetry telemetryM;
 
-    private boolean isAuto = false;
+    private boolean[] isAuto = {false};
 
     @Override
     public void initialize() {
@@ -62,11 +62,11 @@ public class TeleOp extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.B)
         ).whenPressed(
-                new InstantCommand(() -> isAuto = true)
+                new InstantCommand(() -> isAuto[0] = true)
                         .andThen(new TeleOpPathCommand(follower,
                                 TeleOpPaths.buildPath(new Pose(0, 0, 0),
                                         new Pose(10, 10, 10))))
-                        .andThen(new InstantCommand(() -> isAuto = false))
+                        .andThen(new InstantCommand(() -> isAuto[0] = false))
         );
     }
 

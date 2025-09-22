@@ -8,9 +8,9 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 public class TeleOpDriveCommand extends CommandBase {
     private final MecanumDrive drive;
     private final GamepadEx gamepadEx;
-    private final boolean isAuto;
+    private final boolean[] isAuto;
 
-    public TeleOpDriveCommand(MecanumDrive drive, GamepadEx gamepadEx, boolean isAuto) {
+    public TeleOpDriveCommand(MecanumDrive drive, GamepadEx gamepadEx, boolean[] isAuto) {
         this.drive = drive;
         this.gamepadEx = gamepadEx;
         this.isAuto = isAuto;
@@ -19,7 +19,7 @@ public class TeleOpDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (!isAuto) {
+        if (!isAuto[0]) {
             drive.moveRobotFieldRelative(-gamepadEx.getLeftY(), -gamepadEx.getLeftX(), -gamepadEx.getRightX());
         }
     }
