@@ -50,7 +50,7 @@ public class TeleOp extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
         ).whenPressed(
-                new HeadResetCommand(drive)
+                new InstantCommand(() -> drive.reset(0))
         );
 
 //        new FunctionalButton(
