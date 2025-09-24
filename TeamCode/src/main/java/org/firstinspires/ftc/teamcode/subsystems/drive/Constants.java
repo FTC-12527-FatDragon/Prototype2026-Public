@@ -16,50 +16,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(16.2)
+            .mass(5)
             .forwardZeroPowerAcceleration(-26.982707557642915)
             .lateralZeroPowerAcceleration(-67.19294908602483)
-            .translationalPIDFCoefficients(new PIDFCoefficients(
-                    0.0,
-                    0,
-                    0,
-                    0.0
-            ))
-            .translationalPIDFSwitch(4)
-            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(
-                    0.4,
-                    0,
-                    0.005,
-                    0.0006
-            ))
-            .headingPIDFCoefficients(new PIDFCoefficients(
-                    0.8,
-                    0,
-                    0,
-                    0.01
-            ))
-            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(
-                    2.5,
-                    0,
-                    0.1,
-                    0.0005
-            ))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.1,
-                    0,
-                    0.00035,
-                    0.6,
-                    0.015
-            ))
-            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(
-                    0.02,
-                    0,
-                    0.000005,
-                    0.6,
-                    0.01
-            ))
-            .drivePIDFSwitch(15)
-            .centripetalScaling(0.0005);
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.025))
+            .headingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.05, 0.025))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.03,0.0,0.000005,0,0.0))
+            .centripetalScaling(0);
+
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .leftFrontMotorName("leftFrontMotor")
@@ -72,17 +36,16 @@ public class Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(80.89569139856053)
             .yVelocity(63.59879188837967)
-            .useBrakeModeInTeleOp(true);
+            .maxPower(1);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-5)
-            .strafePodX(0.5)
+            .forwardPodY(0)
+            .strafePodX(6.5)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("od")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
-
     /**
      These are the PathConstraints in order:
      tValueConstraint, velocityConstraint, translationalConstraint, headingConstraint, timeoutConstraint,
@@ -91,23 +54,23 @@ public class Constants {
      The BEZIER_CURVE_SEARCH_LIMIT should typically be left at 10 and shouldn't be changed.
      */
 
-    public static PathConstraints pathConstraints = new PathConstraints(
-            0.995,
-            0.1,
-            0.1,
-            0.009,
-            50,
-            1.25,
-            10,
-            1
-    );
+//    public static PathConstraints pathConstraints = new PathConstraints(
+//            0.995,
+//            0.1,
+//            0.1,
+//            0.009,
+//            50,
+//            1.25,
+//            10,
+//            1
+//    );
 
     //Add custom localizers or drivetrains here
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
                 .pinpointLocalizer(localizerConstants)
-                .pathConstraints(pathConstraints)
+//                .pathConstraints(pathConstraints)
                 .build();
     }
 }
