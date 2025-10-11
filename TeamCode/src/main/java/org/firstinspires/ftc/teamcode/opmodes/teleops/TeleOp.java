@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 import org.firstinspires.ftc.teamcode.utils.Pose2dToPose;
+import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
@@ -63,7 +64,7 @@ public class TeleOp extends CommandOpMode {
                 new InstantCommand(() -> isAuto[0] = true)
                         .andThen(new TeleOpPathCommand(follower,
                                 TeleOpPaths.buildPath(follower,
-                                        Pose2dToPose.convert(drive.getPose()),
+                                        Util.Pose2DToPose(drive.getPose()),
                                         new Pose(2, 2, 1))))
                         .andThen(new InstantCommand(() -> isAuto[0] = false))
         );

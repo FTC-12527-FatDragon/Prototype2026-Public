@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.utils.Units;
+import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Config
 public class MecanumDrive extends SubsystemBase {
@@ -103,7 +104,10 @@ public class MecanumDrive extends SubsystemBase {
     }
 
     public void turnRobotTo(double angle, double power) {
-        while (od.getHeading(AngleUnit.RADIANS) < angle) {
+        double heading = od.getHeading(AngleUnit.RADIANS);
+        double needs = (angle - heading) % (2 * Math.PI);
+        if(0 <= needs && needs <= Math.PI || needs <= -Math.PI)
+        while (Util.epsilonEqual(angle,od.getHeading(AngleUnit.RADIANS),0.02)) {
             leftFrontMotor.setPower(power * 0.2);
             leftBackMotor.setPower(power * 0.2);
             rightFrontMotor.setPower(power * -0.2);
@@ -116,6 +120,11 @@ public class MecanumDrive extends SubsystemBase {
     }
 
     public double getYawOffset() {return yawOffset;}
+
+    public boolean isHeadingAtSetPoint(double headingSetPoint) {
+        return Util.epsilonEqual(od.getHeading(AngleUnit.RADIANS), headingSetPoint,
+                DriveConstants.headingEpsilon);
+    }
 
     public void stop() {
         moveRobot(0, 0, 0);

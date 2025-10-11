@@ -18,7 +18,7 @@ public class AutoApriltag extends SubsystemBase {
     public List getNumbers() {
         List<FiducialResult> fiducials = limelight.getLatestResult().getFiducialResults();
         List apriltagIDs = new ArrayList<>();
-        for (FiducialResult fiducial : fiducials) {
+        for (FiducialResult fiducial: fiducials) {
             apriltagIDs.add(fiducial.getFiducialId()); // The ID number of the fiducial
         }
         return apriltagIDs;
