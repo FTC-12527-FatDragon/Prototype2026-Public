@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Shooter extends SubsystemBase {
@@ -10,14 +11,12 @@ public class Shooter extends SubsystemBase {
     public static double shooterVelocity;
 
     public Shooter(final HardwareMap hardwareMap) {
-        leftShooter = new Motor(hardwareMap, ShooterConstants.leftShooterName);
-        rightShooter = new Motor(hardwareMap, ShooterConstants.rightShooterName);
+        leftShooter = new MotorEx(hardwareMap, ShooterConstants.leftShooterName, Motor.GoBILDA.RPM_312);
+        rightShooter = new MotorEx(hardwareMap, ShooterConstants.rightShooterName, Motor.GoBILDA.RPM_312);
         transit = new Motor(hardwareMap, ShooterConstants.transit);
 
         leftShooter.setRunMode(Motor.RunMode.VelocityControl);
         leftShooter.setVeloCoefficients(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD);
-        leftShooter.setFeedforwardCoefficients(ShooterConstants.kS, ShooterConstants.kV, ShooterConstants.kA);
-
         transit.setRunMode(Motor.RunMode.RawPower);
 
         shooterVelocity = 0;
@@ -41,7 +40,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-//        leftShooter.set(shooterVelocity);
-//        rightShooter.set(-shooterVelocity);
+//        leftShooter.setVelocity(shooterVelocity);
+//        rightShooter.setVelocity(-shooterVelocity);
     }
 }
