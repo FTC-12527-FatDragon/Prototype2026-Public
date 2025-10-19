@@ -56,7 +56,7 @@ public class MotorTunerUltimate extends LinearOpMode {
             new PID(0, 0, 0)
     };
 
-    DcMotor[] motors = new DcMotor[4];
+    DcMotorEx[] motors = new DcMotorEx[4];
 
     PIDController[] pidControllers = {
             new PIDController(0, 0, 0),
@@ -77,7 +77,7 @@ public class MotorTunerUltimate extends LinearOpMode {
 
         for (int i = 0; i < 4; ++i)
             if (!motorName[i].isEmpty()) {
-                motors[i] = hardwareMap.get(DcMotor.class, motorName[i]);
+                motors[i] = hardwareMap.get(DcMotorEx.class, motorName[i]);
                 if (closeLoop[i]) {
                     motors[i].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
