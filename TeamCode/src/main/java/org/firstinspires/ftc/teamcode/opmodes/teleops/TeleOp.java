@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.commands.TeleOpPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 import org.firstinspires.ftc.teamcode.utils.Pose2dToPose;
 import org.firstinspires.ftc.teamcode.utils.Util;
@@ -33,6 +34,8 @@ public class TeleOp extends CommandOpMode {
 
     private Shooter shooter;
 
+    private Transit transit;
+
     private Telemetry telemetryM;
 
     private boolean[] isAuto = {false};
@@ -43,6 +46,7 @@ public class TeleOp extends CommandOpMode {
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
 //        shooter = new Shooter(hardwareMap);
+        transit = new Transit(hardwareMap);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
 
