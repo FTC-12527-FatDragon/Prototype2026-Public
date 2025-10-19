@@ -22,6 +22,23 @@ class PID {
     }
 }
 
+class Filter {
+    final int WINDOW = 10;
+    double[] history = new double[WINDOW];
+    public int index = 0;
+
+    public void updateVelocity(double newVal) {
+        history[index] = newVal;
+        index = (index + 1) % WINDOW;
+    }
+
+    public double getSmoothedVelocity() {
+        double sum = 0;
+        for (double v : history) sum += v;
+        return sum / WINDOW;
+    }
+}
+
 @TeleOp(name = "MotorTunerUltimate")
 @Config
 public class MotorTunerUltimate extends LinearOpMode {
@@ -52,6 +69,8 @@ public class MotorTunerUltimate extends LinearOpMode {
         return (pos - lastPos[index]) / 0.02 * 60;
     }
 
+    Filter filter = new Filter();
+
     @Override
     public void runOpMode() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -71,21 +90,20 @@ public class MotorTunerUltimate extends LinearOpMode {
             for (int i = 0; i < 4; ++i)
                 if (!motorName[i].isEmpty()) {
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
-                        pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
+                        if (filter.index == 0) {
+                            pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
+                            double v = filter.getSmoothedVelocity();
+                            motors[i].setPower(pidControllers[i].calculate(v, target[i]));
+
+                            TelemetryPacket packet = new TelemetryPacket();
+                            packet.put("targetVelocity " + i, target[i]);
+                            packet.put("currentVelocity " + i, v);
+
+                            dashboard.sendTelemetryPacket(packet);
+                        }
                         double pos = motors[i].getCurrentPosition();
-                        double v = getVelocity(i, pos);
-                        motors[i].setPower(pidControllers[i].calculate(v, target[i]));
-
-                        TelemetryPacket packet = new TelemetryPacket();
-                        packet.put("targetVelocity " + i, target[i]);
-                        packet.put("currentVelocity " + i, v);
-                        packet.put("lastPos " + i, lastPos[i]);
-                        packet.put("currentPos " + i, pos);
-
-
-                        dashboard.sendTelemetryPacket(packet);
-
+                        filter.updateVelocity(getVelocity(i, pos));
                         lastPos[i] = pos;
                     }
                     else
