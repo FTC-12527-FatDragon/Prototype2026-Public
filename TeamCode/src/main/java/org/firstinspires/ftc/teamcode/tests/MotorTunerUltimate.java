@@ -22,28 +22,10 @@ class PID {
     }
 }
 
-class Filter {
-    final int WINDOW = 10;
-    double[] history = new double[WINDOW];
-    public int index = 0;
-
-    public void updateVelocity(double newVal) {
-        history[index] = newVal;
-        index = (index + 1) % WINDOW;
-    }
-
-    public double getSmoothedVelocity() {
-        double sum = 0;
-        for (double v : history) sum += v;
-        return sum / WINDOW;
-    }
-}
-
 @TeleOp(name = "MotorTunerUltimate")
 @Config
 public class MotorTunerUltimate extends LinearOpMode {
     public static String[] motorName = {"", "", "", ""};
-    public static double[] motorPower = new double[4];
     public static boolean[] closeLoop = new boolean[4];
     public static double[] target = new double[4];
     public static boolean[] isVelocityCloseLoop = new boolean[4];
@@ -87,7 +69,7 @@ public class MotorTunerUltimate extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < 4; ++i) {
                 if (!motorName[i].isEmpty()) {
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
                         if (filter.index == 0) {
@@ -106,9 +88,24 @@ public class MotorTunerUltimate extends LinearOpMode {
                         filter.updateVelocity(getVelocity(i, pos));
                         lastPos[i] = pos;
                     }
-                    else
-                        motors[i].setPower(motorPower[i]);
+                    if (!closeLoop[i]) {
+
+                        motors[i].setPower(target[i]);
+                        if (filter.index == 0) {
+                            double v = filter.getSmoothedVelocity();
+
+                            TelemetryPacket packet = new TelemetryPacket();
+                            packet.put("currentVelocity " + i, v);
+
+                            dashboard.sendTelemetryPacket(packet);
+                        }
+
+                        double pos = motors[i].getCurrentPosition();
+                        filter.updateVelocity(getVelocity(i, pos));
+                        lastPos[i] = pos;
+                    }
                 }
+            }
         }
     }
 }
