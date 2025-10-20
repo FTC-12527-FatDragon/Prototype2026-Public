@@ -13,11 +13,11 @@ public class ShooterToggleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.
+        shooter.setPower(0);
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.setShooterVelocity(0);
+        shooter.setPower(0);
     }
 }

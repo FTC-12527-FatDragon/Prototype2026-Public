@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
+
 class PID {
     public double kP, kI, kD;
 
@@ -29,7 +31,6 @@ public class MotorTunerUltimate extends LinearOpMode {
     public static boolean[] closeLoop = new boolean[4];
     public static double[] target = new double[4];
     public static boolean[] isVelocityCloseLoop = new boolean[4];
-    public double[] lastPos = new double[4];
 
     public static PID[] PIDs = {
             new PID(0, 0, 0),
@@ -38,7 +39,7 @@ public class MotorTunerUltimate extends LinearOpMode {
             new PID(0, 0, 0)
     };
 
-    DcMotorEx[] motors = new DcMotorEx[4];
+    DcMotorRe[] motors = new DcMotorRe[4];
 
     PIDController[] pidControllers = {
             new PIDController(0, 0, 0),
@@ -47,23 +48,14 @@ public class MotorTunerUltimate extends LinearOpMode {
             new PIDController(0, 0, 0)
     };
 
-    public double getVelocity(int index, double pos) {
-        return (pos - lastPos[index]) / 0.02 * 60;
-    }
-
-    Filter filter = new Filter();
-
     @Override
     public void runOpMode() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
         for (int i = 0; i < 4; ++i)
             if (!motorName[i].isEmpty()) {
-                motors[i] = hardwareMap.get(DcMotorEx.class, motorName[i]);
-                if (closeLoop[i]) {
-                    motors[i].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
-                }
+                motors[i] = new DcMotorRe(hardwareMap, motorName[i]);
+                pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
             }
 
         waitForStart();
@@ -72,38 +64,28 @@ public class MotorTunerUltimate extends LinearOpMode {
             for (int i = 0; i < 4; ++i) {
                 if (!motorName[i].isEmpty()) {
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
-                        if (filter.index == 0) {
-                            pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
+                        pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
-                            double v = filter.getSmoothedVelocity();
-                            motors[i].setPower(pidControllers[i].calculate(v, target[i]));
+                        double v = motors[i].getAverageVelocity();
+                        motors[i].setPower(pidControllers[i].calculate(v, target[i]));
 
-                            TelemetryPacket packet = new TelemetryPacket();
-                            packet.put("targetVelocity " + i, target[i]);
-                            packet.put("currentVelocity " + i, v);
+                        TelemetryPacket packet = new TelemetryPacket();
+                        packet.put("targetVelocity " + i, target[i]);
+                        packet.put("currentVelocity " + i, v);
 
-                            dashboard.sendTelemetryPacket(packet);
-                        }
-                        double pos = motors[i].getCurrentPosition();
-                        filter.updateVelocity(getVelocity(i, pos));
-                        lastPos[i] = pos;
+                        dashboard.sendTelemetryPacket(packet);
                     }
                     if (!closeLoop[i]) {
-
                         motors[i].setPower(target[i]);
-                        if (filter.index == 0) {
-                            double v = filter.getSmoothedVelocity();
+                        double v = motors[i].getAverageVelocity();
 
-                            TelemetryPacket packet = new TelemetryPacket();
-                            packet.put("currentVelocity " + i, v);
+                        TelemetryPacket packet = new TelemetryPacket();
+                        packet.put("currentVelocity " + i, v);
+                        packet.put("LibVelocity " + i, motors[i].getLibVelocity());
 
-                            dashboard.sendTelemetryPacket(packet);
-                        }
-
-                        double pos = motors[i].getCurrentPosition();
-                        filter.updateVelocity(getVelocity(i, pos));
-                        lastPos[i] = pos;
+                        dashboard.sendTelemetryPacket(packet);
                     }
+                    motors[i].updateLastPos();
                 }
             }
         }

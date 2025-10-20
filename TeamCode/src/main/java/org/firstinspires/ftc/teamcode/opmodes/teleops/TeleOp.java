@@ -61,11 +61,11 @@ public class TeleOp extends CommandOpMode {
                 new InstantCommand(() -> drive.reset(0))
         );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.A)
-        ).whenHeld(
-                new ShootCommand(shooter, ShooterSpeedCalc.calcSpeed(drive.getPose()))
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.A)
+//        ).whenHeld(
+//                new ShootCommand(shooter, ShooterSpeedCalc.calcSpeed(drive.getPose()))
+//        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.B)

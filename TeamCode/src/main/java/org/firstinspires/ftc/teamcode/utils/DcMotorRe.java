@@ -1,20 +1,22 @@
 package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class DcMotorRe{
-    private final DcMotor motor;
+public class DcMotorRe {
+    private final DcMotorEx motor;
     private double lastPos = 0;
     private final double WINDOW = 10;
     private final Deque<Double> posList = new ArrayDeque<>();
 
     public DcMotorRe(final HardwareMap hardwareMap, final String motorName) {
-        motor = hardwareMap.get(DcMotor.class, motorName);
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor = hardwareMap.get(DcMotorEx.class, motorName);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public double getPosition() { return motor.getCurrentPosition(); }
 
@@ -35,9 +37,13 @@ public class DcMotorRe{
         motor.setPower(power);
     }
 
-    public void updateLastPos(){
+    public double getLibVelocity() {
+        return motor.getVelocity();
+    }
+
+    public void updateLastPos() {
         lastPos = motor.getCurrentPosition();
-        if (posList.element() >= WINDOW) {
+        if (posList.size() >= WINDOW) {
             posList.removeFirst();
         }
         posList.addLast(lastPos);
