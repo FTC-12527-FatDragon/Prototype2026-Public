@@ -14,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
 
-@TeleOp(name = "Sensor: REVColorDistance", group = "Sensor")
-@Disabled                            // Comment this out to add to the opmode list
+@TeleOp(name = "Sensor: REVColorDistance")
+//@Disabled                            // Comment this out to add to the opmode list
 public class ColorSensorTest extends LinearOpMode {
     ColorSensor sensorColor;
     DistanceSensor sensorDistance;
