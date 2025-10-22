@@ -11,7 +11,7 @@ public class Transit extends SubsystemBase {
         transit = hardwareMap.get(DcMotorEx.class, TransitConstants.transitName);
     }
 
-    public void setTransitPower(double power) {
+    public void setPower(double power) {
         transit.setPower(power);
     }
 }

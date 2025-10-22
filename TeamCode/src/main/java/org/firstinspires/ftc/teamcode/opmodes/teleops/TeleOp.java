@@ -8,29 +8,24 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.commands.IntakeToggleCommand;
-import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.TeleOpPathCommand;
-import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
+import org.firstinspires.ftc.teamcode.commands.RobotCentricCommandTEMP;
+import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.RobotCentricTEMP;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
-import org.firstinspires.ftc.teamcode.utils.Pose2dToPose;
-import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
 public class TeleOp extends CommandOpMode {
     private MecanumDrive drive;
-    private Follower follower;
+
+    private RobotCentricTEMP robotCentricTEMP;
+//    private Follower follower;
 
     private GamepadEx gamepadEx1;
 
@@ -46,14 +41,17 @@ public class TeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-        drive = new MecanumDrive(hardwareMap);
+//        drive = new MecanumDrive(hardwareMap);
         gamepadEx1 = new GamepadEx(gamepad1);
-        follower = Constants.createFollower(hardwareMap);
+//        follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
+        robotCentricTEMP = new RobotCentricTEMP(hardwareMap);
 
-        drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
+//        drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
+
+        robotCentricTEMP.setDefaultCommand(new RobotCentricCommandTEMP(robotCentricTEMP, gamepadEx1));
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
@@ -68,10 +66,35 @@ public class TeleOp extends CommandOpMode {
 //        );
 
         new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.X)
+        ).whenPressed(
+                new InstantCommand(() -> intake.toggle())
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
+        ).whenHeld(
+                new TransitCommand(transit, 0.5)
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.A)
+        ).whenPressed(
+                new InstantCommand(() -> shooter.toggleShooterState(Shooter.ShooterState.FAST))
+        );
+
+        new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.B)
         ).whenPressed(
-                new IntakeToggleCommand(intake)
+                new InstantCommand(() -> shooter.toggleShooterState(Shooter.ShooterState.SLOW))
         );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+        ).whenHeld(
+                new TransitCommand(transit, 0.7)
+        );
+
 
 //        new FunctionalButton(
 //                () -> gamepadEx1.getButton(GamepadKeys.Button.B)
@@ -89,10 +112,10 @@ public class TeleOp extends CommandOpMode {
     public void run() {
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
-        telemetry.addData("X", drive.getPose().getX(DistanceUnit.MM));
-        telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
-        telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
-        telemetry.addData("YawOffset",drive.getYawOffset());
+//        telemetry.addData("X", drive.getPose().getX(DistanceUnit.MM));
+//        telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
+//        telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
+//        telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.update();
     }
 }

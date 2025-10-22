@@ -9,6 +9,20 @@ import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
 public class Shooter extends SubsystemBase {
     public final DcMotorRe shooter;
 
+    public enum ShooterState {
+        STOP(0),
+        SLOW(0.65),
+        FAST(0.8);
+
+        double shooterPower;
+
+        ShooterState(double shooterPower) {
+            this.shooterPower = shooterPower;
+        }
+    }
+
+    public ShooterState shooterState = ShooterState.STOP;
+
     public Shooter(final HardwareMap hardwareMap) {
         shooter = new DcMotorRe(hardwareMap, "shooterMotor");
     }
@@ -21,8 +35,13 @@ public class Shooter extends SubsystemBase {
         return shooter.getInstantVelocity();
     }
 
-    public void setPower(double power) {
-        shooter.setPower(power);
+    public void toggleShooterState(ShooterState shooterStateE) {
+        if (shooterStateE == ShooterState.SLOW) {
+            shooterState = shooterState == ShooterState.STOP ? ShooterState.SLOW : ShooterState.STOP;
+        }
+        else if (shooterStateE == ShooterState.FAST) {
+            shooterState = shooterState == ShooterState.STOP ? ShooterState.FAST : ShooterState.STOP;
+        }
     }
 
 //    public void setShooterVelocity(double setPoint) {
@@ -35,6 +54,8 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
+        shooter.setPower(shooterState.shooterPower);
+
         shooter.updateLastPos();
     }
 }

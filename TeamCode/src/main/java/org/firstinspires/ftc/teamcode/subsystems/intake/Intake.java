@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.intake;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Intake extends SubsystemBase {
@@ -11,6 +12,8 @@ public class Intake extends SubsystemBase {
 
     public Intake(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotorEx.class, IntakeConstants.intakeMotorName);
+
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         isRunning = false;
     }
@@ -25,7 +28,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (isRunning()) {
+        if (isRunning) {
             intakeMotor.setPower(IntakeConstants.intakePower);
         }
         else {
