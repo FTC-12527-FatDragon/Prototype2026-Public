@@ -17,8 +17,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
     private final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
     private final SparkFunOTOS otos;
     private double yawOffset;
-    public static double xPose = DriveConstants.xPose, yPose = DriveConstants.yPose,
-            headingPose = DriveConstants.headingPose; // mm
+    public static double xPose = DriveConstants.xPoseOTOS, yPose = DriveConstants.yPoseOTOS,
+            headingPose = DriveConstants.headingPoseOTOS; // mm
 
     public MecanumDriveOTOS(final HardwareMap hardwareMap) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");

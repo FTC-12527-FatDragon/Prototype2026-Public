@@ -20,7 +20,7 @@ public class MecanumDrive extends SubsystemBase {
     private final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
     private final GoBildaPinpointDriver od;
     private double yawOffset;
-    public static double xPose = DriveConstants.xPose, yPose = DriveConstants.yPose; // mm
+    public static double xPose = DriveConstants.xPoseDW, yPose = DriveConstants.yPoseDW; // mm
 
     public MecanumDrive(final HardwareMap hardwareMap) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");

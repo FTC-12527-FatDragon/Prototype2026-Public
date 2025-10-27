@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
@@ -23,7 +24,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
 public class TeleOp extends CommandOpMode {
-    private MecanumDrive drive;
+    private MecanumDriveOTOS drive;
 
     private Follower follower;
 
@@ -41,7 +42,7 @@ public class TeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-        drive = new MecanumDrive(hardwareMap);
+        drive = new MecanumDriveOTOS(hardwareMap);
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap);
