@@ -27,6 +27,9 @@ public class DcMotorRe {
         return (motor.getCurrentPosition() - lastPos) / 0.02;
     }
 
+    /**
+     * In Ticks Per Second
+     */
     public double getAverageVelocity() {
         if (posList.peekFirst() != null && posList.peekLast() != null)
             return (posList.peekLast() - posList.peekFirst()) / (WINDOW * 0.02);

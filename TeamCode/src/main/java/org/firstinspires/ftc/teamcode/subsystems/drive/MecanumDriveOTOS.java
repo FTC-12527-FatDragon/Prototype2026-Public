@@ -25,7 +25,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
-        otos = hardwareMap.get(SparkFunOTOS.class, "od");
+        otos = hardwareMap.get(SparkFunOTOS.class, "otos");
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
