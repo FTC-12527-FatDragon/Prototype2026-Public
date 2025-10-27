@@ -33,7 +33,7 @@ public class CDS extends SubsystemBase {
         return ballDetected;
     }
 
-    public void
+    
 
     @Override
     public void periodic() {
