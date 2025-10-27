@@ -4,13 +4,10 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
 
@@ -24,12 +21,15 @@ class PID {
     }
 }
 
-@TeleOp(name = "MotorTunerUltimate")
+@TeleOp(name = "DashTuner")
 @Config
-public class MotorTunerUltimate extends LinearOpMode {
+public class DashTuner extends LinearOpMode {
     public static String[] motorName = {"", "", "", ""};
+    public static String[] servoName = {"", "", "", ""};
     public static boolean[] closeLoop = new boolean[4];
-    public static double[] target = new double[4];
+    public static double[] motorTarget = new double[4];
+    public static double[] servoTarget = new double[4];
+
     public static boolean[] isVelocityCloseLoop = new boolean[4];
 
     public static PID[] PIDs = {
@@ -40,6 +40,10 @@ public class MotorTunerUltimate extends LinearOpMode {
     };
 
     DcMotorRe[] motors = new DcMotorRe[4];
+
+    Servo[] servos = new Servo[4];
+
+    CRServo[] crServos = new CRServo[4];
 
     PIDController[] pidControllers = {
             new PIDController(0, 0, 0),
@@ -67,16 +71,16 @@ public class MotorTunerUltimate extends LinearOpMode {
                         pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
                         double v = motors[i].getAverageVelocity();
-                        motors[i].setPower(pidControllers[i].calculate(v, target[i]));
+                        motors[i].setPower(pidControllers[i].calculate(v, motorTarget[i]));
 
                         TelemetryPacket packet = new TelemetryPacket();
-                        packet.put("targetVelocity " + i, target[i]);
+                        packet.put("targetVelocity " + i, motorTarget[i]);
                         packet.put("currentVelocity " + i, v);
 
                         dashboard.sendTelemetryPacket(packet);
                     }
                     if (!closeLoop[i]) {
-                        motors[i].setPower(target[i]);
+                        motors[i].setPower(motorTarget[i]);
                         double v = motors[i].getAverageVelocity();
 
                         TelemetryPacket packet = new TelemetryPacket();
@@ -86,6 +90,10 @@ public class MotorTunerUltimate extends LinearOpMode {
                         dashboard.sendTelemetryPacket(packet);
                     }
                     motors[i].updateLastPos();
+                }
+
+                if (!servoName[i].isEmpty()) {
+
                 }
             }
         }

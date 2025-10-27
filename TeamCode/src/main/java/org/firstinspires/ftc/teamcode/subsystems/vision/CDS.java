@@ -29,6 +29,12 @@ public class CDS extends SubsystemBase {
         ballDetected = false;
     }
 
+    public boolean ballIn() {
+        return ballDetected;
+    }
+
+    public void
+
     @Override
     public void periodic() {
         double dis = distanceSensor.getDistance(DistanceUnit.CM);
@@ -41,8 +47,9 @@ public class CDS extends SubsystemBase {
                 (int) (g * SCALE_FACTOR),
                 (int) (b * SCALE_FACTOR),
                 hsvValues);
-
-        ballDetected = dis < VisionConstants.ballDistance;
+        if (dis < VisionConstants.ballDistance) {
+            ballDetected = false;
+        }
 
         purpleDetected = ballDetected && b > Math.max(r, g) * purpleConst;
     }

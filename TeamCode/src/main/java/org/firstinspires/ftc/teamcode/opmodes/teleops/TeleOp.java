@@ -8,12 +8,13 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.follower.Follower;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.RobotCentricCommandTEMP;
+import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
+import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.drive.RobotCentricTEMP;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
@@ -24,8 +25,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 public class TeleOp extends CommandOpMode {
     private MecanumDrive drive;
 
-    private RobotCentricTEMP robotCentricTEMP;
-//    private Follower follower;
+    private Follower follower;
 
     private GamepadEx gamepadEx1;
 
@@ -41,17 +41,14 @@ public class TeleOp extends CommandOpMode {
 
     @Override
     public void initialize() {
-//        drive = new MecanumDrive(hardwareMap);
+        drive = new MecanumDrive(hardwareMap);
         gamepadEx1 = new GamepadEx(gamepad1);
-//        follower = Constants.createFollower(hardwareMap);
+        follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
-        robotCentricTEMP = new RobotCentricTEMP(hardwareMap);
 
-//        drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
-
-        robotCentricTEMP.setDefaultCommand(new RobotCentricCommandTEMP(robotCentricTEMP, gamepadEx1));
+        drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
