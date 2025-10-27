@@ -11,6 +11,8 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
@@ -110,10 +112,10 @@ public class TeleOp extends CommandOpMode {
     public void run() {
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
-//        telemetry.addData("X", drive.getPose().getX(DistanceUnit.MM));
-//        telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
-//        telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
-//        telemetry.addData("YawOffset",drive.getYawOffset());
+        telemetry.addData("X", drive.getPose().getX(DistanceUnit.MM));
+        telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
+        telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
+        telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.update();
     }
 }
