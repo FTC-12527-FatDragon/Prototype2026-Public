@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.subsystems.vision;
+package org.firstinspires.ftc.teamcode.subsystems.cds;
 
-import static org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants.SCALE_FACTOR;
-import static org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants.purpleConst;
+import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.SCALE_FACTOR;
+import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.purpleConst;
 
 import android.graphics.Color;
 
@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants;
 
 public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor;
@@ -20,17 +21,11 @@ public class CDS extends SubsystemBase {
 
     private boolean purpleDetected, greenDetected, ballDetected;
 
+    private double lastPos = 10.0;
+
     public CDS(HardwareMap hardwareMap) {
-        colorSensor = hardwareMap.get(ColorSensor.class, VisionConstants.colorSensorName);
-        distanceSensor = hardwareMap.get(DistanceSensor.class, VisionConstants.distanceSensorName);
-
-        purpleDetected = false;
-        greenDetected = false;
-        ballDetected = false;
-    }
-
-    public boolean ballIn() {
-        return ballDetected;
+        colorSensor = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensorName);
+        distanceSensor = hardwareMap.get(DistanceSensor.class, CDSConstants.distanceSensorName);
     }
 
 
@@ -47,9 +42,6 @@ public class CDS extends SubsystemBase {
                 (int) (g * SCALE_FACTOR),
                 (int) (b * SCALE_FACTOR),
                 hsvValues);
-        if (dis < VisionConstants.ballDistance) {
-            ballDetected = false;
-        }
 
         purpleDetected = ballDetected && b > Math.max(r, g) * purpleConst;
     }

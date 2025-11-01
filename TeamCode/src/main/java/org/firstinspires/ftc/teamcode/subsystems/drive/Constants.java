@@ -18,14 +18,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
+//    public static FollowerConstants followerConstants = new FollowerConstants()
+//            .mass(5)
+//            .forwardZeroPowerAcceleration(-26.982707557642915)
+//            .lateralZeroPowerAcceleration(-67.19294908602483)
+//            .translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.025))
+//            .headingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.05, 0.025))
+//            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.03,0.0,0.000005,0,0.0))
+//            .centripetalScaling(0);
+
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(5)
-            .forwardZeroPowerAcceleration(-26.982707557642915)
-            .lateralZeroPowerAcceleration(-67.19294908602483)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.01, 0.025))
-            .headingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.05, 0.025))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.03,0.0,0.000005,0,0.0))
-            .centripetalScaling(0);
+            .mass(5);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -37,8 +40,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(80.89569139856053)
-            .yVelocity(63.59879188837967)
+            .xVelocity(103.21044921875)
+
             .maxPower(1);
 
     public static OTOSConstants otosConstants = new OTOSConstants()
@@ -49,7 +52,9 @@ public class Constants {
                     DriveConstants.xPoseOTOS,
                     DriveConstants.yPoseOTOS,
                     DriveConstants.headingPoseOTOS
-            ));
+            ))
+            .linearScalar(36.9914)
+            .angularScalar(-0.9957);
 
 //    public static PinpointConstants localizerConstants = new PinpointConstants()
 //            .forwardPodY(0)

@@ -2,9 +2,8 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
-import org.firstinspires.ftc.teamcode.subsystems.vision.CDS;
+import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 
 public class IntakeTransitCommand extends CommandBase {
     private final Transit transit;

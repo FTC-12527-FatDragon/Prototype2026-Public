@@ -18,7 +18,9 @@ public class DcMotorRe {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    public double getPosition() { return motor.getCurrentPosition(); }
+    public double getPosition() {
+        return motor.getCurrentPosition();
+    }
 
     /**
      * In Ticks Per Second

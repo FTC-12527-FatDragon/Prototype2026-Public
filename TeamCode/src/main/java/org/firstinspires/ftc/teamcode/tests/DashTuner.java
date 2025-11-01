@@ -30,6 +30,8 @@ public class DashTuner extends LinearOpMode {
     public static double[] motorTarget = new double[4];
     public static double[] servoTarget = new double[4];
 
+    public static boolean[] isContinous = new boolean[4];
+
     public static boolean[] isVelocityCloseLoop = new boolean[4];
 
     public static PID[] PIDs = {
@@ -56,11 +58,16 @@ public class DashTuner extends LinearOpMode {
     public void runOpMode() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
 
-        for (int i = 0; i < 4; ++i)
+        for (int i = 0; i < 4; i++) {
             if (!motorName[i].isEmpty()) {
                 motors[i] = new DcMotorRe(hardwareMap, motorName[i]);
                 pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
             }
+            if (!servoName[i].isEmpty()) {
+                if (isContinous[i]) crServos[i] = hardwareMap.get(CRServo.class, servoName[i]);
+                else servos[i] = hardwareMap.get(Servo.class, servoName[i]);
+            }
+        }
 
         waitForStart();
 
@@ -79,6 +86,18 @@ public class DashTuner extends LinearOpMode {
 
                         dashboard.sendTelemetryPacket(packet);
                     }
+                    if (closeLoop[i] && !isVelocityCloseLoop[i]) {
+                        pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
+
+                        double pos = motors[i].getPosition();
+                        motors[i].setPower(pidControllers[i].calculate(pos, motorTarget[i]));
+
+                        TelemetryPacket packet = new TelemetryPacket();
+                        packet.put("targetPosition " + i, motorTarget[i]);
+                        packet.put("currentPosition " + i, pos);
+
+                        dashboard.sendTelemetryPacket(packet);
+                    }
                     if (!closeLoop[i]) {
                         motors[i].setPower(motorTarget[i]);
                         double v = motors[i].getAverageVelocity();
@@ -93,7 +112,12 @@ public class DashTuner extends LinearOpMode {
                 }
 
                 if (!servoName[i].isEmpty()) {
-
+                    if (isContinous[i]) {
+                        crServos[i].setPower(servoTarget[i]);
+                    }
+                    else {
+                        servos[i].setPosition(servoTarget[i]);
+                    }
                 }
             }
         }
