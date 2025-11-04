@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleops;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -17,13 +19,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
+import org.firstinspires.ftc.teamcode.commands.TransitCommandWithShooter;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
+@Config
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
 public class TeleOpSolo extends CommandOpMode {
@@ -91,7 +96,7 @@ public class TeleOpSolo extends CommandOpMode {
         ).whenHeld(
                 new InstantCommand(() -> transit.setLimitServoState(Transit.LimitServoState.OPEN))
                         .andThen(new WaitCommand(300))
-                        .andThen(new TransitCommand(transit))
+                        .andThen(new TransitCommandWithShooter(transit, shooter))
         );
 
 
@@ -116,5 +121,13 @@ public class TeleOpSolo extends CommandOpMode {
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.update();
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.put("ShooterVelocity", shooter.getAverageVelocity());
+        packet.put("StopTime", transit.stopTime);
+        packet.put("AtFast", shooter.shooterState == Shooter.ShooterState.FAST
+                && shooter.getAverageVelocity() > ShooterConstants.fastVelocity);
+        packet.put("AtSlow", shooter.shooterState == Shooter.ShooterState.SLOW
+                && shooter.getAverageVelocity() > ShooterConstants.slowVelocity);
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

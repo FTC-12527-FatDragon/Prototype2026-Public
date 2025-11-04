@@ -16,6 +16,7 @@ public class Transit extends SubsystemBase {
     public double transitPower = TransitState.STOP.power;
     public double transitServoPower = 0.5;
     public double limitServoPos = LimitServoState.CLOSE.servoPos;
+    public double stopTime = 0;
 
 
 
@@ -32,7 +33,7 @@ public class Transit extends SubsystemBase {
 
     public enum TransitState {
         STOP(TransitConstants.transitStopPower),
-        INTAKE(TransitConstants.transitInakePower),
+        INTAKE(TransitConstants.transitIntakePower),
         SHOOT(TransitConstants.transitShootPower);
 
         double power;
@@ -71,11 +72,18 @@ public class Transit extends SubsystemBase {
         transitPower = transitState.power;
     }
 
+    public void stopTransit(double time) {
+        setTransitState(TransitState.STOP);
+        stopTime = time;
+    }
+
     @Override
     public void periodic() {
-        transit.setPower(transitPower);
+        if (stopTime <= 0) transit.setPower(transitPower);
+        else transit.setPower(0);
         leftTransitServo.setPosition(transitServoPower);
         rightTransitServo.setPosition(transitServoPower);
         limitServo.setPosition(limitServoPos);
+        if (stopTime > 0) stopTime -= 20;
     }
 }

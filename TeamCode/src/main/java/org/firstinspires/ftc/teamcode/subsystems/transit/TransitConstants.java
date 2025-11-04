@@ -10,7 +10,7 @@ public class TransitConstants {
     public static double limitServoClosePos = 0.28;
     public static double limitServoOpenPos = 0.025;
 
-    public static double transitInakePower = 0.5;
-    public static double transitShootPower = 0.7;
+    public static double transitIntakePower = 0.5;
+    public static double transitShootPower = 0.4;
     public static double transitStopPower = 0.0;
 }
