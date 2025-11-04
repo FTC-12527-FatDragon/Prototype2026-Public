@@ -7,20 +7,17 @@ import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 public class TransitCommand extends CommandBase {
     private final Transit transit;
 
-    private final double power;
-
-    public TransitCommand(Transit transit, double power) {
+    public TransitCommand(Transit transit) {
         this.transit = transit;
-        this.power = power;
     }
 
     @Override
     public void execute() {
-        transit.setPower(power);
+        transit.setTransitState(Transit.TransitState.SHOOT);
     }
 
     @Override
     public void end(boolean interrupted) {
-        transit.setPower(0);
+        transit.setTransitState(Transit.TransitState.STOP);
     }
 }

@@ -49,9 +49,7 @@ public class Constants {
             .linearUnit(DistanceUnit.MM)
             .angleUnit(AngleUnit.RADIANS)
             .offset(new SparkFunOTOS.Pose2D(
-                    DriveConstants.xPoseOTOS,
-                    DriveConstants.yPoseOTOS,
-                    DriveConstants.headingPoseOTOS
+                    0, 0, 0
             ))
             .linearScalar(36.9914)
             .angularScalar(-0.9957);

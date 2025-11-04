@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
@@ -13,10 +14,10 @@ import com.pedropathing.follower.Follower;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
@@ -25,7 +26,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
-public class TeleOp extends CommandOpMode {
+public class TeleOpSolo extends CommandOpMode {
     private MecanumDriveOTOS drive;
 
     private Follower follower;
@@ -66,33 +67,31 @@ public class TeleOp extends CommandOpMode {
 //        );
 
         new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.X)
-        ).whenPressed(
-                new InstantCommand(() -> intake.toggle())
-        );
-
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
+                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5
         ).whenHeld(
-                new TransitCommand(transit, 0.5)
+                new InstantCommand(() -> transit.setLimitServoState(Transit.LimitServoState.CLOSE))
+                        .andThen(new WaitCommand(300))
+                        .alongWith(new IntakeCommand(transit, intake))
         );
 
         new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.A)
+                () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
         ).whenPressed(
                 new InstantCommand(() -> shooter.toggleShooterState(Shooter.ShooterState.FAST))
         );
 
         new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.B)
+                () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
         ).whenPressed(
                 new InstantCommand(() -> shooter.toggleShooterState(Shooter.ShooterState.SLOW))
         );
 
         new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
-                new TransitCommand(transit, 0.7)
+                new InstantCommand(() -> transit.setLimitServoState(Transit.LimitServoState.OPEN))
+                        .andThen(new WaitCommand(300))
+                        .andThen(new TransitCommand(transit))
         );
 
 

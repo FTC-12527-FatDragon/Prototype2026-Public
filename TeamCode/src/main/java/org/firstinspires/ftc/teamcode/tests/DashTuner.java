@@ -30,8 +30,6 @@ public class DashTuner extends LinearOpMode {
     public static double[] motorTarget = new double[4];
     public static double[] servoTarget = new double[4];
 
-    public static boolean[] isContinous = new boolean[4];
-
     public static boolean[] isVelocityCloseLoop = new boolean[4];
 
     public static PID[] PIDs = {
@@ -44,8 +42,6 @@ public class DashTuner extends LinearOpMode {
     DcMotorRe[] motors = new DcMotorRe[4];
 
     Servo[] servos = new Servo[4];
-
-    CRServo[] crServos = new CRServo[4];
 
     PIDController[] pidControllers = {
             new PIDController(0, 0, 0),
@@ -64,15 +60,14 @@ public class DashTuner extends LinearOpMode {
                 pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
             }
             if (!servoName[i].isEmpty()) {
-                if (isContinous[i]) crServos[i] = hardwareMap.get(CRServo.class, servoName[i]);
-                else servos[i] = hardwareMap.get(Servo.class, servoName[i]);
+                servos[i] = hardwareMap.get(Servo.class, servoName[i]);
             }
         }
 
         waitForStart();
 
         while (opModeIsActive()) {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < 4; i++) {
                 if (!motorName[i].isEmpty()) {
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
                         pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
@@ -112,12 +107,7 @@ public class DashTuner extends LinearOpMode {
                 }
 
                 if (!servoName[i].isEmpty()) {
-                    if (isContinous[i]) {
-                        crServos[i].setPower(servoTarget[i]);
-                    }
-                    else {
-                        servos[i].setPosition(servoTarget[i]);
-                    }
+                    servos[i].setPosition(servoTarget[i]);
                 }
             }
         }

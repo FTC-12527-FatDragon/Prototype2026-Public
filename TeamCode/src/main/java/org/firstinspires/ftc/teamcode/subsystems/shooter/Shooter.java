@@ -10,9 +10,9 @@ public class Shooter extends SubsystemBase {
     public final DcMotorRe shooter;
 
     public enum ShooterState {
-        STOP(0),
-        SLOW(0.65),
-        FAST(0.8);
+        STOP(ShooterConstants.stopPower),
+        SLOW(ShooterConstants.slowPower),
+        FAST(ShooterConstants.fastPower);
 
         double shooterPower;
 
@@ -55,7 +55,6 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         shooter.setPower(shooterState.shooterPower);
-
         shooter.updateLastPos();
     }
 }
