@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems.transit;
 
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
 public class TransitConstants {
     public static String transitName = "transitMotor";
 
