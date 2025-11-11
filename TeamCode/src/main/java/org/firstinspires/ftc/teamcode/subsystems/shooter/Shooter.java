@@ -3,20 +3,25 @@ package org.firstinspires.ftc.teamcode.subsystems.shooter;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
+import org.firstinspires.ftc.teamcode.utils.Util;
 
 public class Shooter extends SubsystemBase {
     public final DcMotorRe shooter;
+    public final PIDController pidController;
+    public static double shooterOpenLoopPower = -1;
 
     public enum ShooterState {
         STOP(ShooterConstants.stopPower),
         SLOW(ShooterConstants.slowPower),
-        FAST(ShooterConstants.fastPower);
+        FAST(ShooterConstants.fastPower),
+        OPENLOOP(shooterOpenLoopPower);
 
-        double shooterPower;
+        final double shooterPower;
 
         ShooterState(double shooterPower) {
             this.shooterPower = shooterPower;
@@ -27,6 +32,8 @@ public class Shooter extends SubsystemBase {
 
     public Shooter(final HardwareMap hardwareMap) {
         shooter = new DcMotorRe(hardwareMap, "shooterMotor");
+        pidController = new PIDController(ShooterConstants.kP,
+                ShooterConstants.kI, ShooterConstants.kD);
     }
 
     public double getAverageVelocity() {
@@ -46,17 +53,24 @@ public class Shooter extends SubsystemBase {
         }
     }
 
-//    public void setShooterVelocity(double setPoint) {
-//
-//    }
-//
-//    public boolean isShooterAtSetPoint(double setPoint) {
-//        return Math.abs(shooterVelocity - setPoint) <= ShooterConstants.shooterEpsilon;
-//    }
+    public void setOpenLoopPower(double power) {
+        shooterState = ShooterState.OPENLOOP;
+        shooterOpenLoopPower = power;
+    }
+
+    public void setShooterVelocity(double setPoint) {
+        double power = pidController.calculate(shooter.getLibVelocity(), setPoint);
+        shooter.setPower(power);
+    }
+
+    public boolean isShooterAtSetPoint(double setPoint) {
+        return Util.epsilonEqual(setPoint, shooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
+    }
 
     @Override
     public void periodic() {
-        shooter.setPower(shooterState.shooterPower);
+        if (shooterState != ShooterState.OPENLOOP) shooter.setPower(shooterState.shooterPower);
+        else shooter.setPower(shooterOpenLoopPower);
         shooter.updateLastPos();
     }
 }

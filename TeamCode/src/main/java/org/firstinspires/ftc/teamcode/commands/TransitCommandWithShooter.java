@@ -23,7 +23,6 @@ public class TransitCommandWithShooter extends CommandBase {
                 && shooter.getAverageVelocity() > ShooterConstants.slowVelocity
         ) {
             transit.setTransitState(Transit.TransitState.SHOOT);
-            transit.transitServoOn();
         }
         else {
             transit.stopTransit(700);

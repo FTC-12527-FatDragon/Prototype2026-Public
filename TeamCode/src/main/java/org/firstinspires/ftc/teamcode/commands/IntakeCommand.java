@@ -16,7 +16,7 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void initialize() {
-
+        intake.reverseMotor(false);
     }
 
     @Override
@@ -26,8 +26,6 @@ public class IntakeCommand extends CommandBase {
         }
 
         transit.setTransitState(Transit.TransitState.INTAKE);
-
-        transit.transitServoOn();
     }
 
     @Override
@@ -37,7 +35,5 @@ public class IntakeCommand extends CommandBase {
         }
 
         transit.setTransitState(Transit.TransitState.STOP);
-
-        transit.transitServoOff();
     }
 }

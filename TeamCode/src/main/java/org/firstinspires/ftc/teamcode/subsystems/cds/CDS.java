@@ -39,6 +39,14 @@ public class CDS extends SubsystemBase {
 
     private List<Float> hues = new ArrayList<>();
 
+    public void deleteFirst() {
+        colorQue.poll();
+    }
+
+    public int getFirst() {
+        if (colorQue.peek() != null) return colorQue.peek();
+        return -1;
+    }
 
     @Override
     public void periodic() {
@@ -71,6 +79,7 @@ public class CDS extends SubsystemBase {
             else {
                 colorQue.offer(0);
             }
+            if (colorQue.size() > 3) colorQue.poll();
 
             purpule = false;
             green = false;

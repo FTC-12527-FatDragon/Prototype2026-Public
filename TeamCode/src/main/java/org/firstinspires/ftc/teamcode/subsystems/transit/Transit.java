@@ -11,8 +11,12 @@ public class Transit extends SubsystemBase {
 
     public final Servo limitServo;
 
-    public double transitPower = TransitState.STOP.power;
-    public double limitServoPos = LimitServoState.CLOSE.servoPos;
+    public final Servo chooseServo;
+
+    public TransitState transitState = TransitState.STOP;
+    public LimitServoState limitState = LimitServoState.CLOSE;
+    public ChooseServoState chooseState = ChooseServoState.CLOSE;
+    public static double transitPower = 0;
     public double stopTime = 0;
 
 
@@ -21,19 +25,31 @@ public class Transit extends SubsystemBase {
         CLOSE(TransitConstants.limitServoClosePos),
         OPEN(TransitConstants.limitServoOpenPos);
 
-        double servoPos;
+        final double servoPos;
 
         LimitServoState(double limitServoPos) {
             servoPos = limitServoPos;
         }
     }
 
+    public enum ChooseServoState {
+        CLOSE(TransitConstants.chooseServoClosePos),
+        OPEN(TransitConstants.chooseServoOpenPos);
+
+        final double chooseServoPos;
+
+        ChooseServoState(double chooseServoPos) {
+            this.chooseServoPos = chooseServoPos;
+        }
+    }
+
     public enum TransitState {
         STOP(TransitConstants.transitStopPower),
         INTAKE(TransitConstants.transitIntakePower),
-        SHOOT(TransitConstants.transitShootPower);
+        SHOOT(TransitConstants.transitShootPower),
+        OPENLOOP(transitPower);
 
-        double power;
+        final double power;
 
         TransitState(double transitPower) {
             power = transitPower;
@@ -45,19 +61,26 @@ public class Transit extends SubsystemBase {
 
         limitServo = hardwareMap.get(Servo.class, TransitConstants.limitServoName);
 
-
+        chooseServo = hardwareMap.get(Servo.class, TransitConstants.chooseServoName);
     }
 
     public void setLimitServoState(LimitServoState limitServoState) {
-        limitServoPos = limitServoState.servoPos;
+        limitState = limitServoState;
     }
 
     public void setPower(double power) {
+        transitState = TransitState.OPENLOOP;
         transitPower = power;
     }
 
     public void setTransitState(TransitState transitState) {
         transitPower = transitState.power;
+    }
+
+    public void setChooseServoState(ChooseServoState chooseServoState) {
+        chooseState = chooseServoState;
+        limitState = chooseServoState == ChooseServoState.CLOSE?
+                LimitServoState.CLOSE:LimitServoState.OPEN;
     }
 
     public void stopTransit(double time) {
@@ -69,7 +92,9 @@ public class Transit extends SubsystemBase {
     public void periodic() {
         if (stopTime <= 0) transit.setPower(transitPower);
         else transit.setPower(0);
-        limitServo.setPosition(limitServoPos);
+        limitServo.setPosition(limitState.servoPos);
+        chooseServo.setPosition(chooseState.chooseServoPos);
+
         if (stopTime > 0) stopTime -= 20;
     }
 }

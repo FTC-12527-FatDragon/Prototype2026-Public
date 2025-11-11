@@ -8,12 +8,11 @@ public class ShooterConstants {
     public static String leftShooterName = "leftShooter";
     public static String rightShooterName = "rightShooter";
 
-    public static double shooterEpsilon = 0.05;
+    public static double shooterEpsilon = 50;
 
-    public static double kP = 0;
+    public static double kP = 1;
     public static double kI = 0;
     public static double kD = 0;
-
     public static double stopPower = 0;
     public static double slowPower = 0.575;
     public static double fastPower = 0.675;
@@ -21,6 +20,6 @@ public class ShooterConstants {
     /**
      * In Ticks Per Second
      */
-    public static double fastVelocity = 1500;
-    public static double slowVelocity = 1500;
+    public static double fastVelocity = -1880;
+    public static double slowVelocity = -1580;
 }

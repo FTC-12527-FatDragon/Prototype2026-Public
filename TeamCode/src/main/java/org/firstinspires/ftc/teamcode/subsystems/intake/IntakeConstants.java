@@ -6,8 +6,9 @@ import com.acmerobotics.dashboard.config.Config;
 public class IntakeConstants {
     public static String intakeMotorName = "intakeMotor";
 
-    public static String leftServoName = "leftTransitServo";
-    public static String rightServoName = "rightTransitServo";
+    public static String leftServoName = "leftServo";
+    public static String rightServoName = "rightServo";
 
     public static double intakePower = 0.7;
+    public static double reversedPower = -0.3;
 }

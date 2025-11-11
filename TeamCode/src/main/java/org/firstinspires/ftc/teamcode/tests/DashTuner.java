@@ -110,12 +110,13 @@ public class DashTuner extends LinearOpMode {
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
                         pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
-                        double v = motors[i].getAverageVelocity();
+                        double v = motors[i].getLibVelocity();
                         motors[i].setPower(pidControllers[i].calculate(v, motorTarget[i]));
 
                         TelemetryPacket packet = new TelemetryPacket();
                         packet.put("targetVelocity " + i, motorTarget[i]);
-                        packet.put("currentVelocity " + i, v);
+                        //packet.put("currentVelocity " + i, v);
+                        packet.put("LibVelocity" + i, v);
 
                         dashboard.sendTelemetryPacket(packet);
                     }

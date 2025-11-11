@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
     public final Servo leftServo;
     public final Servo rightServo;
 
-    public static boolean isRunning;
+    public static boolean isRunning, motorReversed;
 
     public Intake(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, IntakeConstants.intakeMotorName);
@@ -34,6 +34,8 @@ public class Intake extends SubsystemBase {
         isRunning = !isRunning;
     }
 
+    public void reverseMotor(boolean inverse) { motorReversed = inverse; }
+
     public boolean isRunning() {
         return isRunning;
     }
@@ -41,8 +43,12 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         if (isRunning) {
-            intakeMotor.setPower(IntakeConstants.intakePower);
-            leftServo.setPosition(0);
+            if (motorReversed) {
+                intakeMotor.setPower(IntakeConstants.reversedPower);
+            } else {
+                intakeMotor.setPower(IntakeConstants.intakePower);
+            }
+            leftServo.setPosition(1);
             rightServo.setPosition(1);
         }
         else {
