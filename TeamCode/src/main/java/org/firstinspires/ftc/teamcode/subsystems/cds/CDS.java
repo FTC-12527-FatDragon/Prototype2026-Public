@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.cds;
 
 import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.SCALE_FACTOR;
+import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.ballDistance;
 import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.purpleConst;
 
 import android.graphics.Color;
@@ -13,21 +14,30 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor;
     private final DistanceSensor distanceSensor;
 
     private final float[] hsvValues = {0F, 0F, 0F};
 
-    private boolean purpleDetected, greenDetected, ballDetected;
-
-    private double lastPos = 10.0;
-
     public CDS(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensorName);
         distanceSensor = hardwareMap.get(DistanceSensor.class, CDSConstants.distanceSensorName);
     }
 
+    private boolean ballDetected = false;
+    private boolean purpule = false;
+    private boolean green = false;
+
+    private Queue<Integer> colorQue = new LinkedList<>();
+
+    private List<Float> hues = new ArrayList<>();
 
 
     @Override
@@ -43,6 +53,29 @@ public class CDS extends SubsystemBase {
                 (int) (b * SCALE_FACTOR),
                 hsvValues);
 
-        purpleDetected = ballDetected && b > Math.max(r, g) * purpleConst;
+        if (dis < ballDistance) {
+            hues.add(hsvValues[0]);
+            ballDetected = true;
+        }
+
+        if (dis > ballDistance && ballDetected) {
+            ballDetected = false;
+
+            Collections.sort(hues);
+
+            float res = hues.get(hues.size() / 2);
+
+            if (res >= purpleConst) {
+                colorQue.offer(1);
+            }
+            else {
+                colorQue.offer(0);
+            }
+
+            purpule = false;
+            green = false;
+
+            hues.clear();
+        }
     }
 }

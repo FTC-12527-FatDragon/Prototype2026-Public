@@ -1,15 +1,26 @@
 package org.firstinspires.ftc.teamcode.tests;
 
+import android.graphics.Color;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Queue;
 
 class PID {
     public double kP, kI, kD;
@@ -50,6 +61,28 @@ public class DashTuner extends LinearOpMode {
             new PIDController(0, 0, 0)
     };
 
+    public static String colorSensorName = "";
+
+    ColorSensor colorSensor;
+
+    DistanceSensor distanceSensor;
+
+    float hsvValues[] = {0F, 0F, 0F};
+
+    final float values[] = hsvValues;
+
+    final double SCALE_FACTOR = 255;
+
+    private boolean ballDetected = false;
+    private boolean purpule = false;
+    private boolean green = false;
+
+    private double lastR = 0.0, lastG = 0.0, lastB = 0.0;
+
+    private Queue<Integer> colorQue = new LinkedList<>();
+
+    List<Float> hues = new ArrayList<>();
+
     @Override
     public void runOpMode() {
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -62,6 +95,11 @@ public class DashTuner extends LinearOpMode {
             if (!servoName[i].isEmpty()) {
                 servos[i] = hardwareMap.get(Servo.class, servoName[i]);
             }
+        }
+
+        if (!colorSensorName.isEmpty()) {
+            colorSensor = hardwareMap.get(ColorSensor.class, colorSensorName);
+            distanceSensor = hardwareMap.get(DistanceSensor.class, colorSensorName);
         }
 
         waitForStart();
@@ -108,6 +146,64 @@ public class DashTuner extends LinearOpMode {
 
                 if (!servoName[i].isEmpty()) {
                     servos[i].setPosition(servoTarget[i]);
+                }
+
+                if (!colorSensorName.isEmpty()) {
+                    Color.RGBToHSV((int) (colorSensor.red() * SCALE_FACTOR),
+                            (int) (colorSensor.green() * SCALE_FACTOR),
+                            (int) (colorSensor.blue() * SCALE_FACTOR),
+                            hsvValues);
+
+                    TelemetryPacket packet = new TelemetryPacket();
+
+                    packet.put("Alpha", colorSensor.alpha());
+                    packet.put("Red  ", colorSensor.red());
+                    packet.put("Green", colorSensor.green());
+                    packet.put("Blue ", colorSensor.blue());
+                    packet.put("Hue", hsvValues[0]);
+                    packet.put("Distance (cm)", String.format(Locale.US, "%.02f", distanceSensor.getDistance(DistanceUnit.CM)));
+
+                    double dis = distanceSensor.getDistance(DistanceUnit.CM);
+
+                    double r = colorSensor.red();
+                    double g = colorSensor.green();
+                    double b = colorSensor.blue();
+
+                    Color.RGBToHSV((int) (r * SCALE_FACTOR),
+                            (int) (g * SCALE_FACTOR),
+                            (int) (b * SCALE_FACTOR),
+                            hsvValues);
+
+                    if (dis < 4.0) {
+                        hues.add(hsvValues[0]);
+                        ballDetected = true;
+                    }
+
+                    if (dis > 4.0 && ballDetected) {
+                        ballDetected = false;
+
+                        Collections.sort(hues);
+
+                        float res = hues.get(hues.size() / 2);
+
+                        if (res >= 180) {
+                            colorQue.offer(1);
+                        }
+                        else {
+                            colorQue.offer(0);
+                        }
+
+                        purpule = false;
+                        green = false;
+
+                        hues.clear();
+                    }
+
+                    packet.put("BALL COLORS", colorQue);
+
+                    dashboard.sendTelemetryPacket(packet);
+
+                    lastG = g; lastB = b; lastR = r;
                 }
             }
         }

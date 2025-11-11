@@ -5,9 +5,6 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class TransitConstants {
     public static String transitName = "transitMotor";
-
-    public static String leftTransitServoName = "leftTransitServo";
-    public static String rightTransitServoName = "rightTransitServo";
     public static String limitServoName = "limitServo";
 
     public static double limitServoClosePos = 0.28;
