@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
@@ -17,6 +19,7 @@ public class IntakeCommand extends CommandBase {
     @Override
     public void initialize() {
         intake.reverseMotor(false);
+        transit.setLimitServoState(Transit.LimitServoState.CLOSE);
     }
 
     @Override

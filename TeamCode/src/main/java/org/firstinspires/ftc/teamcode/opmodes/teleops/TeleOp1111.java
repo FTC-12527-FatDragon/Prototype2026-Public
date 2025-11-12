@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.AdjustCommand;
+import org.firstinspires.ftc.teamcode.commands.ChooseCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.ShootCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
@@ -83,9 +84,7 @@ public class TeleOp1111 extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5
         ).whenHeld(
-                new InstantCommand(() -> transit.setLimitServoState(Transit.LimitServoState.CLOSE))
-                        .andThen(new WaitCommand(300))
-                        .alongWith(new IntakeCommand(transit, intake))
+                new IntakeCommand(transit, intake)
         );
 
         new FunctionalButton(
@@ -108,6 +107,12 @@ public class TeleOp1111 extends CommandOpMode {
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
                 new TransitCommand(transit, intake, shooter)
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
+        ).whenHeld(
+                new ChooseCommand(transit, intake)
         );
 
         new FunctionalButton(
@@ -150,6 +155,7 @@ public class TeleOp1111 extends CommandOpMode {
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
+        telemetry.addData("QueueFirst", cds.getFirst());
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("ShooterVelocity", shooter.getAverageVelocity());
