@@ -16,15 +16,15 @@ public class Shooter extends SubsystemBase {
     public static double shooterOpenLoopPower = -1;
 
     public enum ShooterState {
-        STOP(ShooterConstants.stopPower),
-        SLOW(ShooterConstants.slowPower),
-        FAST(ShooterConstants.fastPower),
-        OPENLOOP(shooterOpenLoopPower);
+        STOP(ShooterConstants.stopVelocity),
+        SLOW(ShooterConstants.slowVelocity),
+        FAST(ShooterConstants.fastVelocity),
+        OPENLOOP(0);
 
-        final double shooterPower;
+        final double shooterVelocity;
 
-        ShooterState(double shooterPower) {
-            this.shooterPower = shooterPower;
+        ShooterState(double shooterVelocity) {
+            this.shooterVelocity = shooterVelocity;
         }
     }
 
@@ -58,18 +58,22 @@ public class Shooter extends SubsystemBase {
         shooterOpenLoopPower = power;
     }
 
-    public void setShooterVelocity(double setPoint) {
-        double power = pidController.calculate(shooter.getLibVelocity(), setPoint);
-        shooter.setPower(power);
+    public void setShooterState(ShooterState state) {
+        shooterState = state;
     }
 
-    public boolean isShooterAtSetPoint(double setPoint) {
-        return Util.epsilonEqual(setPoint, shooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
+    public boolean isShooterAtSetPoint() {
+        return Util.epsilonEqual(shooterState.shooterVelocity,
+                shooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
     }
 
     @Override
     public void periodic() {
-        if (shooterState != ShooterState.OPENLOOP) shooter.setPower(shooterState.shooterPower);
+        if (shooterState != ShooterState.OPENLOOP) {
+            if (shooterState != ShooterState.STOP) shooter.setPower(pidController.calculate(
+                    shooter.getLibVelocity(), shooterState.shooterVelocity));
+            else shooter.setPower(ShooterState.STOP.shooterVelocity);
+        }
         else shooter.setPower(shooterOpenLoopPower);
         shooter.updateLastPos();
     }

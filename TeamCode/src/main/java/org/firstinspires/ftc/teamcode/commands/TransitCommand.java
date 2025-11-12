@@ -3,15 +3,18 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 
 public class TransitCommand extends CommandBase {
     private final Transit transit;
     private final Intake intake;
+    private final Shooter shooter;
 
-    public TransitCommand(Transit transit, Intake intake) {
+    public TransitCommand(Transit transit, Intake intake, Shooter shooter) {
         this.transit = transit;
         this.intake = intake;
+        this.shooter = shooter;
     }
 
     @Override
@@ -21,8 +24,14 @@ public class TransitCommand extends CommandBase {
             transit.setTransitState(Transit.TransitState.INTAKE);
         }
         else {
-            transit.setTransitState(Transit.TransitState.SHOOT);
-            transit.setLimitServoState(Transit.LimitServoState.OPEN);
+            if (shooter.isShooterAtSetPoint()) {
+                transit.setTransitState(Transit.TransitState.SHOOT);
+                transit.setLimitServoState(Transit.LimitServoState.OPEN);
+            }
+            else {
+                transit.setTransitState(Transit.TransitState.STOP);
+                transit.setLimitServoState(Transit.LimitServoState.CLOSE);
+            }
         }
         if (!intake.isRunning()) intake.toggle();
 

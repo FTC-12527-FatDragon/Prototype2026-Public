@@ -9,20 +9,20 @@ import org.firstinspires.ftc.teamcode.subsystems.transit.TransitConstants;
 
 public class ShootCommand extends CommandBase {
     private final Shooter shooter;
-    private final double shooterSetpoint;
+    private final Shooter.ShooterState state;
 
-    public ShootCommand(Shooter shooter, double shooterSetpoint) {
+    public ShootCommand(Shooter shooter, Shooter.ShooterState state) {
         this.shooter = shooter;
-        this.shooterSetpoint = shooterSetpoint;
+        this.state = state;
     }
 
     @Override
     public void execute() {
-        shooter.setShooterVelocity(shooterSetpoint);
+        shooter.setShooterState(state);
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.setShooterVelocity(0);
+        shooter.setShooterState(Shooter.ShooterState.STOP);
     }
 }

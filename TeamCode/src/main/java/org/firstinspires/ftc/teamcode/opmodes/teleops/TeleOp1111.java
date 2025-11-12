@@ -91,23 +91,23 @@ public class TeleOp1111 extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
         ).whenHeld(
-                new InstantCommand(() -> shooter.setOpenLoopPower(-1))
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
         ).whenReleased(
-                new InstantCommand(() -> shooter.setOpenLoopPower(0))
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
         ).whenHeld(
-                new InstantCommand(() -> shooter.setOpenLoopPower(-0.88))
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW))
         ).whenReleased(
-                new InstantCommand(() -> shooter.setOpenLoopPower(0))
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
 
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
-                new TransitCommand(transit, intake)
+                new TransitCommand(transit, intake, shooter)
         );
 
         new FunctionalButton(
@@ -149,6 +149,7 @@ public class TeleOp1111 extends CommandOpMode {
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
+        telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("ShooterVelocity", shooter.getAverageVelocity());
