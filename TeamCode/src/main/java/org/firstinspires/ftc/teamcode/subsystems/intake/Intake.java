@@ -15,7 +15,8 @@ public class Intake extends SubsystemBase {
     public final Servo leftServo;
     public final Servo rightServo;
 
-    public static boolean isRunning, motorReversed;
+    public static boolean isRunning = false;
+    public static boolean motorReversed;
 
     public Intake(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, IntakeConstants.intakeMotorName);
@@ -27,7 +28,6 @@ public class Intake extends SubsystemBase {
 
         leftServo.setDirection(Servo.Direction.REVERSE);
 
-        isRunning = false;
     }
 
     public void toggle() {

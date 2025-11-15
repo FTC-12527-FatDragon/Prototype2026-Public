@@ -12,8 +12,17 @@ import org.firstinspires.ftc.teamcode.utils.Util;
 
 public class Shooter extends SubsystemBase {
     public final DcMotorRe shooter;
+
     public final PIDController pidController;
     public static double shooterOpenLoopPower = -1;
+
+    public ShooterState shooterState = ShooterState.STOP;
+
+    public Shooter(final HardwareMap hardwareMap) {
+        shooter = new DcMotorRe(hardwareMap, "shooterMotor");
+        pidController = new PIDController(ShooterConstants.kP,
+                ShooterConstants.kI, ShooterConstants.kD);
+    }
 
     public enum ShooterState {
         STOP(ShooterConstants.stopVelocity),
@@ -26,22 +35,6 @@ public class Shooter extends SubsystemBase {
         ShooterState(double shooterVelocity) {
             this.shooterVelocity = shooterVelocity;
         }
-    }
-
-    public ShooterState shooterState = ShooterState.STOP;
-
-    public Shooter(final HardwareMap hardwareMap) {
-        shooter = new DcMotorRe(hardwareMap, "shooterMotor");
-        pidController = new PIDController(ShooterConstants.kP,
-                ShooterConstants.kI, ShooterConstants.kD);
-    }
-
-    public double getAverageVelocity() {
-        return shooter.getAverageVelocity();
-    }
-
-    public double getInstantVelocity() {
-        return shooter.getInstantVelocity();
     }
 
     public void toggleShooterState(ShooterState shooterStateE) {
@@ -60,6 +53,14 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterState(ShooterState state) {
         shooterState = state;
+    }
+
+    public double getAverageVelocity() {
+        return shooter.getAverageVelocity();
+    }
+
+    public double getInstantVelocity() {
+        return shooter.getInstantVelocity();
     }
 
     public boolean isShooterAtSetPoint() {

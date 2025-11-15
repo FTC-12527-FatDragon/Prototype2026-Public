@@ -19,7 +19,13 @@ public class Transit extends SubsystemBase {
     public static double transitPower = 0;
     public double stopTime = 0;
 
+    public Transit(HardwareMap hardwareMap) {
+        transit = hardwareMap.get(DcMotor.class, TransitConstants.transitName);
 
+        limitServo = hardwareMap.get(Servo.class, TransitConstants.limitServoName);
+
+        chooseServo = hardwareMap.get(Servo.class, TransitConstants.chooseServoName);
+    }
 
     public enum LimitServoState {
         CLOSE(TransitConstants.limitServoClosePos),
@@ -56,13 +62,6 @@ public class Transit extends SubsystemBase {
         }
     }
 
-    public Transit(HardwareMap hardwareMap) {
-        transit = hardwareMap.get(DcMotor.class, TransitConstants.transitName);
-
-        limitServo = hardwareMap.get(Servo.class, TransitConstants.limitServoName);
-
-        chooseServo = hardwareMap.get(Servo.class, TransitConstants.chooseServoName);
-    }
 
     public void setLimitServoState(LimitServoState limitServoState) {
         limitState = limitServoState;

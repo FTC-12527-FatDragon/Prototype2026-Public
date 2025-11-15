@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.Util;
 @Config
 public class MecanumDriveOTOS extends SubsystemBase {
     private final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+
     private final SparkFunOTOS otos;
     private double yawOffset;
     public static double xPose = DriveConstants.xPoseOTOS, yPose = DriveConstants.yPoseOTOS,
@@ -39,6 +40,10 @@ public class MecanumDriveOTOS extends SubsystemBase {
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
+
+    public void stop() {
+        moveRobot(0, 0, 0);
     }
 
     public void reset(double heading) {
@@ -122,7 +127,5 @@ public class MecanumDriveOTOS extends SubsystemBase {
                 DriveConstants.headingEpsilon);
     }
 
-    public void stop() {
-        moveRobot(0, 0, 0);
-    }
+    
 }
