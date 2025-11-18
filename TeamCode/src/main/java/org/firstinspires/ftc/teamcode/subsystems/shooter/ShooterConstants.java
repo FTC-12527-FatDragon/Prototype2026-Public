@@ -21,6 +21,6 @@ public class ShooterConstants {
      * In Ticks Per Second
      */
     public static double stopVelocity = 0;
-    public static double fastVelocity = 1880;
-    public static double slowVelocity = 1580;
+    public static double fastVelocity = 1580;
+    public static double slowVelocity = 1400;
 }
