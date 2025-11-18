@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -30,7 +31,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config
 @Configurable
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOpCY")
+@TeleOp(name = "TeleOpCY")
 public class TeleOpSolo extends CommandOpMode {
     private MecanumDriveOTOS drive;
 

@@ -105,13 +105,12 @@ public class MecanumDriveOTOS extends SubsystemBase {
     public void turnRobotTo(double angle, double power) {
         double heading = otos.getPosition().h;
         double needs = (angle - heading) % (2 * Math.PI);
-        if(0 <= needs && needs <= Math.PI || needs <= -Math.PI)
-            while (Util.epsilonEqual(angle,otos.getPosition().h,0.02)) {
-                leftFrontMotor.setPower(power * 0.2);
-                leftBackMotor.setPower(power * 0.2);
-                rightFrontMotor.setPower(power * -0.2);
-                rightBackMotor.setPower(power * -0.2);
-            }
+        while (Util.epsilonEqual(angle,otos.getPosition().h,0.02)) {
+            leftFrontMotor.setPower(power * 0.2);
+            leftBackMotor.setPower(power * 0.2);
+            rightFrontMotor.setPower(power * -0.2);
+            rightBackMotor.setPower(power * -0.2);
+        }
     }
 
     public Pose2D getPose() {

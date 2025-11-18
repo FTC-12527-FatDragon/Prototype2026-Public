@@ -13,6 +13,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -37,7 +38,7 @@ import java.util.function.BooleanSupplier;
 
 @Config
 @Configurable
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp1111")
+@TeleOp(name = "TeleOp1111")
 public class TeleOp1111 extends CommandOpMode {
     private MecanumDriveOTOS drive;
 
