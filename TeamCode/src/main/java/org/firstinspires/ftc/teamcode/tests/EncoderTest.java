@@ -160,7 +160,7 @@ public class EncoderTest extends CommandOpMode {
         telemetry.addData("QueueFirst", cds.getFirst());
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("ShooterVelocity", shooter.getInstantVelocity());
+        packet.put("ShooterVelocity", shooter.getLibVelocity());
         packet.put("StopTime", transit.stopTime);
         packet.put("AtFast", shooter.shooterState == Shooter.ShooterState.FAST
                 && shooter.getAverageVelocity() > ShooterConstants.fastVelocity);

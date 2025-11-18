@@ -63,13 +63,13 @@ public class Shooter extends SubsystemBase {
         return rightShooter.getAverageVelocity();
     }
 
-    public double getInstantVelocity() {
-        return rightShooter.getInstantVelocity();
+    public double getLibVelocity() {
+        return rightShooter.getLibVelocity();
     }
 
     public boolean isShooterAtSetPoint() {
         return Util.epsilonEqual(shooterState.shooterVelocity,
-                rightShooter.getInstantVelocity(), ShooterConstants.shooterEpsilon);
+                rightShooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Shooter extends SubsystemBase {
         if (shooterState != ShooterState.OPENLOOP) {
             if (shooterState != ShooterState.STOP) {
                 double currentPower = pidController.calculate(
-                        rightShooter.getInstantVelocity(), shooterState.shooterVelocity);
+                        rightShooter.getLibVelocity(), shooterState.shooterVelocity);
                 leftShooter.setPower(-currentPower);
                 rightShooter.setPower(currentPower);
                 packet.put("currentPower", currentPower);
@@ -92,8 +92,8 @@ public class Shooter extends SubsystemBase {
             rightShooter.setPower(shooterOpenLoopPower);
         }
         rightShooter.updateLastPos();
-        packet.put("leftShooterVelocity", leftShooter.getInstantVelocity());
-        packet.put("rightShooterVelocity", rightShooter.getInstantVelocity());
+        packet.put("leftShooterVelocity", leftShooter.getLibVelocity());
+        packet.put("rightShooterVelocity", rightShooter.getLibVelocity());
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

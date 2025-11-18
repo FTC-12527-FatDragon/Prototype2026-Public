@@ -121,7 +121,7 @@ public class DashTuner extends LinearOpMode {
 
                         TelemetryPacket packet = new TelemetryPacket();
                         packet.put("targetVelocity " + i, motorTarget[i]);
-                        //packet.put("currentVelocity " + i, v);
+                        packet.put("libVelocity " + i, motors[i].getLibVelocity());
                         packet.put("InstantVelocity" + i, v);
 
                         dashboard.sendTelemetryPacket(packet);
