@@ -8,7 +8,7 @@ public class ShooterConstants {
     public static String leftShooterName = "leftShooterMotor";
     public static String rightShooterName = "rightShooterMotor";
 
-    public static double shooterEpsilon = 20;
+    public static double shooterEpsilon = 40;
 
     public static double kP = 0.5;
     public static double kI = 0;
@@ -21,6 +21,6 @@ public class ShooterConstants {
      * In Ticks Per Second
      */
     public static double stopVelocity = 0;
-    public static double fastVelocity = 1580;
-    public static double slowVelocity = 1400;
+    public static double fastVelocity = 1560;
+    public static double slowVelocity = 1360;
 }
