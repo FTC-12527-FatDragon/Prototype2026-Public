@@ -11,7 +11,10 @@ import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
 import org.firstinspires.ftc.teamcode.utils.Util;
 
 public class Shooter extends SubsystemBase {
-    public final DcMotorRe shooter;
+    public final DcMotorRe leftShooter;
+    public final DcMotorRe rightShooter;
+    public final
+    TelemetryPacket packet = new TelemetryPacket();
 
     public final PIDController pidController;
     public static double shooterOpenLoopPower = -1;
@@ -19,7 +22,8 @@ public class Shooter extends SubsystemBase {
     public ShooterState shooterState = ShooterState.STOP;
 
     public Shooter(final HardwareMap hardwareMap) {
-        shooter = new DcMotorRe(hardwareMap, "shooterMotor");
+        leftShooter = new DcMotorRe(hardwareMap, ShooterConstants.leftShooterName);
+        rightShooter = new DcMotorRe(hardwareMap, ShooterConstants.rightShooterName);
         pidController = new PIDController(ShooterConstants.kP,
                 ShooterConstants.kI, ShooterConstants.kD);
     }
@@ -56,26 +60,40 @@ public class Shooter extends SubsystemBase {
     }
 
     public double getAverageVelocity() {
-        return shooter.getAverageVelocity();
+        return rightShooter.getAverageVelocity();
     }
 
     public double getInstantVelocity() {
-        return shooter.getInstantVelocity();
+        return rightShooter.getInstantVelocity();
     }
 
     public boolean isShooterAtSetPoint() {
         return Util.epsilonEqual(shooterState.shooterVelocity,
-                shooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
+                rightShooter.getInstantVelocity(), ShooterConstants.shooterEpsilon);
     }
 
     @Override
     public void periodic() {
         if (shooterState != ShooterState.OPENLOOP) {
-            if (shooterState != ShooterState.STOP) shooter.setPower(pidController.calculate(
-                    shooter.getLibVelocity(), shooterState.shooterVelocity));
-            else shooter.setPower(ShooterState.STOP.shooterVelocity);
+            if (shooterState != ShooterState.STOP) {
+                double currentPower = pidController.calculate(
+                        rightShooter.getInstantVelocity(), shooterState.shooterVelocity);
+                leftShooter.setPower(-currentPower);
+                rightShooter.setPower(currentPower);
+                packet.put("currentPower", currentPower);
+            }
+            else {
+                leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
+                rightShooter.setPower(ShooterState.STOP.shooterVelocity);
+            }
         }
-        else shooter.setPower(shooterOpenLoopPower);
-        shooter.updateLastPos();
+        else {
+            leftShooter.setPower(-shooterOpenLoopPower);
+            rightShooter.setPower(shooterOpenLoopPower);
+        }
+        rightShooter.updateLastPos();
+        packet.put("leftShooterVelocity", leftShooter.getInstantVelocity());
+        packet.put("rightShooterVelocity", rightShooter.getInstantVelocity());
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

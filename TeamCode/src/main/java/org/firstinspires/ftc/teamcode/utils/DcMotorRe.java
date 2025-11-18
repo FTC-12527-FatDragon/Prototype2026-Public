@@ -27,7 +27,7 @@ public class DcMotorRe {
      * In Ticks Per Second
      */
     public double getInstantVelocity() {
-        return (motor.getCurrentPosition() - lastPos) / 0.02;
+        return (motor.getCurrentPosition() - lastPos) / 0.02 / 2048;
     }
 
     /**

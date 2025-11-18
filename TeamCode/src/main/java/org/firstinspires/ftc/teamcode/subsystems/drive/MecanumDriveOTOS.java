@@ -17,9 +17,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
     private final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
 
     private final SparkFunOTOS otos;
-    private double yawOffset;
-    public static double xPose = DriveConstants.xPoseOTOS, yPose = DriveConstants.yPoseOTOS,
-            headingPose = DriveConstants.headingPoseOTOS; // mm
+    private double yawOffset;// mm
 
     public MecanumDriveOTOS(final HardwareMap hardwareMap) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
@@ -36,7 +34,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
         otos.resetTracking();
         otos.setAngularUnit(DriveConstants.angleUnit);
         otos.setLinearUnit(DriveConstants.distanceUnit);
-        otos.setOffset(new SparkFunOTOS.Pose2D(xPose, yPose,headingPose));
+        otos.setOffset(new SparkFunOTOS.Pose2D(DriveConstants.xPoseOTOS,
+                DriveConstants.yPoseOTOS, DriveConstants.headingPoseOTOS));
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);

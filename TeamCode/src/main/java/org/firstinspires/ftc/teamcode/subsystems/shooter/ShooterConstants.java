@@ -5,13 +5,13 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class ShooterConstants {
-    public static String leftShooterName = "leftShooter";
-    public static String rightShooterName = "rightShooter";
+    public static String leftShooterName = "leftShooterMotor";
+    public static String rightShooterName = "rightShooterMotor";
 
     public static double shooterEpsilon = 50;
 
-    public static double kP = 1;
-    public static double kI = 0;
+    public static double kP = 0.02;
+    public static double kI = 0.5;
     public static double kD = 0;
     public static double stopPower = 0;
     public static double slowPower = 0.575;
@@ -21,6 +21,6 @@ public class ShooterConstants {
      * In Ticks Per Second
      */
     public static double stopVelocity = 0;
-    public static double fastVelocity = -1880;
-    public static double slowVelocity = -1580;
+    public static double fastVelocity = 1880;
+    public static double slowVelocity = 1580;
 }

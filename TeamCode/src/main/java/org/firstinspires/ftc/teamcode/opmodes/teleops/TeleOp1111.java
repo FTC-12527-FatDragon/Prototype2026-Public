@@ -150,8 +150,8 @@ public class TeleOp1111 extends CommandOpMode {
     public void run() {
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
-        telemetry.addData("X", drive.getPose().getX(DistanceUnit.MM));
-        telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.MM));
+        telemetry.addData("X", drive.getPose().getX(DistanceUnit.INCH));
+        telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.addData("ShooterVelocity", shooter.shooterState.toString());

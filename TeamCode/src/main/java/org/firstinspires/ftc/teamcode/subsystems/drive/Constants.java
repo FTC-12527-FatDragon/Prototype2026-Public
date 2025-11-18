@@ -46,13 +46,12 @@ public class Constants {
 
     public static OTOSConstants otosConstants = new OTOSConstants()
             .hardwareMapName("otos")
-            .linearUnit(DistanceUnit.MM)
+            .linearUnit(DistanceUnit.INCH)
             .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(
-                    0, 0, 0
-            ))
-            .linearScalar(36.9914)
-            .angularScalar(-0.9957);
+            .offset(new SparkFunOTOS.Pose2D(DriveConstants.xPoseOTOS,
+                    DriveConstants.yPoseOTOS, DriveConstants.headingPoseOTOS))
+            .linearScalar(18.57)
+            .angularScalar(0.99414);
 
 //    public static PinpointConstants localizerConstants = new PinpointConstants()
 //            .forwardPodY(0)

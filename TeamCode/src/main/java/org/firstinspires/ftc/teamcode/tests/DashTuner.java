@@ -40,6 +40,7 @@ public class DashTuner extends LinearOpMode {
     public static boolean[] closeLoop = new boolean[4];
     public static double[] motorTarget = new double[4];
     public static double[] servoTarget = new double[4];
+    public static double[] slaveTo = {-1, -1, -1, -1};
 
     public static boolean[] isVelocityCloseLoop = new boolean[4];
 
@@ -107,16 +108,21 @@ public class DashTuner extends LinearOpMode {
         while (opModeIsActive()) {
             for (int i = 0; i < 4; i++) {
                 if (!motorName[i].isEmpty()) {
+                    if (slaveTo[i] != -1) {
+                        motors[i].setPower(-pidControllers[(int) slaveTo[i]].calculate(motors[(int)
+                                slaveTo[i]].getInstantVelocity(), motorTarget[(int) slaveTo[i]]));
+                        continue;
+                    }
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
                         pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
-                        double v = motors[i].getLibVelocity();
+                        double v = motors[i].getInstantVelocity();
                         motors[i].setPower(pidControllers[i].calculate(v, motorTarget[i]));
 
                         TelemetryPacket packet = new TelemetryPacket();
                         packet.put("targetVelocity " + i, motorTarget[i]);
                         //packet.put("currentVelocity " + i, v);
-                        packet.put("LibVelocity" + i, v);
+                        packet.put("InstantVelocity" + i, v);
 
                         dashboard.sendTelemetryPacket(packet);
                     }
