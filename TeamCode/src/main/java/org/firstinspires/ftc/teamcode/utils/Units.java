@@ -173,7 +173,7 @@ public final class Units {
     }
 
     public static double mmToInches(double mm) {
-        return 0.01 * metersToInches(mm);
+        return 0.001 * metersToInches(mm);
     }
 
     public static double inchesToMm(double inches) {

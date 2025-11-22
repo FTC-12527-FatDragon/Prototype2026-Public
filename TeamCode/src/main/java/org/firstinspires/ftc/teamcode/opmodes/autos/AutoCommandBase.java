@@ -10,6 +10,7 @@ public abstract class AutoCommandBase extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
         Command toRun = runAutoCommand();//.andThen(autoFinish());
 
         CommandScheduler.getInstance().schedule(toRun);
@@ -35,9 +36,4 @@ public abstract class AutoCommandBase extends LinearOpMode {
      *  Executes when auto being stooped, either finished executing or stopped on DriverStation.
      */
     public void onAutoStopped() {}
-
-    /**
-     *  Executes when auto being initialized, but before runAutoCommand (starting).
-     */
-    public void initialize() {}
 }

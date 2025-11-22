@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.utils.Util;
 public class Shooter extends SubsystemBase {
     public final DcMotorRe leftShooter;
     public final DcMotorRe rightShooter;
-    public final
-    TelemetryPacket packet = new TelemetryPacket();
+    public final TelemetryPacket packet = new TelemetryPacket();
+    public static double balls = 0;
 
     public final PIDController pidController;
     public static double shooterOpenLoopPower = -1;

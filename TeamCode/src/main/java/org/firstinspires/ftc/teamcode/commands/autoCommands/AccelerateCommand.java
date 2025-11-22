@@ -1,17 +1,14 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.autoCommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
-import org.firstinspires.ftc.teamcode.subsystems.transit.TransitConstants;
 
-public class ShootCommand extends CommandBase {
+public class AccelerateCommand extends CommandBase {
     private final Shooter shooter;
     private final Shooter.ShooterState state;
 
-    public ShootCommand(Shooter shooter, Shooter.ShooterState state) {
+    public AccelerateCommand(Shooter shooter, Shooter.ShooterState state) {
         this.shooter = shooter;
         this.state = state;
     }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -9,28 +10,15 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.TransitCommand;
-import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 
 @Config
-@Autonomous(name = "Red", group = "Autos")
-public class Red extends AutoCommandBase {
-    private MecanumDriveOTOS drive;
-    private Shooter shooter;
-    private Transit transit;
-    private Intake intake;
-    private CDS cds;
-    private Telemetry telemetryM;
+@Autonomous(name = "AutoDriveTest", group = "Autos")
+public class AutoDriveTest extends AutoCommandBase {
     private Follower follower;
 
-
+    public Pose startPose = new Pose(104.864, 134.467, Math.toRadians(180));
     public PathChain path1;
     public PathChain path2;
     public PathChain path3;
@@ -43,7 +31,9 @@ public class Red extends AutoCommandBase {
     public PathChain path10;
 
     private Command initializeCommand() {
-        return new SequentialCommandGroup();
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> follower.setStartingPose(startPose))
+        );
     }
 
     @Override
@@ -53,9 +43,9 @@ public class Red extends AutoCommandBase {
         path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(104.864, 134.467), new Pose(84.627, 83.958))
+                        new BezierLine(startPose, new Pose(84.627, 83.958))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(225))
+                .setLinearHeadingInterpolation(startPose.getHeading(), Math.toRadians(225))
                 .build();
 
         path2 = follower
@@ -132,9 +122,7 @@ public class Red extends AutoCommandBase {
 
         return new SequentialCommandGroup(
                 initializeCommand(),
-                new AutoDriveCommand(follower, path1),
-                new TransitCommand(transit, intake, shooter)
-
+                new AutoDriveCommand(follower, path1)
         );
     }
 }
