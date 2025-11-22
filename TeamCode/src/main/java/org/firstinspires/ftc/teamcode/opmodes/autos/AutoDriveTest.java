@@ -10,7 +10,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.autoCommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 
 @Config

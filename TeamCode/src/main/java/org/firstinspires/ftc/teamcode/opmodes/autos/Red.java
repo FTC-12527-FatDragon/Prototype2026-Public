@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -10,7 +13,8 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.autoCommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
@@ -132,9 +136,49 @@ public class Red extends AutoCommandBase {
 
         return new SequentialCommandGroup(
                 initializeCommand(),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, path1),
-                new TransitCommand(transit, intake, shooter)
-
+                //new AutoShootCommand(transit, intake, shooter),
+                new ParallelCommandGroup(
+                        new TransitCommand(transit, intake, shooter),
+                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
+                new AutoDriveCommand(follower, path2),
+                new ParallelCommandGroup(
+                        new AutoDriveCommand(follower, path3),
+                        new IntakeCommand(transit, intake)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
+                new AutoDriveCommand(follower, path4),
+                new ParallelCommandGroup(
+                        new TransitCommand(transit, intake, shooter),
+                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
+                new AutoDriveCommand(follower, path5),
+                new ParallelCommandGroup(
+                        new AutoDriveCommand(follower, path6),
+                        new IntakeCommand(transit, intake)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
+                new AutoDriveCommand(follower, path7),
+                new ParallelCommandGroup(
+                        new TransitCommand(transit, intake, shooter),
+                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
+                new AutoDriveCommand(follower, path8),
+                new ParallelCommandGroup(
+                        new AutoDriveCommand(follower, path9),
+                        new IntakeCommand(transit, intake)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
+                new AutoDriveCommand(follower, path10),
+                new ParallelCommandGroup(
+                        new TransitCommand(transit, intake, shooter),
+                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                )
         );
     }
 }

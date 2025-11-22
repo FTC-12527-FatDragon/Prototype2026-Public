@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
+import static org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants.releaseVelocity;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -15,6 +17,7 @@ public class Shooter extends SubsystemBase {
     public final DcMotorRe rightShooter;
     public final TelemetryPacket packet = new TelemetryPacket();
     public static double balls = 0;
+    public static boolean readyToShoot = false;
 
     public final PIDController pidController;
     public static double shooterOpenLoopPower = -1;
@@ -72,6 +75,14 @@ public class Shooter extends SubsystemBase {
                 rightShooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
     }
 
+    public double getBalls() {
+        return balls;
+    }
+
+    public void setBalls(double ballNumber) {
+        balls = ballNumber;
+    }
+
     @Override
     public void periodic() {
         if (shooterState != ShooterState.OPENLOOP) {
@@ -90,6 +101,13 @@ public class Shooter extends SubsystemBase {
         else {
             leftShooter.setPower(-shooterOpenLoopPower);
             rightShooter.setPower(shooterOpenLoopPower);
+        }
+        if (isShooterAtSetPoint()) {
+            readyToShoot = true;
+        }
+        else if (rightShooter.getLibVelocity() <= releaseVelocity) {
+            if (readyToShoot) balls = balls >= 1? balls - 1: balls;
+            readyToShoot = false;
         }
         rightShooter.updateLastPos();
         packet.put("leftShooterVelocity", leftShooter.getLibVelocity());

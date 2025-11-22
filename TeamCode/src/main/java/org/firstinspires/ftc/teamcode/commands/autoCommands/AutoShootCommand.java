@@ -18,6 +18,14 @@ public class AutoShootCommand extends CommandBase {
     }
 
     @Override
+    public void initialize() {
+        transit.setTransitState(Transit.TransitState.STOP);
+        transit.setLimitServoState(Transit.LimitServoState.CLOSE);
+        intake.reverseMotor(true);
+        if (!intake.isRunning()) intake.toggle();
+    }
+
+    @Override
     public void execute() {
         if (transit.chooseState == Transit.ChooseServoState.CLOSE) {
             if (shooter.isShooterAtSetPoint() && shooter.shooterState != Shooter.ShooterState.STOP) {
@@ -29,13 +37,18 @@ public class AutoShootCommand extends CommandBase {
                 transit.setLimitServoState(Transit.LimitServoState.CLOSE);
             }
         }
-        if (!intake.isRunning()) intake.toggle();
 
+    }
+
+    @Override
+    public boolean isFinished() {
+        return shooter.getBalls() < 1;
     }
 
     @Override
     public void end(boolean interrupted) {
         transit.setTransitState(Transit.TransitState.STOP);
         if (intake.isRunning()) intake.toggle();
+        intake.reverseMotor(false);
     }
 }

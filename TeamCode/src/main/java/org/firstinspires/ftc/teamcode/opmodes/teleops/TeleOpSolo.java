@@ -125,10 +125,6 @@ public class TeleOpSolo extends CommandOpMode {
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("ShooterVelocity", shooter.getAverageVelocity());
         packet.put("StopTime", transit.stopTime);
-        packet.put("AtFast", shooter.shooterState == Shooter.ShooterState.FAST
-                && shooter.getAverageVelocity() > ShooterConstants.fastVelocity);
-        packet.put("AtSlow", shooter.shooterState == Shooter.ShooterState.SLOW
-                && shooter.getAverageVelocity() > ShooterConstants.slowVelocity);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

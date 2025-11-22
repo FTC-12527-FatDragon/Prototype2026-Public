@@ -23,4 +23,5 @@ public class ShooterConstants {
     public static double stopVelocity = 0;
     public static double fastVelocity = 1560;
     public static double slowVelocity = 1360;
+    public static double releaseVelocity = 1000;
 }
