@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands.autoCommands;
+package org.firstinspires.ftc.teamcode.commands.autocommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 

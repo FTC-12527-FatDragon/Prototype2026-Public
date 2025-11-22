@@ -7,7 +7,6 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
@@ -17,10 +16,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.commands.AdjustCommand;
+import org.firstinspires.ftc.teamcode.commands.ChooseCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
-import org.firstinspires.ftc.teamcode.commands.TransitCommandWithShooter;
+import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
@@ -31,7 +32,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config
 @Configurable
-@TeleOp(name = "TeleOpCY")
+@TeleOp(name = "TeleOp Solo")
 public class TeleOpSolo extends CommandOpMode {
     private MecanumDriveOTOS drive;
 
@@ -45,6 +46,8 @@ public class TeleOpSolo extends CommandOpMode {
 
     private Intake intake;
 
+    private CDS cds;
+
     private Telemetry telemetryM;
 
     private boolean[] isAuto = {false};
@@ -57,6 +60,7 @@ public class TeleOpSolo extends CommandOpMode {
         shooter = new Shooter(hardwareMap);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
+        cds = new CDS(hardwareMap);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
 
@@ -75,29 +79,53 @@ public class TeleOpSolo extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5
         ).whenHeld(
-                new InstantCommand(() -> transit.setLimitServoState(Transit.LimitServoState.CLOSE))
-                        .andThen(new WaitCommand(300))
-                        .alongWith(new IntakeCommand(transit, intake))
+                new IntakeCommand(transit, intake)
         );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
-        ).whenPressed(
-                new InstantCommand(() -> shooter.toggleShooterState(Shooter.ShooterState.FAST))
+        ).whenHeld(
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
+        ).whenReleased(
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
-        ).whenPressed(
-                new InstantCommand(() -> shooter.toggleShooterState(Shooter.ShooterState.SLOW))
+        ).whenHeld(
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW))
+        ).whenReleased(
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
 
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
-                new InstantCommand(() -> transit.setLimitServoState(Transit.LimitServoState.OPEN))
-                        .andThen(new WaitCommand(300))
-                        .andThen(new TransitCommandWithShooter(transit, shooter))
+                new TransitCommand(transit, intake, shooter)
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
+        ).whenHeld(
+                new ChooseCommand(transit, intake)
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
+        ).whenPressed(
+                new InstantCommand(() -> transit.setChooseServoState(Transit.ChooseServoState.OPEN))
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+        ).whenPressed(
+                new InstantCommand(() -> transit.setChooseServoState(Transit.ChooseServoState.CLOSE))
+        );
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
+        ).whenPressed(
+                new AdjustCommand(transit, intake, cds)
         );
 
 
@@ -121,9 +149,11 @@ public class TeleOpSolo extends CommandOpMode {
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
+        telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
+        telemetry.addData("QueueFirst", cds.getFirst());
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("ShooterVelocity", shooter.getAverageVelocity());
+        packet.put("ShooterVelocity", shooter.getLibVelocity());
         packet.put("StopTime", transit.stopTime);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }

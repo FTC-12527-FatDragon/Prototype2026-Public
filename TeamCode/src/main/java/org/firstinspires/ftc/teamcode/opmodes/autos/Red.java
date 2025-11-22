@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -14,8 +16,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
-import org.firstinspires.ftc.teamcode.commands.autoCommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
+import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
@@ -26,15 +28,6 @@ import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 @Config
 @Autonomous(name = "Red", group = "Autos")
 public class Red extends AutoCommandBase {
-    private MecanumDriveOTOS drive;
-    private Shooter shooter;
-    private Transit transit;
-    private Intake intake;
-    private CDS cds;
-    private Telemetry telemetryM;
-    private Follower follower;
-
-
     public PathChain path1;
     public PathChain path2;
     public PathChain path3;
@@ -46,14 +39,8 @@ public class Red extends AutoCommandBase {
     public PathChain path9;
     public PathChain path10;
 
-    private Command initializeCommand() {
-        return new SequentialCommandGroup();
-    }
-
     @Override
     public Command runAutoCommand() {
-        follower = Constants.createFollower(hardwareMap);
-
         path1 = follower
                 .pathBuilder()
                 .addPath(
@@ -135,49 +122,51 @@ public class Red extends AutoCommandBase {
                 .build();
 
         return new SequentialCommandGroup(
-                initializeCommand(),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, path1),
                 //new AutoShootCommand(transit, intake, shooter),
-                new ParallelCommandGroup(
+                new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter),
-                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                        new WaitCommand(5000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, path2),
                 new ParallelCommandGroup(
                         new AutoDriveCommand(follower, path3),
-                        new IntakeCommand(transit, intake)
+                        new IntakeCommand(transit, intake),
+                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, path4),
-                new ParallelCommandGroup(
+                new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter),
-                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                        new WaitCommand(5000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, path5),
                 new ParallelCommandGroup(
                         new AutoDriveCommand(follower, path6),
-                        new IntakeCommand(transit, intake)
+                        new IntakeCommand(transit, intake),
+                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, path7),
-                new ParallelCommandGroup(
+                new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter),
-                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                        new WaitCommand(5000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, path8),
                 new ParallelCommandGroup(
                         new AutoDriveCommand(follower, path9),
-                        new IntakeCommand(transit, intake)
+                        new IntakeCommand(transit, intake),
+                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
                 new AutoDriveCommand(follower, path10),
-                new ParallelCommandGroup(
+                new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter),
-                        new WaitUntilCommand(() -> shooter.getBalls() < 1)
+                        new WaitCommand(5000)
                 )
         );
     }
