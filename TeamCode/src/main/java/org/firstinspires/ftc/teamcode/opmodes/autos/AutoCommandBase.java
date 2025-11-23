@@ -24,12 +24,12 @@ public abstract class AutoCommandBase extends LinearOpMode {
 
     public abstract Command runAutoCommand();
 
+    public abstract Pose getStartPose();
+
     private void initialize() {
         follower = Constants.createFollower(hardwareMap);
 
-        Pose startPose = new Pose(104.864, 134.467, Math.toRadians(180));
-
-        follower.setStartingPose(startPose);
+        follower.setStartingPose(getStartPose());
         shooter = new Shooter(hardwareMap);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
