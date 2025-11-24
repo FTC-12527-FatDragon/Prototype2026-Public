@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems.drive;
 
+import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
+import static com.qualcomm.robotcore.util.Range.clip;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.strafingBalance;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,10 +17,20 @@ import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Config
 public class MecanumDriveOTOS extends SubsystemBase {
-    private final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
+    public final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
 
     private final SparkFunOTOS otos;
     private double yawOffset;// mm
+
+    public boolean isGamepadOn;
+
+    Pose2D lastPose;
+
+    SparkFunOTOS.Pose2D pose;
+
+    public static double kP_xy = 0.01;
+
+    public static double kP_h = -0.8;
 
     public MecanumDriveOTOS(final HardwareMap hardwareMap) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
@@ -25,6 +38,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         otos = hardwareMap.get(SparkFunOTOS.class, "otos");
+        isGamepadOn = false;
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -39,6 +53,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        lastPose = new Pose2D(DriveConstants.distanceUnit, 0, 0, DriveConstants.angleUnit, 0);
     }
 
     public void stop() {
@@ -47,6 +63,10 @@ public class MecanumDriveOTOS extends SubsystemBase {
 
     public void reset(double heading) {
         yawOffset = otos.getPosition().h + heading;
+    }
+
+    public void setGamepad(boolean on) {
+        isGamepadOn = on;
     }
 
     public void moveRobotFieldRelative(double forward, double fun, double turn) {
@@ -125,5 +145,31 @@ public class MecanumDriveOTOS extends SubsystemBase {
                 DriveConstants.headingEpsilon);
     }
 
-    
+    private void applyPID() {
+        Pose2D p = getPose();
+
+        double errorX = lastPose.getX(DriveConstants.distanceUnit) - p.getX(DriveConstants.distanceUnit);
+        double errorY = lastPose.getY(DriveConstants.distanceUnit) - p.getY(DriveConstants.distanceUnit);
+        double errorH = angleWrap(lastPose.getHeading(DriveConstants.angleUnit) - p.getHeading(DriveConstants.angleUnit));
+
+        double forward =  errorY * kP_xy;
+        double strafe  =  errorX * kP_xy;
+        double turn    =  errorH * kP_h;
+
+        // 限幅
+        forward = clip(forward, -1, 1);
+        strafe  = clip(strafe,  -1, 1);
+        turn    = clip(turn,    -1, 1);
+
+        moveRobotFieldRelative(forward, strafe, turn);
+    }
+
+    @Override
+    public void periodic() {
+        if (!isGamepadOn) {
+            applyPID();
+        }
+
+        lastPose = getPose();
+    }
 }

@@ -136,7 +136,7 @@ public class Red extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path2),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path3),
+                        new AutoDriveCommand(follower, Path3).andThen(new WaitCommand(500)),
                         new IntakeCommand(transit, intake)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
@@ -149,7 +149,7 @@ public class Red extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path5),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path6),
+                        new AutoDriveCommand(follower, Path6).andThen(new WaitCommand(500)),
                         new IntakeCommand(transit, intake)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
@@ -162,7 +162,7 @@ public class Red extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path8),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path9),
+                        new AutoDriveCommand(follower, Path9).andThen(new WaitCommand(500)),
                         new IntakeCommand(transit, intake)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),

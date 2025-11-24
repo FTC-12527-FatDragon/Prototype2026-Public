@@ -151,6 +151,15 @@ public class TeleOpSolo extends CommandOpMode {
         telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
         telemetry.addData("QueueFirst", cds.getFirst());
+        telemetry.addData("Gamepad Lx: ", gamepadEx1.getLeftX());
+        telemetry.addData("Gamepad Ly: ", gamepadEx1.getLeftY());
+        telemetry.addData("Gamepad Rx: ", gamepadEx1.getRightX());
+        telemetry.addData("LF Power: ", drive.leftBackMotor.getPower());
+        telemetry.addData("RF Power: ", drive.rightFrontMotor.getPower());
+        telemetry.addData("LB Power: ", drive.leftBackMotor.getPower());
+        telemetry.addData("RB Motor: ", drive.rightBackMotor.getPower());
+        telemetry.addData("LF Mode: ", drive.leftFrontMotor.getMode());
+        telemetry.addData("Is Gamepad On: ", drive.isGamepadOn);
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("ShooterVelocity", shooter.getLibVelocity());
