@@ -155,8 +155,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         double forward =  errorY * kP_xy;
         double strafe  =  errorX * kP_xy;
         double turn    =  errorH * kP_h;
-
-        // 限幅
+        
         forward = clip(forward, -1, 1);
         strafe  = clip(strafe,  -1, 1);
         turn    = clip(turn,    -1, 1);
