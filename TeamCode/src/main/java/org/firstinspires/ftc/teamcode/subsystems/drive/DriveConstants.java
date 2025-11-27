@@ -24,4 +24,7 @@ public class DriveConstants {
     public static double linearScalar = 1.00026, angularScalar = 0.99414;
     public static double forwardVelocity = 63.966, strafeVelocity = 26.744;
     public static double forwardAcceleration = -32.6419, strafeAcceleration = -95.1316;
+
+    public static double kP_xy = 0.02;
+    public static double kP_h = -0.8;
 }

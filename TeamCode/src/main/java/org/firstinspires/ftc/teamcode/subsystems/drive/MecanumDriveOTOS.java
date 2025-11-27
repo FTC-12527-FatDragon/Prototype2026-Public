@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems.drive;
 
 import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
 import static com.qualcomm.robotcore.util.Range.clip;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_h;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_xy;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.strafingBalance;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -25,12 +27,6 @@ public class MecanumDriveOTOS extends SubsystemBase {
     public boolean isGamepadOn;
 
     Pose2D lastPose;
-
-    SparkFunOTOS.Pose2D pose;
-
-    public static double kP_xy = 0.01;
-
-    public static double kP_h = -0.8;
 
     public MecanumDriveOTOS(final HardwareMap hardwareMap) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
@@ -145,7 +141,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
                 DriveConstants.headingEpsilon);
     }
 
-    private void applyPID() {
+    private void applyBreak() {
         Pose2D p = getPose();
 
         double errorX = lastPose.getX(DriveConstants.distanceUnit) - p.getX(DriveConstants.distanceUnit);
@@ -166,7 +162,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
     @Override
     public void periodic() {
         if (!isGamepadOn) {
-            applyPID();
+            applyBreak();
         }
 
         lastPose = getPose();

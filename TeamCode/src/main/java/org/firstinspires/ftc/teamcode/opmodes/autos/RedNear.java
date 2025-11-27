@@ -6,27 +6,19 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
-import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
-import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 
 @Config
-@Autonomous(name = "Red", group = "Autos")
-public class Red extends AutoCommandBase {
+@Autonomous(name = "RedNear 3+9", group = "Autos")
+public class RedNear extends AutoCommandBase {
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;

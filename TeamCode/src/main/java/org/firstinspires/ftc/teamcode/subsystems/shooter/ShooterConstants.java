@@ -8,7 +8,7 @@ public class ShooterConstants {
     public static String leftShooterName = "leftShooterMotor";
     public static String rightShooterName = "rightShooterMotor";
 
-    public static double shooterEpsilon = 40;
+    public static double shooterEpsilon = 20;
 
     public static double kP = 0.5;
     public static double kI = 0;
