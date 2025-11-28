@@ -9,11 +9,12 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class DashTuner extends LinearOpMode {
             new PID(0, 0, 0)
     };
 
-    DcMotorRe[] motors = new DcMotorRe[4];
+    DcMotorEx[] motors = new DcMotorEx[4];
 
     Servo[] servos = new Servo[4];
 
@@ -90,7 +91,7 @@ public class DashTuner extends LinearOpMode {
 
         for (int i = 0; i < 4; i++) {
             if (!motorName[i].isEmpty()) {
-                motors[i] = new DcMotorRe(hardwareMap, motorName[i]);
+                motors[i] = hardwareMap.get(DcMotorEx.class, motorName[i]);
                 pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
             }
             if (!servoName[i].isEmpty()) {
@@ -110,26 +111,27 @@ public class DashTuner extends LinearOpMode {
                 if (!motorName[i].isEmpty()) {
                     if (slaveTo[i] != -1) {
                         motors[i].setPower(-pidControllers[(int) slaveTo[i]].calculate(motors[(int)
-                                slaveTo[i]].getInstantVelocity(), motorTarget[(int) slaveTo[i]]));
+                                slaveTo[i]].getVelocity(), motorTarget[(int) slaveTo[i]]));
                         continue;
                     }
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
                         pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
-                        double v = motors[i].getInstantVelocity();
+                        double v = motors[i].getVelocity();
+
                         motors[i].setPower(pidControllers[i].calculate(v, motorTarget[i]));
 
                         TelemetryPacket packet = new TelemetryPacket();
                         packet.put("targetVelocity " + i, motorTarget[i]);
-                        packet.put("libVelocity " + i, motors[i].getLibVelocity());
-                        packet.put("InstantVelocity" + i, v);
+                        packet.put("Velocity " + i, v);
 
                         dashboard.sendTelemetryPacket(packet);
                     }
                     if (closeLoop[i] && !isVelocityCloseLoop[i]) {
                         pidControllers[i].setPID(PIDs[i].kP, PIDs[i].kI, PIDs[i].kD);
 
-                        double pos = motors[i].getPosition();
+                        double pos = motors[i].getCurrentPosition();
+
                         motors[i].setPower(pidControllers[i].calculate(pos, motorTarget[i]));
 
                         TelemetryPacket packet = new TelemetryPacket();
@@ -140,15 +142,14 @@ public class DashTuner extends LinearOpMode {
                     }
                     if (!closeLoop[i]) {
                         motors[i].setPower(motorTarget[i]);
-                        double v = motors[i].getAverageVelocity();
+                        double v = motors[i].getVelocity();
 
                         TelemetryPacket packet = new TelemetryPacket();
                         packet.put("currentVelocity " + i, v);
-                        packet.put("LibVelocity " + i, motors[i].getLibVelocity());
+                        packet.put("Velocity " + i, motors[i].getVelocity());
 
                         dashboard.sendTelemetryPacket(packet);
                     }
-                    motors[i].updateLastPos();
                 }
 
                 if (!servoName[i].isEmpty()) {

@@ -9,12 +9,11 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.utils.DcMotorRe;
 import org.firstinspires.ftc.teamcode.utils.Util;
 
 public class Shooter extends SubsystemBase {
-    public final DcMotorRe leftShooter;
-    public final DcMotorRe rightShooter;
+    public final DcMotorEx leftShooter;
+    public final DcMotorEx rightShooter;
     public final TelemetryPacket packet = new TelemetryPacket();
     public static double balls = 0;
     public static boolean readyToShoot = false;
@@ -25,8 +24,8 @@ public class Shooter extends SubsystemBase {
     public ShooterState shooterState = ShooterState.STOP;
 
     public Shooter(final HardwareMap hardwareMap) {
-        leftShooter = new DcMotorRe(hardwareMap, ShooterConstants.leftShooterName);
-        rightShooter = new DcMotorRe(hardwareMap, ShooterConstants.rightShooterName);
+        leftShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.leftShooterName);
+        rightShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.rightShooterName);
         pidController = new PIDController(ShooterConstants.kP,
                 ShooterConstants.kI, ShooterConstants.kD);
     }
@@ -62,17 +61,13 @@ public class Shooter extends SubsystemBase {
         shooterState = state;
     }
 
-    public double getAverageVelocity() {
-        return rightShooter.getAverageVelocity();
-    }
-
-    public double getLibVelocity() {
-        return rightShooter.getLibVelocity();
+    public double getVelocity() {
+        return rightShooter.getVelocity();
     }
 
     public boolean isShooterAtSetPoint() {
         return Util.epsilonEqual(shooterState.shooterVelocity,
-                rightShooter.getLibVelocity(), ShooterConstants.shooterEpsilon);
+                rightShooter.getVelocity(), ShooterConstants.shooterEpsilon);
     }
 
     public double getBalls() {
@@ -88,7 +83,7 @@ public class Shooter extends SubsystemBase {
         if (shooterState != ShooterState.OPENLOOP) {
             if (shooterState != ShooterState.STOP) {
                 double currentPower = pidController.calculate(
-                        rightShooter.getLibVelocity(), shooterState.shooterVelocity);
+                        rightShooter.getVelocity(), shooterState.shooterVelocity);
                 leftShooter.setPower(-currentPower);
                 rightShooter.setPower(currentPower);
                 packet.put("currentPower", currentPower);
@@ -105,13 +100,12 @@ public class Shooter extends SubsystemBase {
         if (isShooterAtSetPoint()) {
             readyToShoot = true;
         }
-        else if (rightShooter.getLibVelocity() <= releaseVelocity) {
+        else if (rightShooter.getVelocity() <= releaseVelocity) {
             if (readyToShoot) balls = balls >= 1? balls - 1: balls;
             readyToShoot = false;
         }
-        rightShooter.updateLastPos();
-        packet.put("leftShooterVelocity", leftShooter.getLibVelocity());
-        packet.put("rightShooterVelocity", rightShooter.getLibVelocity());
+        packet.put("leftShooterVelocity", leftShooter.getVelocity());
+        packet.put("rightShooterVelocity", rightShooter.getVelocity());
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

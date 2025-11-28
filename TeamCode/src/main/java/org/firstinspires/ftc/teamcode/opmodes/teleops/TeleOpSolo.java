@@ -162,7 +162,7 @@ public class TeleOpSolo extends CommandOpMode {
         telemetry.addData("Is Gamepad On: ", drive.isGamepadOn);
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("ShooterVelocity", shooter.getLibVelocity());
+        packet.put("ShooterVelocity", shooter.getVelocity());
         packet.put("StopTime", transit.stopTime);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
