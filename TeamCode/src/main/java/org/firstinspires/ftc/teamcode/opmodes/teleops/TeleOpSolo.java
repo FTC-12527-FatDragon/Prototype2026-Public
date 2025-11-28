@@ -150,7 +150,7 @@ public class TeleOpSolo extends CommandOpMode {
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
         telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
-        telemetry.addData("QueueFirst", cds.getFirst());
+        telemetry.addData("Ball Num", cds.getBallNum());
         telemetry.addData("Gamepad Lx: ", gamepadEx1.getLeftX());
         telemetry.addData("Gamepad Ly: ", gamepadEx1.getLeftY());
         telemetry.addData("Gamepad Rx: ", gamepadEx1.getRightX());

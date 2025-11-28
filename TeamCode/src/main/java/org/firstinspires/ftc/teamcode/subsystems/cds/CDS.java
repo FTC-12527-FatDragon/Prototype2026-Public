@@ -35,6 +35,8 @@ public class CDS extends SubsystemBase {
     private boolean purpule = false;
     private boolean green = false;
 
+    private long ballNum = 0;
+
     private Queue<Integer> colorQue = new LinkedList<>();
 
     private List<Float> hues = new ArrayList<>();
@@ -46,6 +48,14 @@ public class CDS extends SubsystemBase {
     public int getFirst() {
         if (colorQue.peek() != null) return colorQue.peek();
         return -1;
+    }
+
+    public String getColorQue() {
+        return colorQue.toString();
+    }
+
+    public long getBallNum() {
+        return ballNum;
     }
 
     @Override
@@ -63,6 +73,7 @@ public class CDS extends SubsystemBase {
 
         if (dis < ballDistance) {
             hues.add(hsvValues[0]);
+            if (ballDetected == false) ballNum++;
             ballDetected = true;
         }
 

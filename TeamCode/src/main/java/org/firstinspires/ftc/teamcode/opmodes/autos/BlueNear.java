@@ -179,7 +179,7 @@ public class BlueNear extends AutoCommandBase {
                 .addPath(
                         new BezierLine(new Pose(59.167, 84.245), new Pose(39.380, 40.751))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-52), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
                 .build();
 
         Path9 = follower
@@ -195,7 +195,7 @@ public class BlueNear extends AutoCommandBase {
                 .addPath(
                         new BezierLine(new Pose(22.139, 40.163), new Pose(59.167, 84.441))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-48))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
                 .build();
 
         return new SequentialCommandGroup(

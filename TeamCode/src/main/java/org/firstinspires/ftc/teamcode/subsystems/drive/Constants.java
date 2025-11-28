@@ -25,10 +25,10 @@ public class Constants {
             .useSecondaryTranslationalPIDF(false)
             .useSecondaryHeadingPIDF(false)
             .useSecondaryDrivePIDF(false)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0.009, 0, 0.03))
-            .headingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.02, 0.02))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.02, 0, 0.001, 0, 0))
-            .centripetalScaling(0.0007);
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0.000, 0.007, 0.03))
+            .headingPIDFCoefficients(new PIDFCoefficients(0.9, 0, 0.02, 0.02))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.01, 0, 0.0001, 0, 0.02))
+            .centripetalScaling(0.0003);
 
 
     public static MecanumConstants driveConstants = new MecanumConstants()
