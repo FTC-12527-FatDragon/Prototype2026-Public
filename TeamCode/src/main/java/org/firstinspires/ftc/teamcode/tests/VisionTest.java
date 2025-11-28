@@ -19,15 +19,15 @@ public class VisionTest extends CommandOpMode {
     private Telemetry telemetryM;
     @Override
     public void initialize() {
-        autoApriltag = new AutoApriltag(hardwareMap);
+        //autoApriltag = new AutoApriltag(hardwareMap);
     }
 
     @Override
     public void run() {
-        List ids = autoApriltag.getNumbers();
+        //List ids = autoApriltag.getNumbers();
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
-        telemetry.addData("ApriltagID",ids);
+        //telemetry.addData("ApriltagID",ids);
         telemetry.update();
     }
 }
