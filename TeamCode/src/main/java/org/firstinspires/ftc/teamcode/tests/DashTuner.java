@@ -110,8 +110,11 @@ public class DashTuner extends LinearOpMode {
             for (int i = 0; i < 4; i++) {
                 if (!motorName[i].isEmpty()) {
                     if (slaveTo[i] != -1) {
-                        motors[i].setPower(-pidControllers[(int) slaveTo[i]].calculate(motors[(int)
-                                slaveTo[i]].getVelocity(), motorTarget[(int) slaveTo[i]]));
+                        if (closeLoop[i])
+                            motors[i].setPower(-pidControllers[(int) slaveTo[i]].calculate(motors[(int)
+                                    slaveTo[i]].getVelocity(), motorTarget[(int) slaveTo[i]]));
+                        else
+                            motors[i].setPower(-motorTarget[(int) slaveTo[i]]);
                         continue;
                     }
                     if (closeLoop[i] && isVelocityCloseLoop[i]) {
