@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Config
@@ -22,6 +24,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
     public final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
 
     private final SparkFunOTOS otos;
+    private final AutoApriltag autoApriltag;
     private double yawOffset;// mm
 
     public boolean isGamepadOn;
@@ -40,6 +43,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        autoApriltag = new AutoApriltag(hardwareMap);
 
         otos.resetTracking();
         otos.setAngularUnit(DriveConstants.angleUnit);
@@ -165,6 +170,9 @@ public class MecanumDriveOTOS extends SubsystemBase {
             applyBreak();
         }
 
+        Pose3D visionPose = autoApriltag.getRobotPosition();
+        if (visionPose != null) otos.setPosition(
+                Util.visionPoseToOTOSPose(autoApriltag.getRobotPosition()));
         lastPose = getPose();
     }
 }
