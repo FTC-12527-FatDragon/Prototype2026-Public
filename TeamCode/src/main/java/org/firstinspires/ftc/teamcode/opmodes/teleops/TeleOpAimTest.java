@@ -34,7 +34,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config
 @Configurable
-@TeleOp(name = "TeleOp Solo")
+@TeleOp(name = "TeleOpAimTest")
 public class TeleOpAimTest extends CommandOpMode {
     private MecanumDriveOTOS drive;
 
@@ -168,7 +168,7 @@ public class TeleOpAimTest extends CommandOpMode {
         telemetry.addData("Is Gamepad On: ", drive.isGamepadOn);
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("ShooterVelocity", shooter.getLibVelocity());
+        packet.put("ShooterVelocity", shooter.getVelocity());
         packet.put("StopTime", transit.stopTime);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
