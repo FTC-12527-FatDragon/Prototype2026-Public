@@ -6,7 +6,7 @@ public class CDSConstants {
 
     public static double SCALE_FACTOR = 255;
 
-    public static double ballDistance = 4.0;
+    public static double ballDistance = 2.0;
 
     public static double purpleConst = 180.0;
 }

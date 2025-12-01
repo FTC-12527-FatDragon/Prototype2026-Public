@@ -58,6 +58,10 @@ public class CDS extends SubsystemBase {
         return ballNum;
     }
 
+    public void deleteBalls() {
+        ballNum = 0;
+    }
+
     @Override
     public void periodic() {
         double dis = distanceSensor.getDistance(DistanceUnit.CM);

@@ -42,7 +42,7 @@ public class TeleOpAimTest extends CommandOpMode {
 
     private GamepadEx gamepadEx1;
 
-    private Shooter shooter;
+//    private Shooter shooter;
 
     private Transit transit;
 
@@ -61,7 +61,7 @@ public class TeleOpAimTest extends CommandOpMode {
         drive = new MecanumDriveOTOS(hardwareMap);
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+//        shooter = new Shooter(hardwareMap);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
         cds = new CDS(hardwareMap);
@@ -84,30 +84,30 @@ public class TeleOpAimTest extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5
         ).whenHeld(
-                new IntakeCommand(transit, intake)
+                new IntakeCommand(transit, intake, cds)
         );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
-        ).whenHeld(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
-        ).whenReleased(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
+//        ).whenHeld(
+//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
+//        ).whenReleased(
+//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
+//        );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
-        ).whenHeld(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW))
-        ).whenReleased(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
+//        ).whenHeld(
+//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW))
+//        ).whenReleased(
+//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
+//        );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
-        ).whenHeld(
-                new TransitCommand(transit, intake, shooter)
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
+//        ).whenHeld(
+//                new TransitCommand(transit, intake, shooter, cds)
+//        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
@@ -155,7 +155,7 @@ public class TeleOpAimTest extends CommandOpMode {
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
-        telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
+//        telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
         telemetry.addData("QueueFirst", cds.getFirst());
         telemetry.addData("Gamepad Lx: ", gamepadEx1.getLeftX());
         telemetry.addData("Gamepad Ly: ", gamepadEx1.getLeftY());
@@ -168,7 +168,7 @@ public class TeleOpAimTest extends CommandOpMode {
         telemetry.addData("Is Gamepad On: ", drive.isGamepadOn);
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("ShooterVelocity", shooter.getVelocity());
+//        packet.put("ShooterVelocity", shooter.getVelocity());
         packet.put("StopTime", transit.stopTime);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }

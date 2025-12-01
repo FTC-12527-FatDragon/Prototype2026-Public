@@ -15,6 +15,6 @@ public class TransitConstants {
     public static double chooseServoOpenPos = 0.02;
 
     public static double transitIntakePower = 0.4;
-    public static double transitShootPower = 0.7;
+    public static double transitShootPower = 1.0;
     public static double transitStopPower = 0.0;
 }

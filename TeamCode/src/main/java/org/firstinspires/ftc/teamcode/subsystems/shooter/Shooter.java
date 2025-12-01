@@ -80,23 +80,23 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (shooterState != ShooterState.OPENLOOP) {
-            if (shooterState != ShooterState.STOP) {
-                double currentPower = pidController.calculate(
-                        rightShooter.getVelocity(), shooterState.shooterVelocity);
-                leftShooter.setPower(-currentPower);
-                rightShooter.setPower(currentPower);
-                packet.put("currentPower", currentPower);
-            }
-            else {
-                leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
-                rightShooter.setPower(ShooterState.STOP.shooterVelocity);
-            }
+
+//        if (shooterState != ShooterState.STOP) {
+//            double currentPower = pidController.calculate(
+//                    rightShooter.getVelocity(), shooterState.shooterVelocity);
+//            leftShooter.setPower(-currentPower);
+//            rightShooter.setPower(currentPower);
+//            packet.put("currentPower", currentPower);
+//        }
+        if (shooterState != ShooterState.STOP) {
+            leftShooter.setPower(-1);
+            rightShooter.setPower(1);
         }
         else {
-            leftShooter.setPower(-shooterOpenLoopPower);
-            rightShooter.setPower(shooterOpenLoopPower);
+            leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
+            rightShooter.setPower(ShooterState.STOP.shooterVelocity);
         }
+
         if (isShooterAtSetPoint()) {
             readyToShoot = true;
         }

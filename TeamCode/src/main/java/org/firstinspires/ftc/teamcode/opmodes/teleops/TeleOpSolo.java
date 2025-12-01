@@ -79,7 +79,7 @@ public class TeleOpSolo extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.5
         ).whenHeld(
-                new IntakeCommand(transit, intake)
+                new IntakeCommand(transit, intake, cds)
         );
 
         new FunctionalButton(
@@ -101,7 +101,7 @@ public class TeleOpSolo extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
-                new TransitCommand(transit, intake, shooter)
+                new TransitCommand(transit, intake, shooter, cds)
         );
 
         new FunctionalButton(
