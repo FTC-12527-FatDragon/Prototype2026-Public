@@ -154,12 +154,12 @@ public class EncoderTest extends CommandOpMode {
         telemetry.addData("QueueFirst", cds.getFirst());
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-        packet.put("ShooterVelocity", shooter.getLibVelocity());
+        packet.put("ShooterVelocity", shooter.getVelocity());
         packet.put("StopTime", transit.stopTime);
         packet.put("AtFast", shooter.shooterState == Shooter.ShooterState.FAST
-                && shooter.getAverageVelocity() > ShooterConstants.fastVelocity);
+                && shooter.getVelocity() > ShooterConstants.fastVelocity);
         packet.put("AtSlow", shooter.shooterState == Shooter.ShooterState.SLOW
-                && shooter.getAverageVelocity() > ShooterConstants.slowVelocity);
+                && shooter.getVelocity() > ShooterConstants.slowVelocity);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

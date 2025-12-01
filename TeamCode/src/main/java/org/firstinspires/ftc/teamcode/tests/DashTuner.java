@@ -76,7 +76,7 @@ public class DashTuner extends LinearOpMode {
     final double SCALE_FACTOR = 255;
 
     private boolean ballDetected = false;
-    private boolean purpule = false;
+    private boolean purple = false;
     private boolean green = false;
 
     private double lastR = 0.0, lastG = 0.0, lastB = 0.0;
@@ -184,12 +184,12 @@ public class DashTuner extends LinearOpMode {
                             (int) (b * SCALE_FACTOR),
                             hsvValues);
 
-                    if (dis < 4.0) {
+                    if (dis < 2.0) {
                         hues.add(hsvValues[0]);
                         ballDetected = true;
                     }
 
-                    if (dis > 4.0 && ballDetected) {
+                    if (dis > 2.0 && ballDetected) {
                         ballDetected = false;
 
                         Collections.sort(hues);
@@ -203,7 +203,7 @@ public class DashTuner extends LinearOpMode {
                             colorQue.offer(0);
                         }
 
-                        purpule = false;
+                        purple = false;
                         green = false;
 
                         hues.clear();
