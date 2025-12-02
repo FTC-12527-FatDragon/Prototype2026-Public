@@ -199,9 +199,9 @@ public class BlueNear extends AutoCommandBase {
                 .build();
 
         return new SequentialCommandGroup(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, Path1),
                 //new AutoShootCommand(transit, intake, shooter),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
@@ -210,11 +210,12 @@ public class BlueNear extends AutoCommandBase {
                 new AutoDriveCommand(follower, Path2),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path3),
-                        new IntakeCommand(transit, intake, cds)
+                        new IntakeCommand(transit, intake, cds),
+                        new WaitCommand(2500)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, Path4),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
@@ -223,11 +224,13 @@ public class BlueNear extends AutoCommandBase {
                 new AutoDriveCommand(follower, Path5),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path6),
-                        new IntakeCommand(transit, intake, cds)
+                        new IntakeCommand(transit, intake, cds),
+                        new WaitCommand(2500)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
+
                 new AutoDriveCommand(follower, Path7),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
@@ -236,11 +239,13 @@ public class BlueNear extends AutoCommandBase {
                 new AutoDriveCommand(follower, Path8),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path9),
-                        new IntakeCommand(transit, intake, cds)
+                        new IntakeCommand(transit, intake, cds),
+                        new WaitCommand(2500)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
+
                 new AutoDriveCommand(follower, Path10),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
