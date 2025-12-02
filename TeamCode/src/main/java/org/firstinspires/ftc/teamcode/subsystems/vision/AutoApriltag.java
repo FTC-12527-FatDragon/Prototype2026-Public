@@ -23,7 +23,8 @@ public class AutoApriltag extends SubsystemBase {
     public Pose3D getRobotPosition(){
         List<FiducialResult> fiducialResult = limelight.getLatestResult().getFiducialResults();
         if (!fiducialResult.isEmpty()) {
-            return fiducialResult.get(0).getRobotPoseFieldSpace();
+            if (fiducialResult.get(0).getTargetArea() >= 0.01)
+                return fiducialResult.get(0).getRobotPoseFieldSpace();
         }
         return null;
     }

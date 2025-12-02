@@ -26,14 +26,13 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config
 @Configurable
-@TeleOp(name = "TeleOp Solo")
-public class TeleOpSolo extends CommandOpMode {
+@TeleOp(name = "TeleOp Solo Blue")
+public class TeleOpSoloBlue extends CommandOpMode {
     private MecanumDriveOTOS drive;
 
     private Follower follower;
@@ -54,7 +53,7 @@ public class TeleOpSolo extends CommandOpMode {
 
     @Override
     public void initialize() {
-        drive = new MecanumDriveOTOS(hardwareMap);
+        drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.BLUE);
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap);
@@ -62,7 +61,15 @@ public class TeleOpSolo extends CommandOpMode {
         intake = new Intake(hardwareMap);
         cds = new CDS(hardwareMap);
 
-        drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1, isAuto));
+        drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
+                () -> gamepadEx1.getButton(GamepadKeys.Button.A)));
+
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.B)
+        ).whenPressed(
+                new InstantCommand(() -> drive.visionCalibrate())
+        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
@@ -102,6 +109,7 @@ public class TeleOpSolo extends CommandOpMode {
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
                 new TransitCommand(transit, intake, shooter, cds)
+                        .alongWith(new InstantCommand(() -> drive.visionCalibrate()))
         );
 
         new FunctionalButton(
@@ -159,7 +167,6 @@ public class TeleOpSolo extends CommandOpMode {
         telemetry.addData("LB Power: ", drive.leftBackMotor.getPower());
         telemetry.addData("RB Motor: ", drive.rightBackMotor.getPower());
         telemetry.addData("LF Mode: ", drive.leftFrontMotor.getMode());
-        telemetry.addData("Is Gamepad On: ", drive.isGamepadOn);
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
         packet.put("ShooterVelocity", shooter.getVelocity());

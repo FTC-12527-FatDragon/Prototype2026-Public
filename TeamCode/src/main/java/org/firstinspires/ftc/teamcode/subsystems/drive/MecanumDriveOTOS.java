@@ -5,6 +5,14 @@ import static com.qualcomm.robotcore.util.Range.clip;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_h;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_xy;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.strafingBalance;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFarPoseBlue;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFarPoseRed;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xPoseBlue;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xPoseRed;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFarPoseBlue;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFarPoseRed;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yPoseBlue;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yPoseRed;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -14,8 +22,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 import org.firstinspires.ftc.teamcode.utils.Util;
 
@@ -26,18 +36,30 @@ public class MecanumDriveOTOS extends SubsystemBase {
     private final SparkFunOTOS otos;
     private final AutoApriltag autoApriltag;
     private double yawOffset;// mm
+    private DriveState alliance;
 
-    public boolean isGamepadOn;
+    public DriveState driveState;
 
     Pose2D lastPose;
 
-    public MecanumDriveOTOS(final HardwareMap hardwareMap) {
+    public enum DriveState {
+        STOP,
+        TELEOP,
+        ALIGN,
+        RED,
+        BLUE;
+
+        DriveState() {}
+    }
+
+    public MecanumDriveOTOS(final HardwareMap hardwareMap, DriveState alliance) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         otos = hardwareMap.get(SparkFunOTOS.class, "otos");
-        isGamepadOn = false;
+        driveState = DriveState.STOP;
+        this.alliance = alliance;
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -66,8 +88,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
         yawOffset = otos.getPosition().h + heading;
     }
 
-    public void setGamepad(boolean on) {
-        isGamepadOn = on;
+    public void setDriveState(DriveState driveState) {
+        this.driveState = driveState;
     }
 
     public void moveRobotFieldRelative(double forward, double fun, double turn) {
@@ -113,27 +135,6 @@ public class MecanumDriveOTOS extends SubsystemBase {
         rightBackMotor.setPower(rightBackPower);
     }
 
-    public void turnRobot(double angle, double power) {
-        double preAngle = otos.getPosition().h;
-        while (otos.getPosition().h - preAngle < angle) {
-            leftFrontMotor.setPower(power * 0.2);
-            leftBackMotor.setPower(power * 0.2);
-            rightFrontMotor.setPower(power * -0.2);
-            rightBackMotor.setPower(power * -0.2);
-        }
-    }
-
-    public void turnRobotTo(double angle, double power) {
-        double heading = otos.getPosition().h;
-        double needs = (angle - heading) % (2 * Math.PI);
-        while (Util.epsilonEqual(angle,otos.getPosition().h,0.02)) {
-            leftFrontMotor.setPower(power * 0.2);
-            leftBackMotor.setPower(power * 0.2);
-            rightFrontMotor.setPower(power * -0.2);
-            rightBackMotor.setPower(power * -0.2);
-        }
-    }
-
     public Pose2D getPose() {
         SparkFunOTOS.Pose2D pose = otos.getPosition();
         return new Pose2D(DriveConstants.distanceUnit, pose.x, pose.y, DriveConstants.angleUnit, pose.h);
@@ -164,15 +165,51 @@ public class MecanumDriveOTOS extends SubsystemBase {
         moveRobotFieldRelative(forward, strafe, turn);
     }
 
+    /**
+     * @param heading in radians
+     */
+    private void alignTo(double heading) {
+        double errorH = angleWrap(heading - lastPose.getHeading(DriveConstants.angleUnit));
+
+        double turn    =  errorH * kP_h;
+
+        turn    = clip(turn,    -1, 1);
+
+        moveRobotFieldRelative(0, 0, turn);
+    }
+
+    public void visionCalibrate() {
+        Pose3D visionPose = autoApriltag.getRobotPosition();
+        if (visionPose != null) otos.setPosition(Util.visionPoseToOTOSPose(visionPose, alliance));
+    }
+
     @Override
     public void periodic() {
-        if (!isGamepadOn) {
+        if (driveState == DriveState.STOP) {
             applyBreak();
         }
-
-        Pose3D visionPose = autoApriltag.getRobotPosition();
-        if (visionPose != null) otos.setPosition(
-                Util.visionPoseToOTOSPose(autoApriltag.getRobotPosition()));
+        else if (driveState == DriveState.ALIGN) {
+            if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.RED) {
+                double goalHeading = Math.atan2((yPoseRed - getPose().getY(DistanceUnit.INCH)),
+                        xPoseRed - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+                alignTo(goalHeading);
+            }
+            else if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.BLUE) {
+                double goalHeading = Math.atan2((yPoseBlue - getPose().getY(DistanceUnit.INCH)),
+                        xPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+                alignTo(goalHeading);
+            }
+            else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.RED) {
+                double goalHeading = Math.atan2((yFarPoseRed - getPose().getY(DistanceUnit.INCH)),
+                        xFarPoseRed - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+                alignTo(goalHeading);
+            }
+            else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.BLUE) {
+                double goalHeading = Math.atan2((yFarPoseBlue - getPose().getY(DistanceUnit.INCH)),
+                        xFarPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+                alignTo(goalHeading);
+            }
+        }
         lastPose = getPose();
     }
 }
