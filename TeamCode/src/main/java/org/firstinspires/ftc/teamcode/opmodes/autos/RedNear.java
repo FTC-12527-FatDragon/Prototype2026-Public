@@ -118,9 +118,9 @@ public class RedNear extends AutoCommandBase {
                 .build();
 
         return new SequentialCommandGroup(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new AutoDriveCommand(follower, Path1),
                 //new AutoShootCommand(transit, intake, shooter),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
@@ -128,12 +128,15 @@ public class RedNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path2),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path3).andThen(new WaitCommand(500)),
+                        new AutoDriveCommand(follower, Path3),
                         new IntakeCommand(transit, intake, cds)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4),
+                        new IntakeCommand(transit, intake, cds)
+                ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
-                new AutoDriveCommand(follower, Path4),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
@@ -141,12 +144,15 @@ public class RedNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path5),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path6).andThen(new WaitCommand(500)),
+                        new AutoDriveCommand(follower, Path6),
                         new IntakeCommand(transit, intake, cds)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path7),
+                        new IntakeCommand(transit, intake, cds)
+                ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
-                new AutoDriveCommand(follower, Path7),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
@@ -154,16 +160,20 @@ public class RedNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path8),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path9).andThen(new WaitCommand(500)),
+                        new AutoDriveCommand(follower, Path9),
                         new IntakeCommand(transit, intake, cds)
 //                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
-                new AutoDriveCommand(follower, Path10),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path10),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
                         new WaitCommand(2500)
-                )
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
     }
 }
