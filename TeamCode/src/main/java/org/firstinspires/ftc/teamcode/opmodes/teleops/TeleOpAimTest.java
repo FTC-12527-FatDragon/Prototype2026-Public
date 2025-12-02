@@ -150,7 +150,8 @@ public class TeleOpAimTest extends CommandOpMode {
     public void run() {
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
-        telemetry.addData("VisionPosition", vision.getRobotPosition());
+        if (vision.getRobotPosition() != null)
+            telemetry.addData("VisionPosition", vision.getRobotPosition().toString());
         telemetry.addData("X", drive.getPose().getX(DistanceUnit.INCH));
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));

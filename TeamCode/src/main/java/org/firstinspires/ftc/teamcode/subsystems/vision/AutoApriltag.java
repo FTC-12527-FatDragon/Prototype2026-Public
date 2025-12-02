@@ -17,14 +17,14 @@ public class AutoApriltag extends SubsystemBase {
         limelight.start();
     }
 
-    public String getRobotPosition(){
+    /**
+     * @return robot position in the field (can be null if the limelight doesn't see anything)
+     */
+    public Pose3D getRobotPosition(){
         List<FiducialResult> fiducialResult = limelight.getLatestResult().getFiducialResults();
         if (!fiducialResult.isEmpty()) {
-            FiducialResult result = fiducialResult.get(0);
-            Pose3D robotPose = VisionConstants.getCameraFieldPose(result);
-            if (robotPose != null) return robotPose.toString();
-            return null;
+            return fiducialResult.get(0).getRobotPoseFieldSpace();
         }
-        return "No AprilTag Detected";
+        return null;
     }
 }
