@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 
 @Config
-@Autonomous(name = "BlueNear 3+9", group = "Autos")
-public class BlueNear extends AutoCommandBase {
+@Autonomous(name = "BlueFar 3+9", group = "Autos")
+public class BlueFar extends AutoCommandBase {
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
@@ -33,7 +33,7 @@ public class BlueNear extends AutoCommandBase {
 
     @Override
     public Pose getStartPose() {
-        return new Pose(33.519, 135.700, Math.toRadians(0));
+        return new Pose(63.869387755102046, 8.228571428571431, Math.toRadians(-90));
     }
 
     @Override
@@ -41,23 +41,23 @@ public class BlueNear extends AutoCommandBase {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(37.616, 135.967), new Pose(59.167, 84.441))
+                        new BezierLine(new Pose(63.869, 8.229), new Pose(71.902, 22.531))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-50))
+                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-60))
                 .build();
 
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(59.167, 84.441), new Pose(39.576, 86.008))
+                        new BezierLine(new Pose(71.902, 22.531), new Pose(41.731, 59.559))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(-60), Math.toRadians(180))
                 .build();
 
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(39.576, 86.008), new Pose(21.747, 86.596))
+                        new BezierLine(new Pose(41.731, 59.559), new Pose(19.200, 59.559))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -65,23 +65,23 @@ public class BlueNear extends AutoCommandBase {
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(21.747, 86.596), new Pose(58.971, 84.441))
+                        new BezierLine(new Pose(19.200, 59.559), new Pose(71.902, 22.531))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-60))
                 .build();
 
         Path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(58.971, 84.441), new Pose(38.988, 63.478))
+                        new BezierLine(new Pose(71.902, 22.531), new Pose(41.731, 34.873))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(-60), Math.toRadians(180))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(38.988, 63.478), new Pose(22.139, 63.282))
+                        new BezierLine(new Pose(41.731, 34.873), new Pose(18.808, 35.461))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -89,33 +89,33 @@ public class BlueNear extends AutoCommandBase {
         Path7 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(22.139, 63.282), new Pose(59.167, 84.245))
+                        new BezierLine(new Pose(18.808, 35.461), new Pose(71.902, 22.727))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-60))
                 .build();
 
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(59.167, 84.245), new Pose(39.380, 40.751))
+                        new BezierLine(new Pose(71.902, 22.727), new Pose(84.441, 9.992))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(-60), Math.toRadians(0))
                 .build();
 
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(39.380, 40.751), new Pose(22.139, 40.163))
+                        new BezierLine(new Pose(84.441, 9.992), new Pose(134.596, 10.188))
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         Path10 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(22.139, 40.163), new Pose(59.167, 84.441))
+                        new BezierLine(new Pose(134.596, 10.188), new Pose(72.098, 22.531))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-60))
                 .build();
 
         return new SequentialCommandGroup(
