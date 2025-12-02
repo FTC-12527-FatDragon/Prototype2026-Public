@@ -2,17 +2,20 @@ package org.firstinspires.ftc.teamcode.subsystems.drive;
 
 import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
 import static com.qualcomm.robotcore.util.Range.clip;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.farGoalDistance;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_h;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_xy;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.nearGoalDistance;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.strafingBalance;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFarPoseBlue;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFarPoseRed;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xPoseBlue;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xPoseRed;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xNearPoseBlue;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xNearPoseRed;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFarPoseBlue;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFarPoseRed;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yPoseBlue;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yPoseRed;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yNearPoseBlue;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yNearPoseRed;
+import static org.firstinspires.ftc.teamcode.utils.Util.poseDistance;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -22,6 +25,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -154,28 +158,40 @@ public class MecanumDriveOTOS extends SubsystemBase {
         double errorY = lastPose.getY(DriveConstants.distanceUnit) - p.getY(DriveConstants.distanceUnit);
         double errorH = angleWrap(lastPose.getHeading(DriveConstants.angleUnit) - p.getHeading(DriveConstants.angleUnit));
 
-        double forward =  errorY * kP_xy;
-        double strafe  =  errorX * kP_xy;
-        double turn    =  errorH * kP_h;
-        
+        double forward = errorY * kP_xy;
+        double strafe = errorX * kP_xy;
+        double turn = errorH * kP_h;
+
         forward = clip(forward, -1, 1);
-        strafe  = clip(strafe,  -1, 1);
-        turn    = clip(turn,    -1, 1);
+        strafe = clip(strafe, -1, 1);
+        turn = clip(turn, -1, 1);
 
         moveRobotFieldRelative(forward, strafe, turn);
     }
 
-    /**
-     * @param heading in radians
-     */
-    private void alignTo(double heading) {
-        double errorH = angleWrap(heading - lastPose.getHeading(DriveConstants.angleUnit));
+    public double getAlignTurnPower() {
+        double goalHeading = 0;
+        if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.RED) {
+            goalHeading = Math.atan2((yNearPoseRed - getPose().getY(DistanceUnit.INCH)),
+                    xNearPoseRed - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+        }
+        else if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.BLUE) {
+            goalHeading = Math.atan2((yNearPoseBlue - getPose().getY(DistanceUnit.INCH)),
+                    xNearPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+        }
+        else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.RED) {
+            goalHeading = Math.atan2((yFarPoseRed - getPose().getY(DistanceUnit.INCH)),
+                    xFarPoseRed - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+        }
+        else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.BLUE) {
+            goalHeading = Math.atan2((yFarPoseBlue - getPose().getY(DistanceUnit.INCH)),
+                    xFarPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
+        }
+        double errorH = angleWrap(goalHeading - getPose().getHeading(DriveConstants.angleUnit));
 
-        double turn    =  errorH * kP_h;
+        double turn = errorH * kP_h;
 
-        turn    = clip(turn,    -1, 1);
-
-        moveRobotFieldRelative(0, 0, turn);
+        return clip(turn, -1, 1);
     }
 
     public void visionCalibrate() {
@@ -183,33 +199,38 @@ public class MecanumDriveOTOS extends SubsystemBase {
         if (visionPose != null) otos.setPosition(Util.visionPoseToOTOSPose(visionPose, alliance));
     }
 
+    public double distanceToGoal() {
+        if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.RED) {
+            return poseDistance(getPose(), new Pose2D(DistanceUnit.INCH,
+                    xNearPoseRed, yNearPoseRed, AngleUnit.RADIANS, 0));
+        } else if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.BLUE) {
+            return poseDistance(getPose(), new Pose2D(DistanceUnit.INCH,
+                    xNearPoseBlue, yNearPoseBlue, AngleUnit.RADIANS, 0));
+        } else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.RED) {
+            return poseDistance(getPose(), new Pose2D(DistanceUnit.INCH,
+                    xFarPoseRed, yFarPoseRed, AngleUnit.RADIANS, 0));
+        } else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.BLUE) {
+            return poseDistance(getPose(), new Pose2D(DistanceUnit.INCH,
+                    xFarPoseRed, yFarPoseRed, AngleUnit.RADIANS, 0));
+        }
+        return -1;
+    }
+
+    public double getShooterVelocity() {
+        if (distanceToGoal() != -1) return ShooterConstants.slowVelocity
+                + (ShooterConstants.fastVelocity - ShooterConstants.slowVelocity)
+                / (farGoalDistance - nearGoalDistance) * (distanceToGoal() - nearGoalDistance);
+        return 0;
+    }
+
     @Override
     public void periodic() {
         if (driveState == DriveState.STOP) {
             applyBreak();
         }
-        else if (driveState == DriveState.ALIGN) {
-            if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.RED) {
-                double goalHeading = Math.atan2((yPoseRed - getPose().getY(DistanceUnit.INCH)),
-                        xPoseRed - getPose().getX(DistanceUnit.INCH)) - Math.PI;
-                alignTo(goalHeading);
-            }
-            else if (getPose().getY(DistanceUnit.INCH) >= 48 && alliance == DriveState.BLUE) {
-                double goalHeading = Math.atan2((yPoseBlue - getPose().getY(DistanceUnit.INCH)),
-                        xPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
-                alignTo(goalHeading);
-            }
-            else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.RED) {
-                double goalHeading = Math.atan2((yFarPoseRed - getPose().getY(DistanceUnit.INCH)),
-                        xFarPoseRed - getPose().getX(DistanceUnit.INCH)) - Math.PI;
-                alignTo(goalHeading);
-            }
-            else if (getPose().getY(DistanceUnit.INCH) < 48 && alliance == DriveState.BLUE) {
-                double goalHeading = Math.atan2((yFarPoseBlue - getPose().getY(DistanceUnit.INCH)),
-                        xFarPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
-                alignTo(goalHeading);
-            }
-        }
+//        else if (driveState == DriveState.ALIGN) {
+//            moveRobotFieldRelative(0, 0, getAlignTurnPower());
+//        }
         lastPose = getPose();
     }
 }

@@ -23,9 +23,11 @@ public class TeleOpDriveCommand extends CommandBase {
     @Override
     public void execute() {
         if (!isAlign.getAsBoolean()) {
-            if (Math.abs(gamepadEx.getLeftX()) > 0.03 || Math.abs(gamepadEx.getLeftY()) > 0.03 || Math.abs(gamepadEx.getRightX()) > 0.03) {
+            if (Math.abs(gamepadEx.getLeftX()) > 0.03 || Math.abs(gamepadEx.getLeftY())
+                    > 0.03 || Math.abs(gamepadEx.getRightX()) > 0.03) {
                 drive.setDriveState(MecanumDriveOTOS.DriveState.TELEOP);
-                drive.moveRobotFieldRelative(gamepadEx.getLeftY(), gamepadEx.getLeftX(), gamepadEx.getRightX());
+                drive.moveRobotFieldRelative(gamepadEx.getLeftY(),
+                        gamepadEx.getLeftX(), gamepadEx.getRightX());
             }
             else{
                 drive.setDriveState(MecanumDriveOTOS.DriveState.STOP);
@@ -33,6 +35,8 @@ public class TeleOpDriveCommand extends CommandBase {
         }
         else {
             drive.setDriveState(MecanumDriveOTOS.DriveState.ALIGN);
+            drive.moveRobotFieldRelative(gamepadEx.getLeftY(),
+                    gamepadEx.getLeftX(), drive.getAlignTurnPower());
         }
     }
 }
