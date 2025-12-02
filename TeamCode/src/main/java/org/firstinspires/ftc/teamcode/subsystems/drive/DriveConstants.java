@@ -28,9 +28,11 @@ public class DriveConstants {
     public static double kP_xy = 0.02;
     public static double kP_h = -0.8;
 
-    public static double xPoseRed = 140, yPoseRed = 144;
-    public static double xPoseBlue = 4, yPoseBlue = 144;
+    public static double xNearPoseRed = 140, yNearPoseRed = 144;
+    public static double xNearPoseBlue = 4, yNearPoseBlue = 144;
     public static double xFarPoseRed = 136, yFarPoseRed = 144;
     public static double xFarPoseBlue = 8, yFarPoseBlue = 144;
+
+    public static double nearGoalDistance = 0, farGoalDistance = 0;
 
 }

@@ -37,4 +37,9 @@ public class Util {
                 -Units.metersToInches(pose3D.getPosition().x) + 72,
                 pose3D.getOrientation().getYaw() / 180 * Math.PI - Math.PI / 2 + initialOffset);
     }
+
+    public static double poseDistance(Pose2D poseA, Pose2D poseB) {
+        return Math.sqrt(Math.pow(poseA.getX(DistanceUnit.INCH) - poseB.getX(DistanceUnit.INCH), 2)
+                + Math.pow(poseA.getY(DistanceUnit.INCH) - poseB.getY(DistanceUnit.INCH), 2));
+    }
 }
