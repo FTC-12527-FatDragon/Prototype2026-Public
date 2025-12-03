@@ -196,7 +196,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
 
     public void visionCalibrate() {
         Pose3D visionPose = autoApriltag.getRobotPosition();
-        if (visionPose != null) otos.setPosition(Util.visionPoseToOTOSPose(visionPose, alliance));
+        if (visionPose != null) otos.setPosition(Util.visionPoseToOTOSPose(visionPose));
+        yawOffset = alliance == DriveState.BLUE? Math.PI: 0;
     }
 
     public double distanceToGoal() {

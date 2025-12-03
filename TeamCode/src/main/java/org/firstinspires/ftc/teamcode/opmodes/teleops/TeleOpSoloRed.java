@@ -108,6 +108,7 @@ public class TeleOpSoloRed extends CommandOpMode {
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
                 new TransitCommand(transit, intake, shooter, cds)
+                        .alongWith(new InstantCommand(() -> drive.visionCalibrate()))
         );
 
         new FunctionalButton(

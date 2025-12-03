@@ -11,7 +11,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -21,15 +20,11 @@ import org.firstinspires.ftc.teamcode.commands.AdjustCommand;
 import org.firstinspires.ftc.teamcode.commands.ChooseCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
-import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config
@@ -42,15 +37,11 @@ public class TeleOpAimTest extends CommandOpMode {
 
     private GamepadEx gamepadEx1;
 
-//    private Shooter shooter;
-
     private Transit transit;
 
     private Intake intake;
 
     private CDS cds;
-
-    private AutoApriltag vision;
 
     private Telemetry telemetryM;
 
@@ -61,14 +52,19 @@ public class TeleOpAimTest extends CommandOpMode {
         drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.BLUE);
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
-//        shooter = new Shooter(hardwareMap);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
         cds = new CDS(hardwareMap);
-        vision = new AutoApriltag(hardwareMap);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
                 () -> gamepadEx1.getButton(GamepadKeys.Button.A)));
+
+
+        new FunctionalButton(
+                () -> gamepadEx1.getButton(GamepadKeys.Button.B)
+        ).whenPressed(
+                new InstantCommand(() -> drive.visionCalibrate())
+        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON)
@@ -87,28 +83,6 @@ public class TeleOpAimTest extends CommandOpMode {
         ).whenHeld(
                 new IntakeCommand(transit, intake, cds)
         );
-
-//        new FunctionalButton(
-//                () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
-//        ).whenHeld(
-//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
-//        ).whenReleased(
-//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
-//        );
-
-//        new FunctionalButton(
-//                () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
-//        ).whenHeld(
-//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW))
-//        ).whenReleased(
-//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
-//        );
-
-//        new FunctionalButton(
-//                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
-//        ).whenHeld(
-//                new TransitCommand(transit, intake, shooter, cds)
-//        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
@@ -151,14 +125,11 @@ public class TeleOpAimTest extends CommandOpMode {
     public void run() {
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
-        if (vision.getRobotPosition() != null)
-            telemetry.addData("VisionPosition", vision.getRobotPosition().toString());
         telemetry.addData("X", drive.getPose().getX(DistanceUnit.INCH));
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));
         telemetry.addData("YawOffset",drive.getYawOffset());
-//        telemetry.addData("ShooterVelocity", shooter.shooterState.toString());
-        telemetry.addData("QueueFirst", cds.getFirst());
+        telemetry.addData("Ball Num", cds.getBallNum());
         telemetry.addData("Gamepad Lx: ", gamepadEx1.getLeftX());
         telemetry.addData("Gamepad Ly: ", gamepadEx1.getLeftY());
         telemetry.addData("Gamepad Rx: ", gamepadEx1.getRightX());
@@ -169,7 +140,6 @@ public class TeleOpAimTest extends CommandOpMode {
         telemetry.addData("LF Mode: ", drive.leftFrontMotor.getMode());
         telemetry.update();
         TelemetryPacket packet = new TelemetryPacket();
-//        packet.put("ShooterVelocity", shooter.getVelocity());
         packet.put("StopTime", transit.stopTime);
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
