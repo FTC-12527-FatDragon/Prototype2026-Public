@@ -21,14 +21,14 @@ public class AdjustCommand extends CommandBase {
     public void initialize() {
         transit.setChooseServoState(Transit.ChooseServoState.OPEN);
         transit.setLimitServoState(Transit.LimitServoState.OPEN);
-        intake.reverseMotor(true);
+//        intake.reverseMotor(true);
     }
 
     @Override
     public void execute() {
         if (cds.getFirst() == 0) {
             transit.setTransitState(Transit.TransitState.SHOOT);
-            if(!intake.isRunning()) intake.toggle();
+//            if(!intake.isRunning()) intake.toggle();
         }
     }
 
