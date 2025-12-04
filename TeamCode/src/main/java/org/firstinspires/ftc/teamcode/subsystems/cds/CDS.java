@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants;
@@ -23,12 +24,14 @@ import java.util.Queue;
 public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor;
     private final DistanceSensor distanceSensor;
+    private final Servo led;
 
     private final float[] hsvValues = {0F, 0F, 0F};
 
     public CDS(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensorName);
         distanceSensor = hardwareMap.get(DistanceSensor.class, CDSConstants.distanceSensorName);
+        led = hardwareMap.get(Servo.class, CDSConstants.ledName);
     }
 
     private boolean ballDetected = false;
@@ -101,5 +104,7 @@ public class CDS extends SubsystemBase {
 
             hues.clear();
         }
+        if (ballNum >= 3) led.setPosition(1);
+        else led.setPosition(0);
     }
 }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems.cds;
 public class CDSConstants {
     public static String colorSensorName = "colorSensor";
     public static String distanceSensorName = "colorSensor";
+    public static String ledName = "led";
 
     public static double SCALE_FACTOR = 255;
 

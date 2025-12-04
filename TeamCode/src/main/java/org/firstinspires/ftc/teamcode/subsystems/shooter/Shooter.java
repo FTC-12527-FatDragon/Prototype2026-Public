@@ -8,12 +8,14 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.Util;
 
 public class Shooter extends SubsystemBase {
     public final DcMotorEx leftShooter;
     public final DcMotorEx rightShooter;
+    public final Servo brakeServo;
     public final TelemetryPacket packet = new TelemetryPacket();
     public static double balls = 0;
     public static boolean readyToShoot = false;
@@ -26,6 +28,7 @@ public class Shooter extends SubsystemBase {
     public Shooter(final HardwareMap hardwareMap) {
         leftShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.leftShooterName);
         rightShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.rightShooterName);
+        brakeServo = hardwareMap.get(Servo.class, ShooterConstants.brakeServoName);
         pidController = new PIDController(ShooterConstants.kP,
                 ShooterConstants.kI, ShooterConstants.kD);
     }
@@ -78,6 +81,14 @@ public class Shooter extends SubsystemBase {
         balls = ballNumber;
     }
 
+    public void brakeShooter() {
+        brakeServo.setPosition(ShooterConstants.brakePose);
+    }
+
+    public void releaseShooter() {
+        brakeServo.setPosition(ShooterConstants.releasePose);
+    }
+
     @Override
     public void periodic() {
 
@@ -89,10 +100,15 @@ public class Shooter extends SubsystemBase {
 //            packet.put("currentPower", currentPower);
 //        }
         if (shooterState != ShooterState.STOP) {
+            releaseShooter();
             leftShooter.setPower(-1);
             rightShooter.setPower(1);
         }
         else {
+            if (getVelocity() > ShooterState.SLOW.shooterVelocity) {
+                brakeShooter();
+            }
+            else releaseShooter();
             leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
             rightShooter.setPower(ShooterState.STOP.shooterVelocity);
         }

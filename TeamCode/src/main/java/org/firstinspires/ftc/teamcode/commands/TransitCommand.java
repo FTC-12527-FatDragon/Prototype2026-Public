@@ -3,21 +3,35 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
+import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 
 public class TransitCommand extends CommandBase {
     private final Transit transit;
     private final Intake intake;
     private final Shooter shooter;
     private final CDS cds;
+    private final MecanumDriveOTOS drive;
 
-    public TransitCommand(Transit transit, Intake intake, Shooter shooter, CDS cds) {
+    public TransitCommand(Transit transit, Intake intake, Shooter shooter,
+                          CDS cds) {
         this.transit = transit;
         this.intake = intake;
         this.shooter = shooter;
         this.cds = cds;
+        this.drive = null;
+    }
+
+    public TransitCommand(Transit transit, Intake intake, Shooter shooter,
+                          CDS cds, MecanumDriveOTOS drive) {
+        this.transit = transit;
+        this.intake = intake;
+        this.shooter = shooter;
+        this.cds = cds;
+        this.drive = drive;
     }
 
     @Override
@@ -38,6 +52,7 @@ public class TransitCommand extends CommandBase {
 //            }
         }
         if (!intake.isRunning()) intake.toggle();
+        if (drive != null) drive.visionCalibrate();
 
     }
 

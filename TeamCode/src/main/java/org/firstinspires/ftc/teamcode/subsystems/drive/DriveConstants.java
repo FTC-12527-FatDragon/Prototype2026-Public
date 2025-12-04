@@ -25,13 +25,18 @@ public class DriveConstants {
     public static double forwardVelocity = 63.966, strafeVelocity = 26.744;
     public static double forwardAcceleration = -32.6419, strafeAcceleration = -95.1316;
 
-    public static double kP_xy = 0.02;
-    public static double kP_h = -0.8;
+    public static double kP_brakeXY = 0.02;
+    public static double kP_brakeH = -0.8;
+    public static double kP_alignH = -1.2;
+    public static double kI_alignH = 0;
+    public static double kD_alignH = -0.115;
+    public static double kP_followXY = 0;
+    public static double kP_followH = 0;
 
     public static double xNearPoseRed = 140, yNearPoseRed = 144;
     public static double xNearPoseBlue = 4, yNearPoseBlue = 144;
-    public static double xFarPoseRed = 136, yFarPoseRed = 144;
-    public static double xFarPoseBlue = 8, yFarPoseBlue = 144;
+    public static double xFarPoseRed = 139, yFarPoseRed = 144;
+    public static double xFarPoseBlue = 5, yFarPoseBlue = 144;
 
     public static double nearGoalDistance = 0, farGoalDistance = 0;
 

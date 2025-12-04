@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.subsystems.drive;
 import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
 import static com.qualcomm.robotcore.util.Range.clip;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.farGoalDistance;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_h;
-import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_xy;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kD_alignH;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kI_alignH;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_alignH;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_brakeH;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_brakeXY;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.nearGoalDistance;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.strafingBalance;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFarPoseBlue;
@@ -19,6 +22,7 @@ import static org.firstinspires.ftc.teamcode.utils.Util.poseDistance;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -40,7 +44,8 @@ public class MecanumDriveOTOS extends SubsystemBase {
     private final SparkFunOTOS otos;
     private final AutoApriltag autoApriltag;
     private double yawOffset;// mm
-    private DriveState alliance;
+    private PIDController alignPID;
+    private final DriveState alliance;
 
     public DriveState driveState;
 
@@ -63,6 +68,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         driveState = DriveState.STOP;
+        alignPID = new PIDController(kP_alignH, kI_alignH, kD_alignH);
         this.alliance = alliance;
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -151,16 +157,16 @@ public class MecanumDriveOTOS extends SubsystemBase {
                 DriveConstants.headingEpsilon);
     }
 
-    private void applyBreak() {
+    private void applyBrake() {
         Pose2D p = getPose();
 
         double errorX = lastPose.getX(DriveConstants.distanceUnit) - p.getX(DriveConstants.distanceUnit);
         double errorY = lastPose.getY(DriveConstants.distanceUnit) - p.getY(DriveConstants.distanceUnit);
         double errorH = angleWrap(lastPose.getHeading(DriveConstants.angleUnit) - p.getHeading(DriveConstants.angleUnit));
 
-        double forward = errorY * kP_xy;
-        double strafe = errorX * kP_xy;
-        double turn = errorH * kP_h;
+        double forward = errorY * kP_brakeXY;
+        double strafe = errorX * kP_brakeXY;
+        double turn = errorH * kP_brakeH;
 
         forward = clip(forward, -1, 1);
         strafe = clip(strafe, -1, 1);
@@ -189,7 +195,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         }
         double errorH = angleWrap(goalHeading - getPose().getHeading(DriveConstants.angleUnit));
 
-        double turn = errorH * kP_h;
+        double turn = alignPID.calculate(getPose().getHeading(DriveConstants.angleUnit), goalHeading);
 
         return clip(turn, -1, 1);
     }
@@ -227,7 +233,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
     @Override
     public void periodic() {
         if (driveState == DriveState.STOP) {
-            applyBreak();
+            applyBrake();
         }
 //        else if (driveState == DriveState.ALIGN) {
 //            moveRobotFieldRelative(0, 0, getAlignTurnPower());
