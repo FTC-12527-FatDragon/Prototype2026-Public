@@ -8,5 +8,5 @@ public class CDSConstants {
 
     public static double ballDistance = 2.0;
 
-    public static double purpleConst = 180.0;
+    public static double purpleConst = 220.0;
 }

@@ -77,7 +77,7 @@ public class CDS extends SubsystemBase {
 
         if (dis < ballDistance) {
             hues.add(hsvValues[0]);
-            if (ballDetected == false) ballNum++;
+            if (!ballDetected) ballNum++;
             ballDetected = true;
         }
 
