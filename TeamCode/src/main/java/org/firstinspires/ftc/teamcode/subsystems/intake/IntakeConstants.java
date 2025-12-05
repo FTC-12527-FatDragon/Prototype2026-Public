@@ -9,6 +9,6 @@ public class IntakeConstants {
     public static String leftServoName = "leftServo";
     public static String rightServoName = "rightServo";
 
-    public static double intakePower = 0.7;
+    public static double intakePower = 1;
     public static double reversedPower = -0.7;
 }
