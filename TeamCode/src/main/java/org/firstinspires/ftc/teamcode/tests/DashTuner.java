@@ -63,11 +63,11 @@ public class DashTuner extends LinearOpMode {
             new PIDController(0, 0, 0)
     };
 
-    public static String colorSensorName = "";
+    public static String[] colorSensorName = {"", "", "", ""};
 
-    ColorSensor colorSensor;
+    ColorSensor[] colorSensor = new ColorSensor[4];
 
-    DistanceSensor distanceSensor;
+    DistanceSensor[] distanceSensor = new DistanceSensor[4];
 
     float hsvValues[] = {0F, 0F, 0F};
 
@@ -97,12 +97,13 @@ public class DashTuner extends LinearOpMode {
             if (!servoName[i].isEmpty()) {
                 servos[i] = hardwareMap.get(Servo.class, servoName[i]);
             }
+            if (!colorSensorName[i].isEmpty()) {
+                colorSensor[i] = hardwareMap.get(ColorSensor.class, colorSensorName[i]);
+                distanceSensor[i] = hardwareMap.get(DistanceSensor.class, colorSensorName[i]);
+            }
         }
 
-        if (!colorSensorName.isEmpty()) {
-            colorSensor = hardwareMap.get(ColorSensor.class, colorSensorName);
-            distanceSensor = hardwareMap.get(DistanceSensor.class, colorSensorName);
-        }
+
 
         waitForStart();
 
@@ -158,26 +159,26 @@ public class DashTuner extends LinearOpMode {
                     servos[i].setPosition(servoTarget[i]);
                 }
 
-                if (!colorSensorName.isEmpty()) {
-                    Color.RGBToHSV((int) (colorSensor.red() * SCALE_FACTOR),
-                            (int) (colorSensor.green() * SCALE_FACTOR),
-                            (int) (colorSensor.blue() * SCALE_FACTOR),
+                if (!colorSensorName[i].isEmpty()) {
+                    Color.RGBToHSV((int) (colorSensor[i].red() * SCALE_FACTOR),
+                            (int) (colorSensor[i].green() * SCALE_FACTOR),
+                            (int) (colorSensor[i].blue() * SCALE_FACTOR),
                             hsvValues);
 
                     TelemetryPacket packet = new TelemetryPacket();
 
-                    packet.put("Alpha", colorSensor.alpha());
-                    packet.put("Red  ", colorSensor.red());
-                    packet.put("Green", colorSensor.green());
-                    packet.put("Blue ", colorSensor.blue());
-                    packet.put("Hue", hsvValues[0]);
-                    packet.put("Distance (cm)", String.format(Locale.US, "%.02f", distanceSensor.getDistance(DistanceUnit.CM)));
+                    packet.put("Alpha" + i, colorSensor[i].alpha());
+                    packet.put("Red" + i, colorSensor[i].red());
+                    packet.put("Green" + i, colorSensor[i].green());
+                    packet.put("Blue" + i, colorSensor[i].blue());
+                    packet.put("Hue" + i, hsvValues[0]);
+                    packet.put("Distance (cm)" + i, String.format(Locale.US, "%.02f", distanceSensor[i].getDistance(DistanceUnit.CM)));
 
-                    double dis = distanceSensor.getDistance(DistanceUnit.CM);
+                    double dis = distanceSensor[i].getDistance(DistanceUnit.CM);
 
-                    double r = colorSensor.red();
-                    double g = colorSensor.green();
-                    double b = colorSensor.blue();
+                    double r = colorSensor[i].red();
+                    double g = colorSensor[i].green();
+                    double b = colorSensor[i].blue();
 
                     Color.RGBToHSV((int) (r * SCALE_FACTOR),
                             (int) (g * SCALE_FACTOR),

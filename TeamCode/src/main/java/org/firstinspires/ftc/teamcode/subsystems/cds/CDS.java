@@ -24,13 +24,17 @@ import java.util.Queue;
 public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor;
     private final DistanceSensor distanceSensor;
+    private final ColorSensor colorSensor1;
+    private final DistanceSensor distanceSensor1;
     private final Servo led;
 
     private final float[] hsvValues = {0F, 0F, 0F};
 
     public CDS(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensorName);
-        distanceSensor = hardwareMap.get(DistanceSensor.class, CDSConstants.distanceSensorName);
+        distanceSensor = hardwareMap.get(DistanceSensor.class, CDSConstants.colorSensorName);
+        colorSensor1 = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensor1Name);
+        distanceSensor1 = hardwareMap.get(DistanceSensor.class, CDSConstants.colorSensor1Name);
         led = hardwareMap.get(Servo.class, CDSConstants.ledName);
     }
 
@@ -68,6 +72,7 @@ public class CDS extends SubsystemBase {
     @Override
     public void periodic() {
         double dis = distanceSensor.getDistance(DistanceUnit.CM);
+        double dis1 = distanceSensor1.getDistance(DistanceUnit.CM);
 
         double r = colorSensor.red();
         double g = colorSensor.green();
@@ -78,13 +83,13 @@ public class CDS extends SubsystemBase {
                 (int) (b * SCALE_FACTOR),
                 hsvValues);
 
-        if (dis < ballDistance) {
+        if (dis < ballDistance || dis1 < ballDistance) {
             hues.add(hsvValues[0]);
             if (!ballDetected) ballNum++;
             ballDetected = true;
         }
 
-        if (dis > ballDistance && ballDetected) {
+        if ((dis > ballDistance && dis1 > ballDistance) && ballDetected) {
             ballDetected = false;
 
             Collections.sort(hues);
