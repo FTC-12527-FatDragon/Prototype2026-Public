@@ -29,9 +29,7 @@ public class IntakeCommand extends CommandBase {
     public void execute() {
         if (!intake.isRunning()) intake.toggle();
         if (intake.getShooting()) intake.toogleShooting();
-
-        if (cds.getBallNum() >= 3) intake.reverseMotor(true);
-        else intake.reverseMotor(false);
+        intake.reverseMotor(cds.getBallNum() >= 3);
 
         transit.setTransitState(Transit.TransitState.INTAKE);
     }
