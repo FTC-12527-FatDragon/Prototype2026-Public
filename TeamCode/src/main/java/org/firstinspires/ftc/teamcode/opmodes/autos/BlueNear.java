@@ -92,7 +92,7 @@ public class BlueNear extends AutoCommandBase {
         Path7 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(54.665, 87.846), new Pose(44.880, 59.557))
+                        new BezierLine(new Pose(54.665, 87.846), new Pose(45.306, 60.620))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
                 .build();
@@ -100,7 +100,7 @@ public class BlueNear extends AutoCommandBase {
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(44.880, 59.557), new Pose(20.207, 59.557))
+                        new BezierLine(new Pose(45.306, 60.620), new Pose(18.718, 60.408))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
@@ -108,7 +108,7 @@ public class BlueNear extends AutoCommandBase {
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(20.207, 59.557), new Pose(54.877, 87.634))
+                        new BezierLine(new Pose(18.718, 60.408), new Pose(54.877, 87.634))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
                 .build();
@@ -116,7 +116,7 @@ public class BlueNear extends AutoCommandBase {
         Path10 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(54.877, 87.634), new Pose(44.030, 35.521))
+                        new BezierLine(new Pose(54.877, 87.634), new Pose(44.668, 36.585))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
                 .build();
@@ -124,7 +124,7 @@ public class BlueNear extends AutoCommandBase {
         Path11 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(44.030, 35.521), new Pose(20.419, 35.521))
+                        new BezierLine(new Pose(44.668, 36.585), new Pose(19.356, 36.160))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
@@ -132,7 +132,7 @@ public class BlueNear extends AutoCommandBase {
         Path12 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(20.419, 35.521), new Pose(54.665, 87.634))
+                        new BezierLine(new Pose(19.356, 36.160), new Pose(54.665, 87.634))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
                 .build();
@@ -142,7 +142,7 @@ public class BlueNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1500)
+                        new WaitCommand(2000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path2),
@@ -165,7 +165,7 @@ public class BlueNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1500)
+                        new WaitCommand(2000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path7),
@@ -180,7 +180,7 @@ public class BlueNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1500)
+                        new WaitCommand(2000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path10),
@@ -195,7 +195,7 @@ public class BlueNear extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1500)
+                        new WaitCommand(2000)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
