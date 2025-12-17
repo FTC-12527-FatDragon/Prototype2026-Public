@@ -6,6 +6,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.purpleC
 
 import android.graphics.Color;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -27,6 +29,10 @@ public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor1;
     private final DistanceSensor distanceSensor1;
     private final Servo led;
+    public final TelemetryPacket packet = new TelemetryPacket();
+
+    private double dis, dis1;
+    private double r, g, b;
 
     private final float[] hsvValues = {0F, 0F, 0F};
 
@@ -39,27 +45,25 @@ public class CDS extends SubsystemBase {
     }
 
     private boolean ballDetected = false;
-    private boolean purpule = false;
-    private boolean green = false;
 
     private long ballNum = 0;
 
-    private Queue<Integer> colorQue = new LinkedList<>();
-
-    private List<Float> hues = new ArrayList<>();
-
-    public void deleteFirst() {
-        colorQue.poll();
-    }
-
-    public int getFirst() {
-        if (colorQue.peek() != null) return colorQue.peek();
-        return -1;
-    }
-
-    public String getColorQue() {
-        return colorQue.toString();
-    }
+//    private Queue<Integer> colorQue = new LinkedList<>();
+//
+//    private List<Float> hues = new ArrayList<>();
+//
+//    public void deleteFirst() {
+//        colorQue.poll();
+//    }
+//
+//    public int getFirst() {
+//        if (colorQue.peek() != null) return colorQue.peek();
+//        return -1;
+//    }
+//
+//    public String getColorQue() {
+//        return colorQue.toString();
+//    }
 
     public long getBallNum() {
         return ballNum;
@@ -71,20 +75,20 @@ public class CDS extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double dis = distanceSensor.getDistance(DistanceUnit.CM);
-        double dis1 = distanceSensor1.getDistance(DistanceUnit.CM);
+        dis = distanceSensor.getDistance(DistanceUnit.CM);
+        dis1 = distanceSensor1.getDistance(DistanceUnit.CM);
 
-        double r = colorSensor.red();
-        double g = colorSensor.green();
-        double b = colorSensor.blue();
-
-        Color.RGBToHSV((int) (r * SCALE_FACTOR),
-                (int) (g * SCALE_FACTOR),
-                (int) (b * SCALE_FACTOR),
-                hsvValues);
+//        r = colorSensor.red();
+//        g = colorSensor.green();
+//        b = colorSensor.blue();
+//
+//        Color.RGBToHSV((int) (r * SCALE_FACTOR),
+//                (int) (g * SCALE_FACTOR),
+//                (int) (b * SCALE_FACTOR),
+//                hsvValues);
 
         if (dis < ballDistance || dis1 < ballDistance) {
-            hues.add(hsvValues[0]);
+//            hues.add(hsvValues[0]);
             if (!ballDetected) ballNum++;
             ballDetected = true;
         }
@@ -92,24 +96,22 @@ public class CDS extends SubsystemBase {
         if ((dis > ballDistance && dis1 > ballDistance) && ballDetected) {
             ballDetected = false;
 
-            Collections.sort(hues);
-
-            float res = hues.get(hues.size() / 2);
-
-            if (res >= purpleConst) {
-                colorQue.offer(1);
-            }
-            else {
-                colorQue.offer(0);
-            }
-            if (colorQue.size() > 3) colorQue.poll();
-
-            purpule = false;
-            green = false;
-
-            hues.clear();
+//            Collections.sort(hues);
+//            float res = hues.get(hues.size() / 2);
+//            if (res >= purpleConst) {
+//                colorQue.offer(1);
+//            }
+//            else {
+//                colorQue.offer(0);
+//            }
+//            if (colorQue.size() > 3) colorQue.poll();
+//            hues.clear();
         }
         if (ballNum >= 3) led.setPosition(1);
         else led.setPosition(0);
+
+        packet.put("colorSensor dis", dis);
+        packet.put("colorSensor dis1", dis1);
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }

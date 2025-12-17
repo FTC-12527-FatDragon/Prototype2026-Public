@@ -16,8 +16,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.commands.AdjustCommand;
-import org.firstinspires.ftc.teamcode.commands.ChooseCommand;
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
@@ -84,29 +82,29 @@ public class TeleOpAimTest extends CommandOpMode {
                 new IntakeCommand(transit, intake, cds)
         );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
-        ).whenHeld(
-                new ChooseCommand(transit, intake)
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
+//        ).whenHeld(
+//                new ChooseCommand(transit, intake)
+//        );
+//
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
+//        ).whenPressed(
+//                new InstantCommand(() -> transit.setChooseServoState(Transit.ChooseServoState.OPEN))
+//        );
+//
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+//        ).whenPressed(
+//                new InstantCommand(() -> transit.setChooseServoState(Transit.ChooseServoState.CLOSE))
+//        );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
-        ).whenPressed(
-                new InstantCommand(() -> transit.setChooseServoState(Transit.ChooseServoState.OPEN))
-        );
-
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
-        ).whenPressed(
-                new InstantCommand(() -> transit.setChooseServoState(Transit.ChooseServoState.CLOSE))
-        );
-
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
-        ).whenPressed(
-                new AdjustCommand(transit, intake, cds)
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
+//        ).whenPressed(
+//                new AdjustCommand(transit, intake, cds)
+//        );
 
 
 //        new FunctionalButton(

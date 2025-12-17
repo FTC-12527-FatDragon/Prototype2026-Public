@@ -31,6 +31,8 @@ public class BlueNear extends AutoCommandBase {
     public PathChain Path8;
     public PathChain Path9;
     public PathChain Path10;
+    public PathChain Path11;
+    public PathChain Path12;
 
     @Override
     public Pose getStartPose() {
@@ -42,23 +44,23 @@ public class BlueNear extends AutoCommandBase {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(39.137, 134.428), new Pose(60.833, 82.316))
+                        new BezierLine(new Pose(39.137, 134.428), new Pose(54.877, 87.421))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-47))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-50))
                 .build();
 
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(60.833, 82.316), new Pose(45.093, 84.443))
+                        new BezierLine(new Pose(54.877, 87.421), new Pose(44.880, 83.805))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-47), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
                 .build();
 
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(45.093, 84.443), new Pose(22.972, 84.018))
+                        new BezierLine(new Pose(44.880, 83.805), new Pose(19.994, 83.805))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
@@ -66,114 +68,134 @@ public class BlueNear extends AutoCommandBase {
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(22.972, 84.018), new Pose(60.408, 82.529))
+                        new BezierLine(new Pose(19.994, 83.805), new Pose(28.077, 76.999))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-55))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
 
         Path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(60.408, 82.529), new Pose(45.518, 60.620))
+                        new BezierLine(new Pose(28.077, 76.999), new Pose(16.378, 76.573))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-55), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(45.518, 60.620), new Pose(22.334, 59.982))
+                        new BezierLine(new Pose(16.378, 76.573), new Pose(54.665, 87.846))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
                 .build();
 
         Path7 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(22.334, 59.982), new Pose(61.046, 82.529))
+                        new BezierLine(new Pose(54.665, 87.846), new Pose(44.880, 59.557))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-55))
+                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
                 .build();
 
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(61.046, 82.529), new Pose(44.668, 36.372))
+                        new BezierLine(new Pose(44.880, 59.557), new Pose(20.207, 59.557))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-55), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
 
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(44.668, 36.372), new Pose(22.547, 36.372))
+                        new BezierLine(new Pose(20.207, 59.557), new Pose(54.877, 87.634))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
                 .build();
 
         Path10 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(22.547, 36.372), new Pose(61.046, 82.316))
+                        new BezierLine(new Pose(54.877, 87.634), new Pose(44.030, 35.521))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-55))
+                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
+                .build();
+
+        Path11 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(44.030, 35.521), new Pose(20.419, 35.521))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .build();
+
+        Path12 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(20.419, 35.521), new Pose(54.665, 87.634))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-50))
                 .build();
 
         return new SequentialCommandGroup(
                 new AutoDriveCommand(follower, Path1),
-                //new AutoShootCommand(transit, intake, shooter),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(2000)
+                        new WaitCommand(1500)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
                 new AutoDriveCommand(follower, Path2),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path3),
                         new IntakeCommand(transit, intake, cds)
-//                        new InstantCommand(() -> shooter.setBalls(3))
                 ),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path4),
                         new IntakeCommand(transit, intake, cds)
                 ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
-                        new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(2000)
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
                 ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
-                new AutoDriveCommand(follower, Path5),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path6),
                         new IntakeCommand(transit, intake, cds)
-//                        new InstantCommand(() -> shooter.setBalls(3))
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path7),
-                        new IntakeCommand(transit, intake, cds)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(2000)
+                        new WaitCommand(1500)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
-                new AutoDriveCommand(follower, Path8),
+                new AutoDriveCommand(follower, Path7),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path8),
+                        new IntakeCommand(transit, intake, cds)
+                ),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path9),
                         new IntakeCommand(transit, intake, cds)
-//                        new InstantCommand(() -> shooter.setBalls(3))
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
+                new ParallelRaceGroup(
+                        new TransitCommand(transit, intake, shooter, cds),
+                        new WaitCommand(1500)
+                ),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
+                new AutoDriveCommand(follower, Path10),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path11),
+                        new IntakeCommand(transit, intake, cds)
                 ),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path10),
+                        new AutoDriveCommand(follower, Path12),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(2000)
+                        new WaitCommand(1500)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );

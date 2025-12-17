@@ -34,8 +34,6 @@ public abstract class AutoCommandBase extends LinearOpMode {
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
         cds = new CDS(hardwareMap);
-
-        shooter.setBalls(3);
     }
 
     @Override

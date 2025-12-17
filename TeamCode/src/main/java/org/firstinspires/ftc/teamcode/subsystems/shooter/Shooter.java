@@ -17,8 +17,6 @@ public class Shooter extends SubsystemBase {
     public final DcMotorEx rightShooter;
     public final Servo brakeServo;
     public final TelemetryPacket packet = new TelemetryPacket();
-    public static double balls = 0;
-    public static boolean readyToShoot = false;
 
     public final PIDController pidController;
     public static double shooterOpenLoopPower = -1;
@@ -73,14 +71,6 @@ public class Shooter extends SubsystemBase {
                 rightShooter.getVelocity(), ShooterConstants.shooterEpsilon);
     }
 
-    public double getBalls() {
-        return balls;
-    }
-
-    public void setBalls(double ballNumber) {
-        balls = ballNumber;
-    }
-
     public void brakeShooter() {
         brakeServo.setPosition(ShooterConstants.brakePose);
     }
@@ -91,7 +81,6 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-
 //        if (shooterState != ShooterState.STOP) {
 //            double currentPower = pidController.calculate(
 //                    rightShooter.getVelocity(), shooterState.shooterVelocity);
@@ -113,15 +102,7 @@ public class Shooter extends SubsystemBase {
             rightShooter.setPower(ShooterState.STOP.shooterVelocity);
         }
 
-        if (isShooterAtSetPoint()) {
-            readyToShoot = true;
-        }
-        else if (rightShooter.getVelocity() <= releaseVelocity) {
-            if (readyToShoot) balls = balls >= 1? balls - 1: balls;
-            readyToShoot = false;
-        }
-        packet.put("leftShooterVelocity", leftShooter.getVelocity());
-        packet.put("rightShooterVelocity", rightShooter.getVelocity());
+        packet.put("shooterVelocity", rightShooter.getVelocity());
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }
