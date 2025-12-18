@@ -15,7 +15,7 @@ public class ShooterConstants {
     public static double kI = 0;
     public static double kD = 0;
 
-    public static double brakePose = 0.26;
+    public static double brakePose = 0.23;
     public static double releasePose = 0.5;
 
     /**

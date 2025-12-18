@@ -150,6 +150,7 @@ public class TeleOpSoloBlue extends CommandOpMode {
     public void run() {
         telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
+        telemetry.addData("VisionPose", drive.getVisionPose() != null);
         telemetry.addData("X", drive.getPose().getX(DistanceUnit.INCH));
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
         telemetry.addData("Heading", drive.getPose().getHeading(AngleUnit.RADIANS));

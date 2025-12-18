@@ -193,11 +193,14 @@ public class MecanumDriveOTOS extends SubsystemBase {
             goalHeading = Math.atan2((yFarPoseBlue - getPose().getY(DistanceUnit.INCH)),
                     xFarPoseBlue - getPose().getX(DistanceUnit.INCH)) - Math.PI;
         }
-        double errorH = angleWrap(goalHeading - getPose().getHeading(DriveConstants.angleUnit));
 
         double turn = alignPID.calculate(getPose().getHeading(DriveConstants.angleUnit), goalHeading);
 
         return clip(turn, -1, 1);
+    }
+
+    public Pose3D getVisionPose() {
+        return autoApriltag.getRobotPosition();
     }
 
     public void visionCalibrate() {
