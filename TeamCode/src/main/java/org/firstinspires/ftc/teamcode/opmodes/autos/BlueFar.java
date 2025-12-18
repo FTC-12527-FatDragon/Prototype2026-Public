@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -170,7 +171,7 @@ public class BlueFar extends AutoCommandBase {
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(38.074, 14.889), new Pose(14.251, 11.061))
+                        new BezierLine(new Pose(38.074, 14.889), new Pose(13.910, 8.816))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
@@ -178,7 +179,7 @@ public class BlueFar extends AutoCommandBase {
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(14.251, 11.061), new Pose(21.483, 14.038))
+                        new BezierLine(new Pose(13.910, 8.816), new Pose(21.483, 14.038))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
@@ -186,7 +187,7 @@ public class BlueFar extends AutoCommandBase {
         Path10 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(21.483, 14.038), new Pose(14.464, 17.654))
+                        new BezierLine(new Pose(21.483, 14.038), new Pose(13.910, 16.653))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
@@ -194,7 +195,7 @@ public class BlueFar extends AutoCommandBase {
         Path11 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(14.464, 17.654), new Pose(59.982, 17.229))
+                        new BezierLine(new Pose(13.910, 16.653), new Pose(59.982, 17.229))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-66))
                 .build();
@@ -203,14 +204,16 @@ public class BlueFar extends AutoCommandBase {
         Path12 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(14.251, 11.061), new Pose(59.982, 17.229))
+                        new BezierLine(Path8.endPose(), Path11.endPose())
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-66))
                 .build();
 
         return new SequentialCommandGroup(
-                new AutoDriveCommand(follower, Path1),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
+                new ParallelCommandGroup(new AutoDriveCommand(follower, Path1),
+                        new SequentialCommandGroup(new WaitCommand(250),
+                                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)))),
+                //new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
                 new AutoDriveCommand(follower, Path2),
                 new AutoBrakeCommand(follower, Path2.endPose()),
                 new ParallelRaceGroup(
