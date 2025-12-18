@@ -25,11 +25,10 @@ public class AutoDriveCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        if (follower.isBusy()) {
-            follower.breakFollowing();
-        }
+        follower.breakFollowing();
     }
 
+    @Override
     public boolean isFinished() {
         return !follower.isBusy();
     }
