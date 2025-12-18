@@ -23,16 +23,21 @@ public class Shooter extends SubsystemBase {
 
     public ShooterState shooterState = ShooterState.STOP;
 
-    public Shooter(final HardwareMap hardwareMap) {
+    public final boolean highSpeed;
+
+    public Shooter(final HardwareMap hardwareMap, boolean highSpeed) {
         leftShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.leftShooterName);
         rightShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.rightShooterName);
         brakeServo = hardwareMap.get(Servo.class, ShooterConstants.brakeServoName);
         pidController = new PIDController(ShooterConstants.kP,
                 ShooterConstants.kI, ShooterConstants.kD);
+
+        this.highSpeed = highSpeed;
     }
 
     public enum ShooterState {
         STOP(ShooterConstants.stopVelocity),
+        FASTSTOP(ShooterConstants.fastStopVelocity),
         SLOW(ShooterConstants.slowVelocity),
         FAST(ShooterConstants.fastVelocity),
         OPENLOOP(0);
@@ -94,12 +99,19 @@ public class Shooter extends SubsystemBase {
             rightShooter.setPower(1);
         }
         else {
-            if (getVelocity() > ShooterState.SLOW.shooterVelocity) {
+            if (getVelocity() > ShooterState.SLOW.shooterVelocity && !highSpeed) {
                 brakeShooter();
             }
             else releaseShooter();
-            leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
-            rightShooter.setPower(ShooterState.STOP.shooterVelocity);
+            if (highSpeed) {
+                leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
+                rightShooter.setPower(ShooterState.STOP.shooterVelocity);
+            }
+            else {
+                leftShooter.setPower(-ShooterState.FASTSTOP.shooterVelocity);
+                rightShooter.setPower(ShooterState.FASTSTOP.shooterVelocity);
+            }
+
         }
 
         packet.put("shooterVelocity", rightShooter.getVelocity());

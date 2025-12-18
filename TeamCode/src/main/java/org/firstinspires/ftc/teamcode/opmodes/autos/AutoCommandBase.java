@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.pedropathing.follower.Follower;
@@ -19,18 +21,18 @@ public abstract class AutoCommandBase extends LinearOpMode {
     protected Transit transit;
     protected Intake intake;
     protected CDS cds;
-    protected Telemetry telemetryM;
     protected Follower follower;
 
     public abstract Command runAutoCommand();
 
     public abstract Pose getStartPose();
+    public abstract boolean highSpeed();
 
     private void initialize() {
         follower = Constants.createFollower(hardwareMap);
 
         follower.setStartingPose(getStartPose());
-        shooter = new Shooter(hardwareMap);
+        shooter = new Shooter(hardwareMap, highSpeed());
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
         cds = new CDS(hardwareMap);
@@ -54,6 +56,9 @@ public abstract class AutoCommandBase extends LinearOpMode {
 
         onAutoStopped();
         CommandScheduler.getInstance().reset();
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.put("shooterVelocity", shooter.getVelocity());
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
     /**

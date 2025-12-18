@@ -41,6 +41,11 @@ public class RedNear extends AutoCommandBase {
     }
 
     @Override
+    public boolean highSpeed() {
+        return false;
+    }
+
+    @Override
     public Command runAutoCommand() {
         Path1 = follower
                 .pathBuilder()

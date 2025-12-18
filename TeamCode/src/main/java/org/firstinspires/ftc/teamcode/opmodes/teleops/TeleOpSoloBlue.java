@@ -54,7 +54,7 @@ public class TeleOpSoloBlue extends CommandOpMode {
         drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.BLUE);
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+        shooter = new Shooter(hardwareMap, false);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
         cds = new CDS(hardwareMap);

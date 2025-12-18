@@ -3,18 +3,31 @@ package org.firstinspires.ftc.teamcode.commands.autocommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class AutoDriveCommand extends CommandBase {
     private Follower follower;
     private PathChain pathChain;
+    private double waitTime;
+    private final ElapsedTime timer;
 
     public AutoDriveCommand(Follower follower, PathChain pathChain) {
         this.follower = follower;
         this.pathChain = pathChain;
+        this.waitTime = 30 * 1000;
+        this.timer = new ElapsedTime();
+    }
+
+    public AutoDriveCommand(Follower follower, PathChain pathChain, double waitTime) {
+        this.follower = follower;
+        this.pathChain = pathChain;
+        this.waitTime = waitTime;
+        this.timer = new ElapsedTime();
     }
 
     @Override
     public void initialize() {
+        timer.reset();
         follower.followPath(pathChain);
     }
 
@@ -30,6 +43,6 @@ public class AutoDriveCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !follower.isBusy();
+        return !follower.isBusy() || timer.milliseconds() >= waitTime;
     }
 }
