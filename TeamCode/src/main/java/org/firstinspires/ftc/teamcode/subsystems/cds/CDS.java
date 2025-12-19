@@ -33,6 +33,7 @@ public class CDS extends SubsystemBase {
     private final ElapsedTime ledTimer;
     public final TelemetryPacket packet = new TelemetryPacket();
 
+    private boolean killed;
     private double dis, dis1, ledTime;
     private double r, g, b;
 
@@ -61,6 +62,7 @@ public class CDS extends SubsystemBase {
         distanceSensor1 = hardwareMap.get(DistanceSensor.class, CDSConstants.colorSensor1Name);
         led = hardwareMap.get(Servo.class, CDSConstants.ledName);
         ledTimer = new ElapsedTime();
+        this.killed = false;
     }
 
     private boolean ballDetected = false;
@@ -102,6 +104,10 @@ public class CDS extends SubsystemBase {
         ledTime = time;
     }
 
+    public void kill() {
+        killed = true;
+    }
+
     @Override
     public void periodic() {
         dis = distanceSensor.getDistance(DistanceUnit.CM);
@@ -135,6 +141,10 @@ public class CDS extends SubsystemBase {
 //            }
 //            if (colorQue.size() > 3) colorQue.poll();
 //            hues.clear();
+        }
+
+        if (killed) {
+            ballNum = 0;
         }
 
 

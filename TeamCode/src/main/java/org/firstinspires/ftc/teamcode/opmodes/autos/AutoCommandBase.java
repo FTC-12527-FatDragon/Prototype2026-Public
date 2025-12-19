@@ -34,7 +34,7 @@ public abstract class AutoCommandBase extends LinearOpMode {
         follower.setStartingPose(getStartPose());
         shooter = new Shooter(hardwareMap, highSpeed());
         transit = new Transit(hardwareMap);
-        intake = new Intake(hardwareMap);
+        intake = new Intake(hardwareMap, true);
         cds = new CDS(hardwareMap);
     }
 

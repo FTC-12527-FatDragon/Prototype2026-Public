@@ -18,14 +18,17 @@ public class Intake extends SubsystemBase {
     public static boolean isRunning = false;
     public static boolean motorReversed = false;
     public static boolean shooting = false;
+    public static boolean autoReverse;
 
-    public Intake(HardwareMap hardwareMap) {
+    public Intake(HardwareMap hardwareMap, boolean autoReverse) {
         intakeMotor = hardwareMap.get(DcMotor.class, IntakeConstants.intakeMotorName);
         leftServo = hardwareMap.get(Servo.class, IntakeConstants.leftServoName);
         rightServo = hardwareMap.get(Servo.class, IntakeConstants.rightServoName);
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftServo.setDirection(Servo.Direction.REVERSE);
+
+        this.autoReverse = autoReverse;
     }
 
     public void toggle() {
@@ -60,7 +63,8 @@ public class Intake extends SubsystemBase {
             rightServo.setPosition(1);
         }
         else {
-            intakeMotor.setPower(0);
+            if (autoReverse) intakeMotor.setPower(IntakeConstants.reversedPower);
+            else intakeMotor.setPower(0);
             leftServo.setPosition(0.5);
             rightServo.setPosition(0.5);
         }

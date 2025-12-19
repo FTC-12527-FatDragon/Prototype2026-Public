@@ -33,8 +33,6 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 public class TeleOpSoloRed extends CommandOpMode {
     private MecanumDriveOTOS drive;
 
-    private Follower follower;
-
     private GamepadEx gamepadEx1;
 
     private Shooter shooter;
@@ -45,19 +43,14 @@ public class TeleOpSoloRed extends CommandOpMode {
 
     private CDS cds;
 
-    private Telemetry telemetryM;
-
-    private boolean[] isAuto = {false};
-
     @Override
     public void initialize() {
         cds = new CDS(hardwareMap);
         drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.RED, cds);
         gamepadEx1 = new GamepadEx(gamepad1);
-        follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap, false);
         transit = new Transit(hardwareMap);
-        intake = new Intake(hardwareMap);
+        intake = new Intake(hardwareMap, false);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
                 () -> gamepadEx1.getButton(GamepadKeys.Button.A)));
@@ -148,7 +141,6 @@ public class TeleOpSoloRed extends CommandOpMode {
 
     @Override
     public void run() {
-        telemetryM = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         CommandScheduler.getInstance().run();
         telemetry.addData("X", drive.getPose().getX(DistanceUnit.INCH));
         telemetry.addData("Y",  drive.getPose().getY(DistanceUnit.INCH));
