@@ -9,6 +9,7 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.autocommands.AutoBrakeCommand;
 import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 
+@Autonomous(name = "Blue Near INF", group = "Autos")
 public class BlueNearInf extends AutoCommandBase {
     public PathChain Path1;
     public PathChain Path2;
