@@ -99,11 +99,14 @@ public class Shooter extends SubsystemBase {
             rightShooter.setPower(1);
         }
         else {
-            if (getVelocity() > ShooterState.SLOW.shooterVelocity && !highSpeed) {
+            if (highSpeed && getVelocity() > ShooterState.FAST.shooterVelocity) {
+                brakeShooter();
+            }
+            else if (!highSpeed && getVelocity() > ShooterState.SLOW.shooterVelocity) {
                 brakeShooter();
             }
             else releaseShooter();
-            if (highSpeed) {
+            if (!highSpeed) {
                 leftShooter.setPower(-ShooterState.STOP.shooterVelocity);
                 rightShooter.setPower(ShooterState.STOP.shooterVelocity);
             }
@@ -115,6 +118,7 @@ public class Shooter extends SubsystemBase {
         }
 
         packet.put("shooterVelocity", rightShooter.getVelocity());
+        packet.put("shooterPower", rightShooter.getPower());
         FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 }
