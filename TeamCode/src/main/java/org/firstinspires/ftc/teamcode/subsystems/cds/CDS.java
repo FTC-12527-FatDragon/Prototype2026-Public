@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants;
@@ -29,12 +30,29 @@ public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor1;
     private final DistanceSensor distanceSensor1;
     private final Servo led;
+    private final ElapsedTime ledTimer;
     public final TelemetryPacket packet = new TelemetryPacket();
 
-    private double dis, dis1;
+    private double dis, dis1, ledTime;
     private double r, g, b;
 
     private final float[] hsvValues = {0F, 0F, 0F};
+
+    public enum LEDState {
+        NULL(0.2),
+        RED(0.3),
+        YELLOW(0.4),
+        GREEN(0.5),
+        BLUE(0.6),
+        PURPLE(0.7),
+        WHITE(0.8);
+
+        public double colorPose;
+
+        LEDState(double colorPose) {
+            this.colorPose = colorPose;
+        }
+    }
 
     public CDS(HardwareMap hardwareMap) {
         colorSensor = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensorName);
@@ -42,6 +60,7 @@ public class CDS extends SubsystemBase {
         colorSensor1 = hardwareMap.get(ColorSensor.class, CDSConstants.colorSensor1Name);
         distanceSensor1 = hardwareMap.get(DistanceSensor.class, CDSConstants.colorSensor1Name);
         led = hardwareMap.get(Servo.class, CDSConstants.ledName);
+        ledTimer = new ElapsedTime();
     }
 
     private boolean ballDetected = false;
@@ -71,6 +90,16 @@ public class CDS extends SubsystemBase {
 
     public void deleteBalls() {
         ballNum = 0;
+    }
+
+    public void setLED(LEDState color) {
+        led.setPosition(color.colorPose);
+    }
+
+    public void setLED(LEDState color, double time) {
+        led.setPosition(color.colorPose);
+        ledTimer.reset();
+        ledTime = time;
     }
 
     @Override
@@ -107,8 +136,24 @@ public class CDS extends SubsystemBase {
 //            if (colorQue.size() > 3) colorQue.poll();
 //            hues.clear();
         }
-        if (ballNum >= 3) led.setPosition(1);
-        else led.setPosition(0);
+
+
+        if(ledTimer.milliseconds() > ledTime) {
+            switch ((int) ballNum) {
+                case 0:
+                    setLED(LEDState.PURPLE);
+                    break;
+                case 1:
+                    setLED(LEDState.RED);
+                    break;
+                case 2:
+                    setLED(LEDState.YELLOW);
+                    break;
+                case 3:
+                    setLED(LEDState.GREEN);
+                    break;
+            }
+        }
 
         packet.put("colorSensor dis", dis);
         packet.put("colorSensor dis1", dis1);

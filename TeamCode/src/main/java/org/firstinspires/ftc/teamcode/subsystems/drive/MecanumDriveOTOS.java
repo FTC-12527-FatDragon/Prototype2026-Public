@@ -33,6 +33,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants;
 import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 import org.firstinspires.ftc.teamcode.utils.Util;
@@ -46,6 +47,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
     private double yawOffset;// mm
     private PIDController alignPID;
     private final DriveState alliance;
+    private final CDS cds;
 
     public DriveState driveState;
 
@@ -61,7 +63,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         DriveState() {}
     }
 
-    public MecanumDriveOTOS(final HardwareMap hardwareMap, DriveState alliance) {
+    public MecanumDriveOTOS(final HardwareMap hardwareMap, DriveState alliance, CDS cds) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
@@ -70,6 +72,7 @@ public class MecanumDriveOTOS extends SubsystemBase {
         driveState = DriveState.STOP;
         alignPID = new PIDController(kP_alignH, kI_alignH, kD_alignH);
         this.alliance = alliance;
+        this.cds = cds;
 
         leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -205,7 +208,10 @@ public class MecanumDriveOTOS extends SubsystemBase {
 
     public void visionCalibrate() {
         Pose3D visionPose = autoApriltag.getRobotPosition();
-        if (visionPose != null) otos.setPosition(Util.visionPoseToOTOSPose(visionPose));
+        if (visionPose != null){
+            otos.setPosition(Util.visionPoseToOTOSPose(visionPose));
+            cds.setLED(CDS.LEDState.BLUE, 1000);
+        }
         yawOffset = alliance == DriveState.BLUE? Math.PI: 0;
     }
 

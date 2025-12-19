@@ -51,13 +51,13 @@ public class TeleOpSoloRed extends CommandOpMode {
 
     @Override
     public void initialize() {
-        drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.RED);
+        cds = new CDS(hardwareMap);
+        drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.RED, cds);
         gamepadEx1 = new GamepadEx(gamepad1);
         follower = Constants.createFollower(hardwareMap);
         shooter = new Shooter(hardwareMap, false);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap);
-        cds = new CDS(hardwareMap);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
                 () -> gamepadEx1.getButton(GamepadKeys.Button.A)));
@@ -106,6 +106,7 @@ public class TeleOpSoloRed extends CommandOpMode {
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
                 new TransitCommand(transit, intake, shooter, cds, drive)
+                        .alongWith(new InstantCommand(() -> drive.visionCalibrate()))
         );
 
 //        new FunctionalButton(
