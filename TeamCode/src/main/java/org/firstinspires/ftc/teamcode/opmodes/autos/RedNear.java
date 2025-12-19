@@ -37,7 +37,7 @@ public class RedNear extends AutoCommandBase {
 
     @Override
     public Pose getStartPose() {
-        return new Pose(104.863, 134.428, Math.toRadians(180));
+        return new Pose(116.561, 131.238, Math.toRadians(-144));
     }
 
     @Override
@@ -50,9 +50,9 @@ public class RedNear extends AutoCommandBase {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(104.863, 134.428), new Pose(91.037, 90.399))
+                        new BezierLine(new Pose(116.561, 131.238), new Pose(91.037, 90.399))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-130))
+                .setLinearHeadingInterpolation(Math.toRadians(-144), Math.toRadians(-130))
                 .build();
 
         Path2 = follower

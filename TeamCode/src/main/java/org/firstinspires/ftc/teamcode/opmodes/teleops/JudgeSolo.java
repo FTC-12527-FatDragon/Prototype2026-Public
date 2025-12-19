@@ -31,7 +31,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config
 @Configurable
-@TeleOp(name = "TeleOp Solo Blue")
+@TeleOp(name = "Judge Solo")
 public class JudgeSolo extends CommandOpMode {
     private MecanumDriveOTOS drive;
 

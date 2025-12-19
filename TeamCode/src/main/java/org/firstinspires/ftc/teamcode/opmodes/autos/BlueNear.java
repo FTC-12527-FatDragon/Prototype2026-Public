@@ -36,7 +36,7 @@ public class BlueNear extends AutoCommandBase {
 
     @Override
     public Pose getStartPose() {
-        return new Pose(39.137, 134.428, Math.toRadians(0));
+        return new Pose(27.226, 130.812, Math.toRadians(-36));
     }
 
     @Override
@@ -49,9 +49,9 @@ public class BlueNear extends AutoCommandBase {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(39.137, 134.428), new Pose(54.877, 87.421))
+                        new BezierLine(new Pose(27.226, 130.812), new Pose(54.877, 87.421))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-50))
+                .setLinearHeadingInterpolation(Math.toRadians(-36), Math.toRadians(-50))
                 .build();
 
         Path2 = follower
