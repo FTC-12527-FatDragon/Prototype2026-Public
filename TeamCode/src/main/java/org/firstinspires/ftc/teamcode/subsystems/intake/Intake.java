@@ -60,7 +60,7 @@ public class Intake extends SubsystemBase {
             rightServo.setPosition(1);
         }
         else {
-            intakeMotor.setPower(IntakeConstants.reversedPower);
+            intakeMotor.setPower(0);
             leftServo.setPosition(0.5);
             rightServo.setPosition(0.5);
         }

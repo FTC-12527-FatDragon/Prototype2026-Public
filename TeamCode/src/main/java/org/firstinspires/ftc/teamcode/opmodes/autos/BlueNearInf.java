@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes.autos;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -31,7 +32,7 @@ public class BlueNearInf extends AutoCommandBase {
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(2000)
+                        new WaitCommand(1500)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
@@ -47,12 +48,13 @@ public class BlueNearInf extends AutoCommandBase {
                         new AutoDriveCommand(follower, Path6),
                         new IntakeCommand(transit, intake, cds)
                 ),
+                new WaitCommand(120),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path7),
                         new IntakeCommand(transit, intake, cds)
                 ),
-                new AutoBrakeCommand(follower, Path7.endPose()),
-                shootCommand()
+                new ParallelCommandGroup(new AutoBrakeCommand(follower, Path7.endPose()),
+                        shootCommand())
         );
     }
 
@@ -109,31 +111,31 @@ public class BlueNearInf extends AutoCommandBase {
                 .addPath(
                         new BezierCurve(
                                 new Pose(51.049, 91.675),
-                                new Pose(50.836, 57.430),
-                                new Pose(16.378, 62.322)
+                                new Pose(59.755, 64.261),
+                                new Pose(21.551, 67.004)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(-50), Math.toRadians(173))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(16.378, 62.322), new Pose(13.188, 59.344))
+                        new BezierLine(new Pose(21.551, 67.004), new Pose(13.910, 59.559))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(160))
+                .setLinearHeadingInterpolation(Math.toRadians(173), Math.toRadians(140))
                 .build();
 
         Path7 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(13.188, 59.344),
+                                new Pose(13.910, 59.559),
                                 new Pose(52.750, 59.982),
                                 new Pose(51.049, 91.888)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(160), Math.toRadians(-50))
+                .setLinearHeadingInterpolation(Math.toRadians(140), Math.toRadians(-50))
                 .build();
 
         return new SequentialCommandGroup(
@@ -150,7 +152,10 @@ public class BlueNearInf extends AutoCommandBase {
                         new AutoDriveCommand(follower, Path4),
                         new IntakeCommand(transit, intake, cds)
                 ),
-                new AutoBrakeCommand(follower, Path4.endPose()),
+                new ParallelCommandGroup(new AutoBrakeCommand(follower, Path4.endPose()),
+                        shootCommand()),
+                cycleCommand(),
+                cycleCommand(),
                 cycleCommand()
         );
     }
