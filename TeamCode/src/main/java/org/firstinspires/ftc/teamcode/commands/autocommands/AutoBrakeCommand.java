@@ -12,11 +12,20 @@ public class AutoBrakeCommand extends CommandBase {
     private Pose holdPose;
     private PathChain holdPath;
     private final ElapsedTime timer;
+    private final double holdTime;
 
     public AutoBrakeCommand(Follower follower, Pose holdPose) {
         this.follower = follower;
         this.holdPose = holdPose;
         timer = new ElapsedTime();
+        this.holdTime = 250;
+    }
+
+    public AutoBrakeCommand(Follower follower, Pose holdPose, double holdTime) {
+        this.follower = follower;
+        this.holdPose = holdPose;
+        timer = new ElapsedTime();
+        this.holdTime = holdTime;
     }
 
     @Override
@@ -52,6 +61,6 @@ public class AutoBrakeCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.milliseconds() >= 250;
+        return timer.milliseconds() >= holdTime;
     }
 }

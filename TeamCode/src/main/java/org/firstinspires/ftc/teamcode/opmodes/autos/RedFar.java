@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.commands.autocommands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 
 @Config
-@Autonomous(name = "BlueFar 3+9", group = "Autos")
+@Autonomous(name = "RedFar 3+9", group = "Autos")
 public class RedFar extends AutoCommandBase {
     public PathChain Path1;
     public PathChain Path2;
@@ -34,10 +34,11 @@ public class RedFar extends AutoCommandBase {
     public PathChain Path10;
     public PathChain Path11;
     public PathChain Path12;
+    public PathChain Path13;
 
     @Override
     public Pose getStartPose() {
-        return new Pose(57.004, 8.721, Math.toRadians(-90));
+        return new Pose(87.004, 8.721, Math.toRadians(-90));
     }
 
     @Override
@@ -122,7 +123,7 @@ public class RedFar extends AutoCommandBase {
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(87.092, 13.188), new Pose(84.082, 17.442))
+                        new BezierLine(new Pose(87.092, 13.188), new Pose(86.357, 15.527))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(246))
                 .build();
@@ -130,7 +131,7 @@ public class RedFar extends AutoCommandBase {
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(84.082, 17.442), new Pose(97.220, 35.521))
+                        new BezierLine(new Pose(86.357, 15.527), new Pose(97.220, 35.521))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(246), Math.toRadians(0))
                 .build();
@@ -146,23 +147,23 @@ public class RedFar extends AutoCommandBase {
         Path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(124.000, 35.521), new Pose(84.000, 17.442))
+                        new BezierLine(new Pose(124.000, 35.521), new Pose(92.526, 11.911))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(246))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(244))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(84.000, 17.442), new Pose(91.000, 17.442))
+                        new BezierLine(new Pose(92.526, 11.911), new Pose(102.310, 15.740))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(246), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(244), Math.toRadians(0))
                 .build();
 
         Path7 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(91.000, 17.442), new Pose(106.000, 14.889))
+                        new BezierLine(new Pose(102.310, 15.740), new Pose(111.669, 13.613))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -170,7 +171,7 @@ public class RedFar extends AutoCommandBase {
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(106.000, 14.889), new Pose(132.000, 9.572))
+                        new BezierLine(new Pose(111.669, 13.613), new Pose(132.000, 9.572))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -194,9 +195,9 @@ public class RedFar extends AutoCommandBase {
         Path11 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.495, 15.102), new Pose(84.245, 17.241))
+                        new BezierLine(new Pose(132.495, 15.102), new Pose(92.526, 12.124))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(246))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(244))
                 .build();
 
         // 8 end to 11 end
@@ -205,7 +206,7 @@ public class RedFar extends AutoCommandBase {
                 .addPath(
                         new BezierLine(Path8.endPose(), Path11.endPose())
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-66))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(244))
                 .build();
 
         return new SequentialCommandGroup(
@@ -236,7 +237,7 @@ public class RedFar extends AutoCommandBase {
                         new WaitCommand(1750)
                 ),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
-                cycleTry1(),
+                cycleTry2(),
                 cycleTry2(),
                 cycleTry2()
         );

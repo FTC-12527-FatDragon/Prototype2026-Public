@@ -50,7 +50,7 @@ public class TeleOpSoloBlue extends CommandOpMode {
         gamepadEx1 = new GamepadEx(gamepad1);
         shooter = new Shooter(hardwareMap, false);
         transit = new Transit(hardwareMap);
-        intake = new Intake(hardwareMap, false);
+        intake = new Intake(hardwareMap, true);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
                 () -> gamepadEx1.getButton(GamepadKeys.Button.A)));

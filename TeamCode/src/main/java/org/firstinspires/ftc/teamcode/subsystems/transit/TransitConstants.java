@@ -8,8 +8,8 @@ public class TransitConstants {
     public static String limitServoName = "limitServo";
     public static String chooseServoName = "chooseServo";
 
-    public static double limitServoClosePos = 0.29;
-    public static double limitServoOpenPos = 0.03;
+    public static double limitServoClosePos = 0.26;
+    public static double limitServoOpenPos = 0.0;
 
     public static double chooseServoClosePos = 0.6;
     public static double chooseServoOpenPos = 0.25;
