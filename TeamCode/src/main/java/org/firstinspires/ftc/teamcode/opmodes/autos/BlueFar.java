@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 @Autonomous(name = "BlueFar 3+9", group = "Autos")
 public class BlueFar extends AutoCommandBase {
 
-    public PathChain Path1, Path2, Path3, Path4, Path5, Path6, Path7, Path8, Path9;
+    public PathChain Path1, Path2, Path3, Path4, Path5, Path6, Path7, Path8, Path9, Path10;
 
     @Override
     public boolean highSpeed() {
@@ -173,6 +173,15 @@ public class BlueFar extends AutoCommandBase {
                 )
                 .build();
 
+        Path10 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(144 - 92.100, 13.613),
+                                new Pose(144 - 108.479, 13.826))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180) - Math.toRadians(-108), Math.toRadians(0))
+                .build();
+
         return new SequentialCommandGroup(
                 new AutoDriveCommand(follower, Path1),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
@@ -191,7 +200,8 @@ public class BlueFar extends AutoCommandBase {
                 new AutoBrakeCommand(follower, Path5.endPose()),
                 shootCommand(),
                 cycleCommand(),
-                cycleCommand()
+                cycleCommand(),
+                new AutoDriveCommand(follower, Path10)
         );
     }
 }

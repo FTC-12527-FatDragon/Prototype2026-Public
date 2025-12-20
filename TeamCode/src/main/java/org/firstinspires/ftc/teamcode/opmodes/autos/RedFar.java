@@ -31,6 +31,7 @@ public class RedFar extends AutoCommandBase {
     public PathChain Path7;
     public PathChain Path8;
     public PathChain Path9;
+    public PathChain Path10;
 
     @Override
     public boolean highSpeed() {
@@ -150,6 +151,14 @@ public class RedFar extends AutoCommandBase {
                 .setLinearHeadingInterpolation(Math.toRadians(-21), Math.toRadians(-108))
                 .build();
 
+        Path10 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(92.100, 13.613), new Pose(108.479, 13.826))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-108), Math.toRadians(180))
+                .build();
+
         return new SequentialCommandGroup(
                 new AutoDriveCommand(follower, Path1),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
@@ -168,7 +177,8 @@ public class RedFar extends AutoCommandBase {
                 new AutoBrakeCommand(follower, Path5.endPose()),
                 shootCommand(),
                 cycleCommand(),
-                cycleCommand()
+                cycleCommand(),
+                new AutoDriveCommand(follower, Path10)
         );
     }
 }
