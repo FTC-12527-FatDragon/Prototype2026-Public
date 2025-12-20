@@ -10,14 +10,12 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @Config

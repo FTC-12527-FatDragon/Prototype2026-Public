@@ -3,11 +3,8 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
-import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 
 public class JudgeTransitCommand extends CommandBase {
     private final Transit transit;
