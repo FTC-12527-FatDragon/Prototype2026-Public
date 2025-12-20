@@ -45,6 +45,7 @@ public class MecanumDrive extends SubsystemBase {
     public final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
 
     private final GoBildaPinpointDriver od;
+    private final SparkFunOTOS otos;
     private final AutoApriltag autoApriltag;
     private double yawOffset;// mm
     private PIDController alignPID;
@@ -71,6 +72,7 @@ public class MecanumDrive extends SubsystemBase {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         od = hardwareMap.get(GoBildaPinpointDriver.class, "od");
+        otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         driveState = DriveState.STOP;
         alignPID = new PIDController(kP_alignH, kI_alignH, kD_alignH);
         this.alliance = alliance;
@@ -88,6 +90,12 @@ public class MecanumDrive extends SubsystemBase {
                 GoBildaPinpointDriver.EncoderDirection.REVERSED);
         od.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         od.setOffsets(DriveConstants.xPoseDW, yPoseDW, DriveConstants.distanceUnit);
+
+        otos.resetTracking();
+        otos.setAngularUnit(DriveConstants.angleUnit);
+        otos.setLinearUnit(DriveConstants.distanceUnit);
+        otos.setOffset(new SparkFunOTOS.Pose2D(DriveConstants.xPoseOTOS,
+                DriveConstants.yPoseOTOS, DriveConstants.headingPoseOTOS));
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -213,6 +221,7 @@ public class MecanumDrive extends SubsystemBase {
             od.setPosition(Util.visionPoseToDWPose(visionPose));
             od.setHeading(Util.visionPoseToDWPose(visionPose).getHeading(DriveConstants.angleUnit),
                     DriveConstants.angleUnit);
+            otos.setPosition(Util.visionPoseToOTOSPose(visionPose));
             cds.setLED(CDS.LEDState.BLUE, 1000);
         }
         yawOffset = alliance == DriveState.BLUE? Math.PI: 0;
@@ -245,6 +254,7 @@ public class MecanumDrive extends SubsystemBase {
     @Override
     public void periodic() {
         od.update();
+        od.setHeading(otos.getPosition().h, DriveConstants.angleUnit);
         if (driveState == DriveState.STOP) {
             applyBrake();
         }
