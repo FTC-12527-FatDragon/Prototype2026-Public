@@ -8,6 +8,8 @@ import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.constants.OTOSConstants;
+import com.pedropathing.ftc.localization.constants.PinpointConstants;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -43,23 +45,23 @@ public class Constants {
             .xVelocity(DriveConstants.forwardVelocity)
             .yVelocity(DriveConstants.strafeVelocity);
 
-    public static OTOSConstants otosConstants = new OTOSConstants()
-            .hardwareMapName("otos")
-            .linearUnit(DistanceUnit.INCH)
-            .angleUnit(AngleUnit.RADIANS)
-            .offset(new SparkFunOTOS.Pose2D(DriveConstants.xPoseOTOS,
-                    DriveConstants.yPoseOTOS, DriveConstants.headingPoseOTOS))
-            .linearScalar(DriveConstants.linearScalar)
-            .angularScalar(DriveConstants.angularScalar);
+//    public static OTOSConstants otosConstants = new OTOSConstants()
+//            .hardwareMapName("otos")
+//            .linearUnit(DistanceUnit.INCH)
+//            .angleUnit(AngleUnit.RADIANS)
+//            .offset(new SparkFunOTOS.Pose2D(DriveConstants.xPoseOTOS,
+//                    DriveConstants.yPoseOTOS, DriveConstants.headingPoseOTOS))
+//            .linearScalar(DriveConstants.linearScalar)
+//            .angularScalar(DriveConstants.angularScalar);
 
-//    public static PinpointConstants localizerConstants = new PinpointConstants()
-//            .forwardPodY(0)
-//            .strafePodX(6.5)
-//            .distanceUnit(DistanceUnit.INCH)
-//            .hardwareMapName("od")
-//            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
-//            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-//            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
+    public static PinpointConstants localizerConstants = new PinpointConstants()
+            .forwardPodY(DriveConstants.yPoseDW)
+            .strafePodX(DriveConstants.xPoseDW)
+            .distanceUnit(DistanceUnit.INCH)
+            .hardwareMapName("od")
+            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
     /**
      These are the PathConstraints in order:
      tValueConstraint, velocityConstraint, translationalConstraint, headingConstraint, timeoutConstraint,
@@ -83,8 +85,8 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
-                .OTOSLocalizer(otosConstants)
-//                .pinpointLocalizer(localizerConstants)
+//                .OTOSLocalizer(otosConstants)
+                .pinpointLocalizer(localizerConstants)
 //                .pathConstraints(pathConstraints)
                 .build();
     }

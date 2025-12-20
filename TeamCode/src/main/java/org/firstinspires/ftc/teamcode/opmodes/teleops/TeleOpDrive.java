@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
+import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
@@ -23,7 +24,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 @Configurable
 @TeleOp(name = "TeleOpDrive")
 public class TeleOpDrive extends CommandOpMode {
-    private MecanumDriveOTOS drive;
+    private MecanumDrive drive;
 
     private GamepadEx gamepadEx1;
 
@@ -32,7 +33,7 @@ public class TeleOpDrive extends CommandOpMode {
     @Override
     public void initialize() {
         cds = new CDS(hardwareMap);
-        drive = new MecanumDriveOTOS(hardwareMap, MecanumDriveOTOS.DriveState.BLUE, cds);
+        drive = new MecanumDrive(hardwareMap, MecanumDrive.DriveState.BLUE, cds);
         gamepadEx1 = new GamepadEx(gamepad1);
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,

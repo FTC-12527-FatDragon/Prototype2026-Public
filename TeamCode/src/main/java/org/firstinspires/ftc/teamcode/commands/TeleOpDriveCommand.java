@@ -9,11 +9,11 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import java.util.function.BooleanSupplier;
 
 public class TeleOpDriveCommand extends CommandBase {
-    private final MecanumDriveOTOS drive;
+    private final MecanumDrive drive;
     private final GamepadEx gamepadEx;
     private final BooleanSupplier isAlign;
 
-    public TeleOpDriveCommand(MecanumDriveOTOS drive, GamepadEx gamepadEx, BooleanSupplier isAlign) {
+    public TeleOpDriveCommand(MecanumDrive drive, GamepadEx gamepadEx, BooleanSupplier isAlign) {
         this.drive = drive;
         this.gamepadEx = gamepadEx;
         this.isAlign = isAlign;
@@ -25,16 +25,16 @@ public class TeleOpDriveCommand extends CommandBase {
         if (!isAlign.getAsBoolean()) {
             if (Math.abs(gamepadEx.getLeftX()) > 0.03 || Math.abs(gamepadEx.getLeftY())
                     > 0.03 || Math.abs(gamepadEx.getRightX()) > 0.03) {
-                drive.setDriveState(MecanumDriveOTOS.DriveState.TELEOP);
+                drive.setDriveState(MecanumDrive.DriveState.TELEOP);
                 drive.moveRobotFieldRelative(gamepadEx.getLeftY(),
                         gamepadEx.getLeftX(), gamepadEx.getRightX());
             }
             else{
-                drive.setDriveState(MecanumDriveOTOS.DriveState.STOP);
+                drive.setDriveState(MecanumDrive.DriveState.STOP);
             }
         }
         else {
-            drive.setDriveState(MecanumDriveOTOS.DriveState.ALIGN);
+            drive.setDriveState(MecanumDrive.DriveState.ALIGN);
             drive.moveRobotFieldRelative(gamepadEx.getLeftY(),
                     gamepadEx.getLeftX(), drive.getAlignTurnPower());
         }

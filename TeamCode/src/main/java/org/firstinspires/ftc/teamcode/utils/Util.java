@@ -9,15 +9,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDriveOTOS;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 public class Util {
     public static Pose Pose2DToPose(Pose2D pose2D) {
-        return new Pose(pose2D.getX(DistanceUnit.INCH),
-                pose2D.getY(DistanceUnit.INCH),
-                pose2D.getHeading(AngleUnit.RADIANS));
+        return new Pose(pose2D.getX(DriveConstants.distanceUnit),
+                pose2D.getY(DriveConstants.distanceUnit),
+                pose2D.getHeading(DriveConstants.angleUnit));
     }
 
     public static boolean epsilonEqual(double a, double b, double epsilon) {
@@ -30,8 +31,14 @@ public class Util {
                 pose3D.getOrientation().getYaw() / 180 * Math.PI - Math.PI / 2);
     }
 
+    public static Pose2D visionPoseToDWPose(Pose3D pose3D) {
+        return new Pose2D(DriveConstants.distanceUnit, Units.metersToInches(pose3D.getPosition().y) + 72,
+                -Units.metersToInches(pose3D.getPosition().x) + 72, DriveConstants.angleUnit,
+                pose3D.getOrientation().getYaw() / 180 * Math.PI - Math.PI / 2);
+    }
+
     public static double poseDistance(Pose2D poseA, Pose2D poseB) {
-        return Math.sqrt(Math.pow(poseA.getX(DistanceUnit.INCH) - poseB.getX(DistanceUnit.INCH), 2)
-                + Math.pow(poseA.getY(DistanceUnit.INCH) - poseB.getY(DistanceUnit.INCH), 2));
+        return Math.sqrt(Math.pow(poseA.getX(DriveConstants.distanceUnit) - poseB.getX(DriveConstants.distanceUnit), 2)
+                + Math.pow(poseA.getY(DriveConstants.distanceUnit) - poseB.getY(DriveConstants.distanceUnit), 2));
     }
 }
