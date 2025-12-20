@@ -22,8 +22,8 @@ public class DriveConstants {
     public static AngleUnit angleUnit = AngleUnit.RADIANS;
 
     public static double linearScalar = 1.00026, angularScalar = 0.99414;
-    public static double forwardVelocity = 79.742, strafeVelocity = 63.509;
-    public static double forwardAcceleration = -32.867, strafeAcceleration = -63.582;
+    public static double forwardVelocity = 78.603, strafeVelocity = 61.349;
+    public static double forwardAcceleration = -33.988, strafeAcceleration = -69.653;
 
     public static double kP_brakeXY = 0.02;
     public static double kP_brakeH = -0.8;

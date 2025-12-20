@@ -31,40 +31,14 @@ public class RedFar extends AutoCommandBase {
     public PathChain Path7;
     public PathChain Path8;
     public PathChain Path9;
-    public PathChain Path10;
-    public PathChain Path11;
-    public PathChain Path12;
-    public PathChain Path13;
-
-    @Override
-    public Pose getStartPose() {
-        return new Pose(87.004, 8.721, Math.toRadians(-90));
-    }
 
     @Override
     public boolean highSpeed() {
         return true;
     }
 
-    private Command cycleTry1() {
+    public Command shootCommand() {
         return new SequentialCommandGroup(
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path6),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path7),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path8, 1200),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path12),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new AutoBrakeCommand(follower, Path11.endPose()),
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
                 new ParallelRaceGroup(
                         new TransitCommand(transit, intake, shooter, cds),
@@ -74,40 +48,32 @@ public class RedFar extends AutoCommandBase {
         );
     }
 
-    private Command cycleTry2() {
+    public Command cycleCommand() {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path6),
+                        new AutoDriveCommand(follower, Path6, 2000, Path7),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path7),
+                        new AutoDriveCommand(follower, Path7, 2000, Path8),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path8, 1200),
+                        new AutoDriveCommand(follower, Path8, 2000, Path9),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path9),
                         new IntakeCommand(transit, intake, cds)
                 ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path10, 500),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path11),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new AutoBrakeCommand(follower, Path11.endPose()),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
-                new ParallelRaceGroup(
-                        new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1750)
-                ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
+                new AutoBrakeCommand(follower, Path9.endPose()),
+                shootCommand()
         );
+    }
+
+    @Override
+    public Pose getStartPose() {
+        return new Pose(86.996, 8.721, Math.toRadians(-90));
     }
 
     @Override
@@ -115,7 +81,7 @@ public class RedFar extends AutoCommandBase {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(87.004, 8.721), new Pose(87.092, 13.188))
+                        new BezierLine(new Pose(86.996, 8.721), new Pose(86.996, 11.911))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-90))
                 .build();
@@ -123,47 +89,47 @@ public class RedFar extends AutoCommandBase {
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(87.092, 13.188), new Pose(86.357, 15.527))
+                        new BezierLine(new Pose(86.996, 11.911), new Pose(92.313, 13.613))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(246))
+                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-108))
                 .build();
 
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(86.357, 15.527), new Pose(97.220, 35.521))
+                        new BezierLine(new Pose(92.313, 13.613), new Pose(114.222, 14.251))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(246), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-108), Math.toRadians(0))
                 .build();
 
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(97.220, 35.521), new Pose(124.000, 35.521))
+                        new BezierLine(new Pose(114.222, 14.251), new Pose(132.089, 11.911))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-21))
                 .build();
 
         Path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(124.000, 35.521), new Pose(92.526, 11.911))
+                        new BezierLine(new Pose(132.089, 11.911), new Pose(92.313, 13.613))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(244))
+                .setLinearHeadingInterpolation(Math.toRadians(-21), Math.toRadians(-108))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(92.526, 11.911), new Pose(102.310, 15.740))
+                        new BezierLine(new Pose(92.313, 13.613), new Pose(131.876, 14.889))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(244), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-108), Math.toRadians(0))
                 .build();
 
         Path7 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(102.310, 15.740), new Pose(111.669, 13.613))
+                        new BezierLine(new Pose(131.876, 14.889), new Pose(125.069, 13.400))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -171,56 +137,25 @@ public class RedFar extends AutoCommandBase {
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(111.669, 13.613), new Pose(132.000, 9.572))
+                        new BezierLine(new Pose(125.069, 13.400), new Pose(132.089, 11.911))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-21))
                 .build();
 
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 9.572), new Pose(122.517, 14.038))
+                        new BezierLine(new Pose(132.089, 11.911), new Pose(92.100, 13.613))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
-        Path10 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(122.517, 14.038), new Pose(132.495, 15.102))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
-        Path11 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(132.495, 15.102), new Pose(92.526, 12.124))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(244))
-                .build();
-
-        // 8 end to 11 end
-        Path12 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(Path8.endPose(), Path11.endPose())
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(244))
+                .setLinearHeadingInterpolation(Math.toRadians(-21), Math.toRadians(-108))
                 .build();
 
         return new SequentialCommandGroup(
-                new ParallelCommandGroup(new AutoDriveCommand(follower, Path1),
-                        new SequentialCommandGroup(new WaitCommand(150),
-                                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)))),
-                //new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
+                new AutoDriveCommand(follower, Path1),
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
                 new AutoDriveCommand(follower, Path2),
                 new AutoBrakeCommand(follower, Path2.endPose()),
-                new ParallelRaceGroup(
-                        new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1750)
-                ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
+                shootCommand(),
                 new AutoDriveCommand(follower, Path3),
                 new ParallelRaceGroup(
                         new AutoDriveCommand(follower, Path4),
@@ -231,15 +166,9 @@ public class RedFar extends AutoCommandBase {
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new AutoBrakeCommand(follower, Path5.endPose()),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST)),
-                new ParallelRaceGroup(
-                        new TransitCommand(transit, intake, shooter, cds),
-                        new WaitCommand(1750)
-                ),
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP)),
-                cycleTry2(),
-                cycleTry2(),
-                cycleTry2()
+                shootCommand(),
+                cycleCommand(),
+                cycleCommand()
         );
     }
 }

@@ -41,12 +41,12 @@ public class RedNearInf extends AutoCommandBase {
     public Command cycleCommand() {
         return new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path5, 1000),
+                        new AutoDriveCommand(follower, Path5, 1000, Path6),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new AutoBrakeCommand(follower, Path5.endPose()),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path6, 500),
+                        new AutoDriveCommand(follower, Path6, 500, Path7),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new AutoBrakeCommand(follower, Path6.endPose()),
