@@ -176,6 +176,7 @@ public class RedFar extends AutoCommandBase {
                 ),
                 new AutoBrakeCommand(follower, Path5.endPose()),
                 shootCommand(),
+                new WaitCommand(3000),
                 cycleCommand(),
                 cycleCommand(),
                 new AutoDriveCommand(follower, Path10)
