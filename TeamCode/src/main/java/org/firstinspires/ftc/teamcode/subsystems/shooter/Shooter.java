@@ -114,7 +114,6 @@ public class Shooter extends SubsystemBase {
                 leftShooter.setPower(-ShooterState.FASTSTOP.shooterVelocity);
                 rightShooter.setPower(ShooterState.FASTSTOP.shooterVelocity);
             }
-
         }
 
         packet.put("shooterVelocity", rightShooter.getVelocity());

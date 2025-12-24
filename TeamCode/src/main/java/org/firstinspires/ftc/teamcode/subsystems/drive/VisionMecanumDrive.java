@@ -14,6 +14,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFa
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xFarPoseRed;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xNearPoseBlue;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xNearPoseRed;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.xPoseDW;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFarPoseBlue;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFarPoseRed;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yNearPoseBlue;
@@ -24,15 +25,11 @@ import static org.firstinspires.ftc.teamcode.utils.Util.poseDistance;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
@@ -41,11 +38,10 @@ import org.firstinspires.ftc.teamcode.subsystems.vision.AutoApriltag;
 import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Config
-public class MecanumDrive extends SubsystemBase {
+public class VisionMecanumDrive extends SubsystemBase {
     public final DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
 
     private final GoBildaPinpointDriver od;
-    private final SparkFunOTOS otos;
     private final AutoApriltag autoApriltag;
     private double yawOffset;// mm
     private PIDController alignPID;
@@ -66,13 +62,12 @@ public class MecanumDrive extends SubsystemBase {
         DriveState() {}
     }
 
-    public MecanumDrive(final HardwareMap hardwareMap, DriveState alliance, CDS cds) {
+    public VisionMecanumDrive(final HardwareMap hardwareMap, DriveState alliance, CDS cds) {
         leftFrontMotor = hardwareMap.get(DcMotor.class, "leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class, "leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFrontMotor");
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         od = hardwareMap.get(GoBildaPinpointDriver.class, "od");
-        otos = hardwareMap.get(SparkFunOTOS.class, "otos");
         driveState = DriveState.STOP;
         alignPID = new PIDController(kP_alignH, kI_alignH, kD_alignH);
         this.alliance = alliance;
@@ -86,16 +81,10 @@ public class MecanumDrive extends SubsystemBase {
         autoApriltag = new AutoApriltag(hardwareMap);
 
         od.resetPosAndIMU();
-        od.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED,
+        od.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD,
                 GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        od.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        od.setOffsets(DriveConstants.xPoseDW, yPoseDW, DriveConstants.distanceUnit);
-
-        otos.resetTracking();
-        otos.setAngularUnit(DriveConstants.angleUnit);
-        otos.setLinearUnit(DriveConstants.distanceUnit);
-        otos.setOffset(new SparkFunOTOS.Pose2D(DriveConstants.xPoseOTOS,
-                DriveConstants.yPoseOTOS, DriveConstants.headingPoseOTOS));
+        od.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        od.setOffsets(xPoseDW, yPoseDW, DriveConstants.distanceUnit);
 
         leftFrontMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -221,7 +210,6 @@ public class MecanumDrive extends SubsystemBase {
             od.setPosition(Util.visionPoseToDWPose(visionPose));
             od.setHeading(Util.visionPoseToDWPose(visionPose).getHeading(DriveConstants.angleUnit),
                     DriveConstants.angleUnit);
-            otos.setPosition(Util.visionPoseToOTOSPose(visionPose));
             cds.setLED(CDS.LEDState.BLUE, 1000);
         }
         yawOffset = alliance == DriveState.BLUE? Math.PI: 0;
@@ -254,7 +242,6 @@ public class MecanumDrive extends SubsystemBase {
     @Override
     public void periodic() {
         od.update();
-        od.setHeading(otos.getPosition().h, DriveConstants.angleUnit);
         if (driveState == DriveState.STOP) {
             applyBrake();
         }

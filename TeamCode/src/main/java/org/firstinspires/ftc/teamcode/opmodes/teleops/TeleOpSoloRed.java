@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.TransitCommand;
 import org.firstinspires.ftc.teamcode.subsystems.cds.CDS;
-import org.firstinspires.ftc.teamcode.subsystems.drive.MecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.VisionMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 @Configurable
 @TeleOp(name = "TeleOp Solo Red")
 public class TeleOpSoloRed extends CommandOpMode {
-    private MecanumDrive drive;
+    private VisionMecanumDrive drive;
 
     private GamepadEx gamepadEx1;
 
@@ -42,7 +42,7 @@ public class TeleOpSoloRed extends CommandOpMode {
     @Override
     public void initialize() {
         cds = new CDS(hardwareMap);
-        drive = new MecanumDrive(hardwareMap, MecanumDrive.DriveState.RED, cds);
+        drive = new VisionMecanumDrive(hardwareMap, VisionMecanumDrive.DriveState.RED, cds);
         gamepadEx1 = new GamepadEx(gamepad1);
         shooter = new Shooter(hardwareMap, false);
         transit = new Transit(hardwareMap);
