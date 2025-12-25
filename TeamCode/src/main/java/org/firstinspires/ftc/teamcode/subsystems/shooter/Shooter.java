@@ -5,7 +5,6 @@ import static org.firstinspires.ftc.teamcode.subsystems.shooter.ShooterConstants
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -18,9 +17,6 @@ public class Shooter extends SubsystemBase {
     public final Servo brakeServo;
     public final TelemetryPacket packet = new TelemetryPacket();
 
-    public final PIDController pidController;
-    public static double shooterOpenLoopPower = -1;
-
     public ShooterState shooterState = ShooterState.STOP;
 
     public final boolean highSpeed;
@@ -29,9 +25,6 @@ public class Shooter extends SubsystemBase {
         leftShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.leftShooterName);
         rightShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.rightShooterName);
         brakeServo = hardwareMap.get(Servo.class, ShooterConstants.brakeServoName);
-        pidController = new PIDController(ShooterConstants.kP,
-                ShooterConstants.kI, ShooterConstants.kD);
-
         this.highSpeed = highSpeed;
     }
 
@@ -47,20 +40,6 @@ public class Shooter extends SubsystemBase {
         ShooterState(double shooterVelocity) {
             this.shooterVelocity = shooterVelocity;
         }
-    }
-
-    public void toggleShooterState(ShooterState shooterStateE) {
-        if (shooterStateE == ShooterState.SLOW) {
-            shooterState = shooterState == ShooterState.STOP ? ShooterState.SLOW : ShooterState.STOP;
-        }
-        else if (shooterStateE == ShooterState.FAST) {
-            shooterState = shooterState == ShooterState.STOP ? ShooterState.FAST : ShooterState.STOP;
-        }
-    }
-
-    public void setOpenLoopPower(double power) {
-        shooterState = ShooterState.OPENLOOP;
-        shooterOpenLoopPower = power;
     }
 
     public void setShooterState(ShooterState state) {
@@ -95,8 +74,14 @@ public class Shooter extends SubsystemBase {
 //        }
         if (shooterState != ShooterState.STOP) {
             releaseShooter();
-            leftShooter.setPower(-1);
-            rightShooter.setPower(1);
+            if (shooterState == ShooterState.FAST) {
+                leftShooter.setPower(-0.95);
+                rightShooter.setPower(0.95);
+            }
+            else {
+                leftShooter.setPower(-0.8);
+                rightShooter.setPower(0.8);
+            }
         }
         else {
             if (highSpeed && getVelocity() > ShooterState.FAST.shooterVelocity) {
