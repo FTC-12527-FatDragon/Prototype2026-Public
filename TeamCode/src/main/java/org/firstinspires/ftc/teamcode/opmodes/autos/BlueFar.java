@@ -41,23 +41,16 @@ public class BlueFar extends AutoCommandBase {
 
     public Command cycleCommand() {
         return new SequentialCommandGroup(
+                new AutoDriveCommand(follower, Path3),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path6, 2000, Path7),
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
                         new IntakeCommand(transit, intake, cds)
                 ),
                 new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path7, 2000, Path8),
+                        new AutoDriveCommand(follower, Path5),
                         new IntakeCommand(transit, intake, cds)
                 ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path8, 2000, Path9),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path9),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new AutoBrakeCommand(follower, Path9.endPose()),
+                new AutoBrakeCommand(follower, Path5.endPose()),
                 shootCommand()
         );
     }
@@ -65,9 +58,9 @@ public class BlueFar extends AutoCommandBase {
     @Override
     public Pose getStartPose() {
         return new Pose(
-                144 - 86.996,
-                8.721,
-                Math.toRadians(180) - Math.toRadians(-90)
+                57.004,
+                9.39,
+                Math.toRadians(-90)
         );
     }
 
@@ -109,26 +102,22 @@ public class BlueFar extends AutoCommandBase {
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-67))
                 .build();
 
+        Path6 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(58.068, 14.464), new Pose(38.712, 14.677))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-67), Math.toRadians(180))
+                .build();
+
         return new SequentialCommandGroup(
                 new AutoDriveCommand(follower, Path1),
                 new AutoDriveCommand(follower, Path2),
                 new AutoBrakeCommand(follower, Path2.endPose()),
                 shootCommand(),
-                new AutoDriveCommand(follower, Path3),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path4),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new ParallelRaceGroup(
-                        new AutoDriveCommand(follower, Path5),
-                        new IntakeCommand(transit, intake, cds)
-                ),
-                new AutoBrakeCommand(follower, Path5.endPose()),
-                shootCommand()
-//                new WaitCommand(3000),
-//                cycleCommand(),
-//                cycleCommand(),
-//                new AutoDriveCommand(follower, Path10)
+                cycleCommand(),
+                cycleCommand(),
+                new AutoDriveCommand(follower, Path6)
         );
     }
 }
