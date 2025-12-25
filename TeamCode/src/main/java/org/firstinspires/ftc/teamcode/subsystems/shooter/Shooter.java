@@ -21,11 +21,14 @@ public class Shooter extends SubsystemBase {
 
     public final boolean highSpeed;
 
+    public double dynamicSpeed;
+
     public Shooter(final HardwareMap hardwareMap, boolean highSpeed) {
         leftShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.leftShooterName);
         rightShooter = hardwareMap.get(DcMotorEx.class, ShooterConstants.rightShooterName);
         brakeServo = hardwareMap.get(Servo.class, ShooterConstants.brakeServoName);
         this.highSpeed = highSpeed;
+        this.dynamicSpeed = 0;
     }
 
     public enum ShooterState {
@@ -33,6 +36,7 @@ public class Shooter extends SubsystemBase {
         FASTSTOP(ShooterConstants.fastStopVelocity),
         SLOW(ShooterConstants.slowVelocity),
         FAST(ShooterConstants.fastVelocity),
+        DYNAMIC(0),
         OPENLOOP(0);
 
         final double shooterVelocity;
@@ -44,6 +48,10 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterState(ShooterState state) {
         shooterState = state;
+    }
+
+    public void setDynamicSpeed(double dynamicSpeed) {
+        this.dynamicSpeed = dynamicSpeed;
     }
 
     public double getVelocity() {
@@ -78,9 +86,13 @@ public class Shooter extends SubsystemBase {
                 leftShooter.setPower(-0.95);
                 rightShooter.setPower(0.95);
             }
-            else {
+            else if (shooterState == ShooterState.SLOW) {
                 leftShooter.setPower(-0.8);
                 rightShooter.setPower(0.8);
+            }
+            else if (shooterState == ShooterState.DYNAMIC){
+                leftShooter.setPower(-dynamicSpeed);
+                rightShooter.setPower(dynamicSpeed);
             }
         }
         else {

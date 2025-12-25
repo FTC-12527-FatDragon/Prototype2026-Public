@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 @Config
 @Configurable
-@TeleOp(name = "TeleOp Solo Blue")
-public class TeleOpSoloBlue extends CommandOpMode {
+@TeleOp(name = "TeleOp Solo Blue Adjust")
+public class TeleOpSoloBlueAdjust extends CommandOpMode {
     private VisionMecanumDrive drive;
 
     private GamepadEx gamepadEx1;
@@ -90,18 +90,18 @@ public class TeleOpSoloBlue extends CommandOpMode {
                 new IntakeCommand(transit, intake, cds)
         );
 
-        new FunctionalButton(
-                () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
-        ).whenHeld(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
-        ).whenReleased(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
-        );
+//        new FunctionalButton(
+//                () -> gamepadEx1.getButton(GamepadKeys.Button.RIGHT_BUMPER)
+//        ).whenHeld(
+//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.FAST))
+//        ).whenReleased(
+//                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
+//        );
 
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
         ).whenHeld(
-                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.SLOW))
+                new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.DYNAMIC))
         ).whenReleased(
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
@@ -109,7 +109,7 @@ public class TeleOpSoloBlue extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
-                new TransitCommand(transit, intake, shooter, cds, drive, false)
+                new TransitCommand(transit, intake, shooter, cds, drive, true)
                         .alongWith(new InstantCommand(() -> drive.visionCalibrate()))
         );
 

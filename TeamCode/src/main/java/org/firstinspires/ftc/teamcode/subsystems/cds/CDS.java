@@ -149,19 +149,22 @@ public class CDS extends SubsystemBase {
 
 
         if(ledTimer.milliseconds() > ledTime) {
-            switch ((int) ballNum) {
-                case 0:
-                    setLED(LEDState.PURPLE);
-                    break;
-                case 1:
-                    setLED(LEDState.RED);
-                    break;
-                case 2:
-                    setLED(LEDState.YELLOW);
-                    break;
-                case 3:
-                    setLED(LEDState.GREEN);
-                    break;
+            if (killed) setLED(LEDState.WHITE);
+            else {
+                switch ((int) ballNum) {
+                    case 0:
+                        setLED(LEDState.PURPLE);
+                        break;
+                    case 1:
+                        setLED(LEDState.RED);
+                        break;
+                    case 2:
+                        setLED(LEDState.YELLOW);
+                        break;
+                    case 3:
+                        setLED(LEDState.GREEN);
+                        break;
+                }
             }
         }
 

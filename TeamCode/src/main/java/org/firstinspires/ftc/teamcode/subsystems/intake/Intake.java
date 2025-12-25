@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase {
         return isRunning;
     }
 
-    public void toogleShooting() {
+    public void toggleShooting() {
         shooting = !shooting;
     }
 

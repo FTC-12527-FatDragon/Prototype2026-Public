@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -22,6 +23,8 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transit.Transit;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
+
+import java.util.concurrent.TimeUnit;
 
 @Config
 @Configurable
@@ -39,6 +42,8 @@ public class TeleOpSoloRed extends CommandOpMode {
 
     private CDS cds;
 
+    private ElapsedTime timer;
+
     @Override
     public void initialize() {
         cds = new CDS(hardwareMap);
@@ -47,6 +52,15 @@ public class TeleOpSoloRed extends CommandOpMode {
         shooter = new Shooter(hardwareMap, false);
         transit = new Transit(hardwareMap);
         intake = new Intake(hardwareMap, true);
+        timer = new ElapsedTime();
+
+        timer.reset();
+
+        new FunctionalButton(
+                () -> timer.time(TimeUnit.SECONDS) == 90
+        ).whenPressed(
+                new InstantCommand(() -> gamepad1.rumble(1.0, 1.0, 500))
+        );
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
                 () -> gamepadEx1.getButton(GamepadKeys.Button.A)));
@@ -94,7 +108,7 @@ public class TeleOpSoloRed extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.5
         ).whenHeld(
-                new TransitCommand(transit, intake, shooter, cds, drive)
+                new TransitCommand(transit, intake, shooter, cds, drive, false)
                         .alongWith(new InstantCommand(() -> drive.visionCalibrate()))
         );
 

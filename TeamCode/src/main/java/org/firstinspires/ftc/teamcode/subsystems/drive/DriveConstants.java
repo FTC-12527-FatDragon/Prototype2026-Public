@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.utils.Units;
+import org.firstinspires.ftc.teamcode.utils.Util;
 
 @Config
 public class DriveConstants {
@@ -32,11 +34,16 @@ public class DriveConstants {
     public static double kP_followXY = 0;
     public static double kP_followH = 0;
 
-    public static double xNearPoseRed = 144, yNearPoseRed = 144;
-    public static double xNearPoseBlue = 4, yNearPoseBlue = 144;
-    public static double xFarPoseRed = 142, yFarPoseRed = 144;
-    public static double xFarPoseBlue = 5, yFarPoseBlue = 144;
+    public static double xNearPoseRed = 142, yNearPoseRed = 144;
+    public static double xNearPoseBlue = 2, yNearPoseBlue = 144;
+    public static double xFarPoseRed = 140, yFarPoseRed = 144;
+    public static double xFarPoseBlue = 4, yFarPoseBlue = 144;
 
-    public static double nearGoalDistance = 0, farGoalDistance = 0;
-
+    //86 24, 60 86
+    public static double nearGoalDistance = Util.poseDistance(new Pose2D(DistanceUnit.INCH, 60,
+            86, AngleUnit.RADIANS, 0), new Pose2D(DistanceUnit.INCH, xNearPoseBlue,
+            yNearPoseBlue, AngleUnit.RADIANS, 0));
+    public static double farGoalDistance = Util.poseDistance(new Pose2D(DistanceUnit.INCH, 86,
+            24, AngleUnit.RADIANS, 0), new Pose2D(DistanceUnit.INCH, xFarPoseBlue,
+            yFarPoseBlue, AngleUnit.RADIANS, 0));
 }
