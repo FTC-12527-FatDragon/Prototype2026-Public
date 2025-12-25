@@ -20,6 +20,7 @@ import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yFa
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yNearPoseBlue;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yNearPoseRed;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.yPoseDW;
+import static org.firstinspires.ftc.teamcode.utils.Util.adjustRange;
 import static org.firstinspires.ftc.teamcode.utils.Util.poseDistance;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -195,7 +196,8 @@ public class VisionMecanumDrive extends SubsystemBase {
                     xFarPoseBlue - getPose().getX(DriveConstants.distanceUnit)) - Math.PI;
         }
 
-        double turn = alignPID.calculate(getPose().getHeading(DriveConstants.angleUnit), goalHeading);
+        double turn = alignPID.calculate(0,
+                adjustRange(goalHeading - getPose().getHeading(DriveConstants.angleUnit)));
 
         return clip(turn, -1, 1);
     }

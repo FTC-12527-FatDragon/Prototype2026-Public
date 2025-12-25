@@ -55,7 +55,7 @@ public class RedNear extends AutoCommandBase {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(118.688, 131.451), new Pose(94.440, 94.015))
+                        new BezierLine(new Pose(118.688, 131.451), new Pose(93.802, 93.377))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-144), Math.toRadians(225))
                 .build();
@@ -63,7 +63,7 @@ public class RedNear extends AutoCommandBase {
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(94.440, 94.015), new Pose(96.567, 59.131))
+                        new BezierLine(new Pose(93.802, 93.377), new Pose(92.526, 60.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(225), Math.toRadians(0))
                 .build();
@@ -71,7 +71,7 @@ public class RedNear extends AutoCommandBase {
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(96.567, 59.131), new Pose(122.304, 59.131))
+                        new BezierLine(new Pose(92.526, 60.000), new Pose(122.304, 59.800))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -79,7 +79,7 @@ public class RedNear extends AutoCommandBase {
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(122.304, 59.131), new Pose(128.047, 69.767))
+                        new BezierLine(new Pose(122.304, 59.800), new Pose(124.644, 69.341))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-90))
                 .build();
@@ -88,20 +88,20 @@ public class RedNear extends AutoCommandBase {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(128.047, 69.767),
+                                new Pose(124.644, 69.341),
                                 new Pose(77.637, 60.620),
-                                new Pose(94.440, 93.802)
+                                new Pose(91.675, 96.993)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(223))
+                .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-133))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(94.440, 93.802), new Pose(94.653, 83.592))
+                        new BezierLine(new Pose(91.675, 96.993), new Pose(94.653, 83.592))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(223), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-133), Math.toRadians(0))
                 .build();
 
         Path7 = follower
@@ -115,23 +115,23 @@ public class RedNear extends AutoCommandBase {
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(122.304, 83.167), new Pose(94.227, 93.802))
+                        new BezierLine(new Pose(122.304, 83.167), new Pose(91.888, 96.780))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(253))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-133))
                 .build();
 
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(94.227, 93.802), new Pose(97.631, 55.090))
+                        new BezierLine(new Pose(91.888, 96.780), new Pose(92.313, 63.811))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(253), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(-133), Math.toRadians(0))
                 .build();
 
         Path10 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(97.631, 55.090), new Pose(97.843, 35.521))
+                        new BezierLine(new Pose(92.313, 63.811), new Pose(93.377, 35.947))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -139,7 +139,7 @@ public class RedNear extends AutoCommandBase {
         Path11 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(97.843, 35.521), new Pose(122.942, 35.734))
+                        new BezierLine(new Pose(93.377, 35.947), new Pose(122.942, 35.734))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -147,17 +147,17 @@ public class RedNear extends AutoCommandBase {
         Path12 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(122.942, 35.734), new Pose(94.653, 93.589))
+                        new BezierLine(new Pose(122.942, 35.734), new Pose(91.462, 97.418))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(253))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(225))
                 .build();
 
         Path13 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(94.653, 93.589), new Pose(98.056, 68.490))
+                        new BezierLine(new Pose(91.462, 97.418), new Pose(98.056, 68.490))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(253), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(225), Math.toRadians(0))
                 .build();
 
         return new SequentialCommandGroup(

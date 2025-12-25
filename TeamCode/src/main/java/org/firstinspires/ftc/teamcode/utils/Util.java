@@ -34,4 +34,10 @@ public class Util {
         return Math.sqrt(Math.pow(poseA.getX(DriveConstants.distanceUnit) - poseB.getX(DriveConstants.distanceUnit), 2)
                 + Math.pow(poseA.getY(DriveConstants.distanceUnit) - poseB.getY(DriveConstants.distanceUnit), 2));
     }
+
+    public static double adjustRange(double rad) {
+        if (rad > Math.PI) rad -= Math.ceil((rad - Math.PI) / (2 * Math.PI)) * 2 * Math.PI;
+        if (rad < -Math.PI) rad += Math.ceil((-Math.PI - rad) / (2 * Math.PI)) * 2 * Math.PI;
+        return rad;
+    }
 }
