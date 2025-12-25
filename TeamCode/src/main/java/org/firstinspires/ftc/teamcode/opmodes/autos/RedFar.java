@@ -97,7 +97,7 @@ public class RedFar extends AutoCommandBase {
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(102.736, 14.251), new Pose(135.492, 9.146))
+                        new BezierLine(new Pose(102.736, 14.251), new Pose(135.492, 8.295))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -105,7 +105,7 @@ public class RedFar extends AutoCommandBase {
         Path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(135.492, 9.146), new Pose(102.736, 14.251))
+                        new BezierLine(new Pose(135.492, 8.295), new Pose(102.736, 14.251))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
