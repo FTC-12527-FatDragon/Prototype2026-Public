@@ -241,6 +241,13 @@ public class VisionMecanumDrive extends SubsystemBase {
         return 0;
     }
 
+    public double getShooterPower() {
+        if (distanceToGoal() != -1) return ShooterConstants.slowPower
+                + (ShooterConstants.fastPower - ShooterConstants.slowPower)
+                / (farGoalDistance - nearGoalDistance) * (distanceToGoal() - nearGoalDistance);
+        return 0;
+    }
+
     @Override
     public void periodic() {
         od.update();

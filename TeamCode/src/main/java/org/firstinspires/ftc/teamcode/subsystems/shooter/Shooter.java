@@ -32,8 +32,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public enum ShooterState {
-        STOP(ShooterConstants.stopVelocity),
-        FASTSTOP(ShooterConstants.fastStopVelocity),
+        STOP(ShooterConstants.stopPower),
+        FASTSTOP(ShooterConstants.fastStopPower),
         SLOW(ShooterConstants.slowVelocity),
         FAST(ShooterConstants.fastVelocity),
         DYNAMIC(0),
@@ -83,12 +83,12 @@ public class Shooter extends SubsystemBase {
         if (shooterState != ShooterState.STOP) {
             releaseShooter();
             if (shooterState == ShooterState.FAST) {
-                leftShooter.setPower(-0.95);
-                rightShooter.setPower(0.95);
+                leftShooter.setPower(-ShooterConstants.fastPower);
+                rightShooter.setPower(ShooterConstants.fastPower);
             }
             else if (shooterState == ShooterState.SLOW) {
-                leftShooter.setPower(-0.8);
-                rightShooter.setPower(0.8);
+                leftShooter.setPower(-ShooterConstants.slowPower);
+                rightShooter.setPower(ShooterConstants.slowPower);
             }
             else if (shooterState == ShooterState.DYNAMIC){
                 leftShooter.setPower(-dynamicSpeed);

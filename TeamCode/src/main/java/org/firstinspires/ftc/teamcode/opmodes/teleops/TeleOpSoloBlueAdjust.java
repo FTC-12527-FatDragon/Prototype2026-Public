@@ -102,6 +102,7 @@ public class TeleOpSoloBlueAdjust extends CommandOpMode {
                 () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_BUMPER)
         ).whenHeld(
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.DYNAMIC))
+                        .alongWith(new InstantCommand(() -> shooter.setDynamicSpeed(drive.getShooterPower())))
         ).whenReleased(
                 new InstantCommand(() -> shooter.setShooterState(Shooter.ShooterState.STOP))
         );
