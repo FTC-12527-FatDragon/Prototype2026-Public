@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 @Autonomous(name = "BlueFar 3+9", group = "Autos")
 public class BlueFar extends AutoCommandBase {
 
-    public PathChain Path1, Path2, Path3, Path4, Path5, Path6;
+    public PathChain Path1, Path2, Path3, Path4, Path5, Path6, Path33;
 
     @Override
     public boolean highSpeed() {
@@ -62,8 +62,7 @@ public class BlueFar extends AutoCommandBase {
     @Override
     public Pose getStartPose() {
         return new Pose(
-                57.004,
-                9.39,
+                57.004, 9.390,
                 Math.toRadians(-90)
         );
     }
@@ -89,27 +88,35 @@ public class BlueFar extends AutoCommandBase {
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(58.068, 14.464), new Pose(32.331, 14.251))
+                        new BezierLine(new Pose(58.068, 14.464), new Pose(38.925, 14.038))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-67), Math.toRadians(180))
+                .build();
+
+        Path33 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(58.068, 14.464), new Pose(38.925, 14.038))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-67), Math.toRadians(180))
                 .build();
 
         Path4 = follower
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(32.331, 14.251), new Pose(8.295, 9.359)))
+                .addPath(new BezierLine(new Pose(38.925, 14.038), new Pose(8.508, 8.295)))
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
 
         Path5 = follower
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(8.295, 9.359), new Pose(32.331, 14.251)))
+                .addPath(new BezierLine(new Pose(8.508, 8.295), new Pose(38.925, 14.251)))
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
 
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(32.331, 14.251), new Pose(58.068, 14.464))
+                        new BezierLine(new Pose(38.925, 14.251), new Pose(58.068, 14.464))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-67))
                 .build();
@@ -119,8 +126,66 @@ public class BlueFar extends AutoCommandBase {
                 new AutoDriveCommand(follower, Path2),
                 new AutoBrakeCommand(follower, Path2.endPose()),
                 shootCommand(),
-                cycleCommand(),
-                cycleCommand(),
+                new AutoDriveCommand(follower, Path3),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
+                new AutoDriveCommand(follower, Path33),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
+                new AutoDriveCommand(follower, Path33),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
+                new AutoDriveCommand(follower, Path33),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
                 new AutoDriveCommand(follower, Path3)
         );
     }

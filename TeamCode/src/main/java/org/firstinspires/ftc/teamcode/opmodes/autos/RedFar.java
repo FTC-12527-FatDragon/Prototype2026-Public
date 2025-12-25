@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 @Autonomous(name = "RedFar 3+9", group = "Autos")
 public class RedFar extends AutoCommandBase {
 
-    public PathChain Path1, Path2, Path3, Path4, Path5, Path6;
+    public PathChain Path1, Path2, Path3, Path4, Path5, Path6, Path33;
 
     @Override
     public boolean highSpeed() {
@@ -94,6 +94,14 @@ public class RedFar extends AutoCommandBase {
                 .setLinearHeadingInterpolation(Math.toRadians(-112), Math.toRadians(0))
                 .build();
 
+        Path33 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(84.869, 14.464), new Pose(102.736, 14.251))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-110), Math.toRadians(0))
+                .build();
+
         Path4 = follower
                 .pathBuilder()
                 .addPath(
@@ -115,7 +123,7 @@ public class RedFar extends AutoCommandBase {
                 .addPath(
                         new BezierLine(new Pose(102.736, 14.251), new Pose(85.081, 14.464))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-112))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-110))
                 .build();
 
         return new SequentialCommandGroup(
@@ -123,8 +131,66 @@ public class RedFar extends AutoCommandBase {
                 new AutoDriveCommand(follower, Path2),
                 new AutoBrakeCommand(follower, Path2.endPose()),
                 shootCommand(),
-                cycleCommand(),
-                cycleCommand(),
+                new AutoDriveCommand(follower, Path3),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
+                new AutoDriveCommand(follower, Path33),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
+                new AutoDriveCommand(follower, Path33),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
+                new AutoDriveCommand(follower, Path33),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path4, 1000, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path5),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new ParallelRaceGroup(
+                        new AutoDriveCommand(follower, Path6),
+                        new IntakeCommand(transit, intake, cds)
+                ),
+                new AutoBrakeCommand(follower, Path6.endPose()),
+                shootCommand(),
                 new AutoDriveCommand(follower, Path3)
         );
     }
