@@ -71,7 +71,7 @@ public class RedNear extends AutoCommandBase {
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(92.526, 60.000), new Pose(122.304, 59.800))
+                        new BezierLine(new Pose(92.526, 60.000), new Pose(123.500, 59.800))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -79,7 +79,7 @@ public class RedNear extends AutoCommandBase {
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(122.304, 59.800), new Pose(124.644, 69.341))
+                        new BezierLine(new Pose(123.500, 59.800), new Pose(124.644, 69.341))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-90))
                 .build();
@@ -90,7 +90,7 @@ public class RedNear extends AutoCommandBase {
                         new BezierCurve(
                                 new Pose(124.644, 69.341),
                                 new Pose(77.637, 60.620),
-                                new Pose(91.675, 96.993)
+                                new Pose(89.927, 99.331)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-90), Math.toRadians(-133))
@@ -99,7 +99,7 @@ public class RedNear extends AutoCommandBase {
         Path6 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(91.675, 96.993), new Pose(94.653, 83.592))
+                        new BezierLine(new Pose(89.927, 99.331), new Pose(94.653, 83.592))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-133), Math.toRadians(0))
                 .build();
@@ -107,7 +107,7 @@ public class RedNear extends AutoCommandBase {
         Path7 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(94.653, 83.592), new Pose(122.304, 83.167))
+                        new BezierLine(new Pose(94.653, 83.592), new Pose(122.300, 83.167))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -115,7 +115,7 @@ public class RedNear extends AutoCommandBase {
         Path8 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(122.304, 83.167), new Pose(91.888, 96.780))
+                        new BezierLine(new Pose(122.300, 83.167), new Pose(89.927, 99.722))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-133))
                 .build();
@@ -123,7 +123,7 @@ public class RedNear extends AutoCommandBase {
         Path9 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(91.888, 96.780), new Pose(92.313, 63.811))
+                        new BezierLine(new Pose(89.927, 99.722), new Pose(92.313, 63.811))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-133), Math.toRadians(0))
                 .build();
@@ -139,7 +139,7 @@ public class RedNear extends AutoCommandBase {
         Path11 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(93.377, 35.947), new Pose(122.942, 35.734))
+                        new BezierLine(new Pose(93.377, 35.947), new Pose(123.500, 35.734))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -147,7 +147,7 @@ public class RedNear extends AutoCommandBase {
         Path12 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(122.942, 35.734), new Pose(91.462, 97.418))
+                        new BezierLine(new Pose(123.500, 35.734), new Pose(89.927, 99.527))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(225))
                 .build();
@@ -155,7 +155,7 @@ public class RedNear extends AutoCommandBase {
         Path13 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(91.462, 97.418), new Pose(98.056, 68.490))
+                        new BezierLine(new Pose(89.927, 99.527), new Pose(98.056, 68.490))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(225), Math.toRadians(0))
                 .build();
