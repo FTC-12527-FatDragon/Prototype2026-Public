@@ -4,6 +4,7 @@ import static com.arcrobotics.ftclib.purepursuit.PurePursuitUtil.angleWrap;
 import static com.qualcomm.robotcore.util.Range.clip;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.farGoalDistance;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kD_alignH;
+import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kF_alignH;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kI_alignH;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_alignH;
 import static org.firstinspires.ftc.teamcode.subsystems.drive.DriveConstants.kP_brakeH;
@@ -25,7 +26,7 @@ import static org.firstinspires.ftc.teamcode.utils.Util.poseDistance;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -45,7 +46,7 @@ public class VisionMecanumDrive extends SubsystemBase {
     private final GoBildaPinpointDriver od;
     private final AutoApriltag autoApriltag;
     private double yawOffset;// mm
-    private PIDController alignPID;
+    private PIDFController alignPID;
     private final DriveState alliance;
     private final CDS cds;
 
@@ -70,7 +71,7 @@ public class VisionMecanumDrive extends SubsystemBase {
         rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
         od = hardwareMap.get(GoBildaPinpointDriver.class, "od");
         driveState = DriveState.STOP;
-        alignPID = new PIDController(kP_alignH, kI_alignH, kD_alignH);
+        alignPID = new PIDFController(kP_alignH, kI_alignH, kD_alignH, kF_alignH);
         this.alliance = alliance;
         this.cds = cds;
 

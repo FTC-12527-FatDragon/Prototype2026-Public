@@ -28,9 +28,10 @@ public class DriveConstants {
 
     public static double kP_brakeXY = 0.02;
     public static double kP_brakeH = -0.8;
-    public static double kP_alignH = -1.2;
+    public static double kP_alignH = -0.4;
     public static double kI_alignH = 0;
-    public static double kD_alignH = -0.115;
+    public static double kD_alignH = -0.0;
+    public static double kF_alignH = -0.1;
     public static double kP_followXY = 0;
     public static double kP_followH = 0;
 
