@@ -28,17 +28,17 @@ public class DriveConstants {
 
     public static double kP_brakeXY = 0.02;
     public static double kP_brakeH = -0.8;
-    public static double kP_alignH = -0.4;
+    public static double kP_alignH = -1;
     public static double kI_alignH = 0;
-    public static double kD_alignH = -0.0;
-    public static double kF_alignH = -0.1;
+    public static double kD_alignH = -0.01;
+    public static double kF_alignH = -0.03;
     public static double kP_followXY = 0;
     public static double kP_followH = 0;
 
-    public static double xNearPoseRed = 142, yNearPoseRed = 144;
-    public static double xNearPoseBlue = 2, yNearPoseBlue = 144;
-    public static double xFarPoseRed = 140, yFarPoseRed = 144;
-    public static double xFarPoseBlue = 4, yFarPoseBlue = 144;
+    public static double xNearPoseRed = 139, yNearPoseRed = 140;
+    public static double xNearPoseBlue = 5, yNearPoseBlue = 140;
+    public static double xFarPoseRed = 137, yFarPoseRed = 140;
+    public static double xFarPoseBlue = 7, yFarPoseBlue = 140;
 
     //86 24, 60 86
     public static double nearGoalDistance = Util.poseDistance(new Pose2D(DistanceUnit.INCH, 60,

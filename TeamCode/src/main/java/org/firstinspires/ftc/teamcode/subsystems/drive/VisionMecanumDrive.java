@@ -236,9 +236,9 @@ public class VisionMecanumDrive extends SubsystemBase {
     }
 
     public double getShooterVelocity() {
-        if (distanceToGoal() != -1) return ShooterConstants.slowVelocity
+        if (distanceToGoal() != -1) return 20 * Math.ceil((ShooterConstants.slowVelocity
                 + (ShooterConstants.fastVelocity - ShooterConstants.slowVelocity)
-                / (farGoalDistance - nearGoalDistance) * (distanceToGoal() - nearGoalDistance);
+                / (farGoalDistance - nearGoalDistance) * (distanceToGoal() - nearGoalDistance)) / 20);
         return 0;
     }
 
