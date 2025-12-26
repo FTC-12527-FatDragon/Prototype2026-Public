@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.cds;
 
-import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.SCALE_FACTOR;
 import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.ballDistance;
-import static org.firstinspires.ftc.teamcode.subsystems.cds.CDSConstants.purpleConst;
-
-import android.graphics.Color;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -16,13 +12,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.subsystems.vision.VisionConstants;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 
 public class CDS extends SubsystemBase {
     private final ColorSensor colorSensor;
@@ -34,6 +23,7 @@ public class CDS extends SubsystemBase {
     public final TelemetryPacket packet = new TelemetryPacket();
 
     private boolean killed;
+    private boolean isRainbow;
     private double dis, dis1, ledTime;
     private double r, g, b;
 
@@ -63,6 +53,7 @@ public class CDS extends SubsystemBase {
         led = hardwareMap.get(Servo.class, CDSConstants.ledName);
         ledTimer = new ElapsedTime();
         this.killed = false;
+        this.isRainbow = false;
     }
 
     private boolean ballDetected = false;
@@ -102,6 +93,10 @@ public class CDS extends SubsystemBase {
         led.setPosition(color.colorPose);
         ledTimer.reset();
         ledTime = time;
+    }
+
+    public void startRainbow() {
+        isRainbow = true;
     }
 
     public void kill() {
@@ -150,6 +145,9 @@ public class CDS extends SubsystemBase {
 
         if(ledTimer.milliseconds() > ledTime) {
             if (killed) setLED(LEDState.WHITE);
+            else if (isRainbow) {
+                led.setPosition(ledTimer.milliseconds() % 2000 / 5000 + 0.3);
+            }
             else {
                 switch ((int) ballNum) {
                     case 0:

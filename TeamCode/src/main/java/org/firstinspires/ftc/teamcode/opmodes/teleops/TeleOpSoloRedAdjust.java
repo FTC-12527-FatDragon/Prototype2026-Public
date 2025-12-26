@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.bylazar.configurables.annotations.Configurable;
@@ -57,9 +58,12 @@ public class TeleOpSoloRedAdjust extends CommandOpMode {
         timer.reset();
 
         new FunctionalButton(
-                () -> timer.time(TimeUnit.SECONDS) == 90
+                () -> timer.time(TimeUnit.SECONDS) == 100
         ).whenPressed(
-                new InstantCommand(() -> gamepad1.rumble(1.0, 1.0, 500))
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> gamepad1.rumble(1.0, 1.0, 1000)),
+                        new InstantCommand(() -> cds.startRainbow())
+                )
         );
 
         drive.setDefaultCommand(new TeleOpDriveCommand(drive, gamepadEx1,
