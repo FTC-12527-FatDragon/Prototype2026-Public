@@ -240,7 +240,7 @@ public class VisionMecanumDrive extends SubsystemBase {
             double distance = distanceToGoal();
             double normalizedDistance = (distance - nearGoalDistance) / (farGoalDistance - nearGoalDistance);
 
-            double nonlinearFactor = 1.0 + 0.3 * normalizedDistance;
+            double nonlinearFactor = 1.0 + 0.04 * normalizedDistance;
 
             double finalVelocity = (ShooterConstants.slowVelocity
                     + (ShooterConstants.fastVelocity - ShooterConstants.slowVelocity)

@@ -123,7 +123,7 @@ public class RedFar extends AutoCommandBase {
                 .addPath(
                         new BezierLine(new Pose(102.736, 14.251), new Pose(85.081, 14.464))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-108))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-106))
                 .build();
 
         return new SequentialCommandGroup(
